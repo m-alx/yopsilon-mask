@@ -1,0 +1,35 @@
+$axInputPadding: 0.25em; // 0.2em;
+$axInputBtnWidth: 2.0em;
+
+$border-color: #dedede;
+$accent-color: #e96737;
+$error-color: #d9534f;
+$selection-color: #b6e2fc;
+
+input {
+  font-family: "Open Sans", sans-serif; 
+  font-size: 1em;
+  padding: $axInputPadding;
+  margin: 0.5em;
+  border: 1px solid $border-color;
+  outline: 0;
+}
+
+input:focus {
+  border-color: $accent-color;
+  outline: none;
+}
+
+input.yn-btn {
+  padding: $axInputPadding $axInputBtnWidth $axInputPadding $axInputPadding;
+  margin-right: 0;
+}
+
+::selection {
+  background: $selection-color;
+  text-shadow: none;
+}
+
+h1 {
+  font-size: 150%;
+}
