@@ -1,6 +1,7 @@
 // Copyright (C) 2018 Aleksey Melnikov
+// mailto: z9115011@gmail.com
 // This project is licensed under the terms of the MIT license.
-// https://github.com/m-alx/yn
+// https://github.com/m-alx/yopsilon-mask
 
 import { MaskSectionValue } from "./mask-section-value.class";
 
@@ -10,10 +11,10 @@ export class MaskValue {
 
   public sectionPos: number;
 
-  public beforeValue: string; // textBefore
+  public beforeValue: string;
   public sectionValue: MaskSectionValue;
-  public delimiter: string;   //
-  public afterValue: string;  // textAfter
+  public delimiter: string;   
+  public afterValue: string;
 
   public nextSectionPos(): number {
     return this.beforeValue.length + this.sectionValue.length + this.delimiter.length;
