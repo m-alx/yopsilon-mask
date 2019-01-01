@@ -1,8 +1,13 @@
 // Copyright (C) 2018 Aleksey Melnikov
+// mailto: z9115011@gmail.com
 // This project is licensed under the terms of the MIT license.
-// https://github.com/m-alx/yn
+// https://github.com/m-alx/yopsilon-mask
+
+import { Injectable } from '@angular/core';
 
 import { Internationalization } from "../internationalization/internationalization.class";
+import { Locale } from "../internationalization/locale.class";
+
 import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskSectionType } from "./mask-section-type.class";
 import { MaskSection,
@@ -11,6 +16,7 @@ import { MaskOptions } from "./mask-options.class";
 
 // Маска
 // @dynamic
+@Injectable()
 export class Mask {
 
   // Настройки
@@ -22,7 +28,7 @@ export class Mask {
   }
 
   // Настройки по умолчанию
-  public static readonly defaultOptions: MaskOptions = new MaskOptions();
+  public static readonly defaultOptions: MaskOptions = new MaskOptions("_");
 
   public get options() {
     return this._options == null ? Mask.defaultOptions : this._options;
@@ -124,7 +130,6 @@ export class Mask {
   private parse(s: string): void {
 
     this._mask = s;
-
     this.sections = [];
 
     if(!s || s.length==0)
@@ -136,7 +141,6 @@ export class Mask {
     while( i < s.length) {
 
       let c = s[i];
-
       let sType = null;
       let part = "";
 
@@ -160,7 +164,6 @@ export class Mask {
           del += s[i];
           i++;
         }
-
         this.addSection(part, del);
         continue;
       }
@@ -182,12 +185,36 @@ export class Mask {
       while(v.sectionValue.length < section.length)
         v.sectionValue.append(this.options.placeholder);
 
+      v.delimiter = section.delimiter;
+
       // Обновляем значение и позицию следующей секции
       value = v.value();
       sectionStart = v.nextSectionPos();
       i++;
     }
     return value;
+  }
+
+  // Форматирование строки по маске
+  // Пустая строка будет означать инвалидность
+  public applyMaskExact(value: string): string  {
+    let sectionPos = 0;
+    let res = value;
+    for(let i = 0; i < this.sections.length; i++) {
+      let section = this.sections[i];
+      let v = section.extractSectionValue(res, sectionPos);
+      if(v.sectionValue.value() == "" && v.delimiter == "" && v.afterValue == "")
+        break;
+
+      v.delimiter = section.delimiter;
+      let sv = section.autoCorrectValue(v.sectionValue.value());
+
+      res = v.update(sv, 0);
+      sectionPos = v.nextSectionPos();
+    }
+
+    res = res.substring(0, sectionPos);
+    return res;
   }
 
   // Форматирование строки по маске
@@ -232,6 +259,9 @@ export class Mask {
                                                        selLength,
                                                        acceptDelimiterChars,
                                                        i == this.sections.length - 1);
+
+      if(this.options.appendPlaceholders)
+        res.newValue = this.appendPlaceholders(res.newValue);
 
       if(res.action == MaskSectionAction.APPLY) // Готово!
         return res;
@@ -308,10 +338,19 @@ export class Mask {
     return null;
   }
 
+  private setLocale(locale: Locale) {
+    //
+    Mask.selectSection("mmm").variants = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
+    Mask.selectSection("MMM").variants = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
+  }
 
   constructor(protected intl: Internationalization) {
     // Здесь нужно подписаться на смену локализации и поменять наименования месяцев
-    Mask.selectSection("mmm").variants = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
-    Mask.selectSection("MMM").variants = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
+    this.intl.onLocaleChanged.subscribe(locale => {
+      console.log("СМЕНА ЛОКАЛИЗАЦИИ");
+      console.log(locale);
+      console.log("-----------------");
+      this.setLocale(locale);
+    });
   }
 }

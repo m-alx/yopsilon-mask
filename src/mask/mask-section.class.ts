@@ -1,6 +1,7 @@
 // Copyright (C) 2018 Aleksey Melnikov
+// mailto: z9115011@gmail.com
 // This project is licensed under the terms of the MIT license.
-// https://github.com/m-alx/yn
+// https://github.com/m-alx/yopsilon-mask
 
 import { Internationalization } from "../internationalization/internationalization.class";
 import { MaskSectionType } from "./mask-section-type.class";
@@ -476,8 +477,11 @@ export class MaskSection {
       }
 
       // Введен символ разделителя
-      if(this.delimiter != "" && key == this.delimiter[0] && acceptDelimiterChars)
+      if(this.delimiter != "" && key == this.delimiter[0] && acceptDelimiterChars) {
+        if(selStart_local == 0) // Если ничего не внесено, то смысла нет переходить на следующую секцию
+          return this.apply(mv, mv.sectionValue.value(), selStart, 0);
         return this.applyDelimiter(mv, selStart);
+      }
 
       // Клавиша Delete
       if(key == "Delete") {
@@ -515,13 +519,16 @@ export class MaskSection {
 
         mv.sectionValue.beforeChars = mv.sectionValue.beforeChars.substring(0, mv.sectionValue.beforeChars.length - 1);
 
-        if((mv.sectionValue.beforeChars.length >= this.length) || (mv.sectionValue.currentChar == "" && mv.afterValue == "")) {
+        if((mv.sectionValue.beforeChars.length >= this.length && mv.afterValue == "") || (mv.sectionValue.currentChar == "" && mv.afterValue == "")) {
           // Удаляем совсем
           // Нужно и разделитель убрать
           mv.delimiter = "";
         }
         else // Заменяем плэйсхолдером
-          mv.sectionValue.beforeChars += this.options.placeholder;
+        {
+          if(mv.sectionValue.beforeChars.length < this.length)
+            mv.sectionValue.beforeChars += this.options.placeholder;
+        }
 
         return this.apply(mv, mv.sectionValue.value(), selStart, -1);
       }

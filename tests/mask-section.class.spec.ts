@@ -14,7 +14,7 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    let options = new MaskOptions();
+    let options = new MaskOptions(" ");
     let sType = Mask.selectSection("mm");
 
     let section = new MaskSection(intl, options, "mm", ".", sType);
@@ -37,8 +37,9 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    // let sType = Mask.selectSection("mmm");
+
     let mask = new Mask(intl);
+
     mask.mask = "mm/dd/yyyy";
     let section = mask.sections[1];
     res = section.applyKey('12/', '3', 3, 3, 0);
@@ -48,17 +49,20 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
   it(`Новая позиция курсора должна быть 4`, () => expect(res.newSelStart).toBe(4));
 });
 
-describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=0: `, () => {
+describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
   let res: any;
 
   beforeEach(async(() => {
     let intl = new Internationalization();
     // let sType = Mask.selectSection("mmm");
+    let options = new MaskOptions(" ");
+    options.appendPlaceholders = false;
+
 
     let mask = new Mask(intl);
     mask.mask = "mm/dd/yyyy";
     let section = mask.sections[1];
-    res = section.applyKey('', '/', 0, 0, 0, true);
+    res = section.applyKey('1', '/', 0, 1, 0, true);
   }));
 
   it(`Новое значение маски должно быть 01/`, () => expect(res.newValue).toBe("01/"));

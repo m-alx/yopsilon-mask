@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular 2+ input masking directive",
-  "version": "0.0.5",
+  "version": "0.1.1",
   "scripts": {
     "test": "karma start",
     "clean": "rimraf dist",
@@ -26,8 +26,8 @@
   "typings": "./yopsilon-mask.d.ts",
   "homepage": "https://github.com/m-alx/yopsilon-mask#readme",
   "peerDependencies": {
-    "@angular/core": "^4.0.0 || ^5.0.0",
-    "@angular/forms": "^4.0.0 || ^5.0.0"
+    "@angular/core": "^5.0.0",
+    "@angular/forms": "^5.0.0"
   },
   "devDependencies": {
     "@angular/common": "^5.2.11",
@@ -58,7 +58,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.3",
     "loader-utils": "^1.1.0",
-    "ng-packagr": "^4.4.5",
+    "ng-packagr": "^2.0.0",
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.0",
     "source-map-loader": "^0.2.1",
