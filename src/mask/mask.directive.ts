@@ -1,6 +1,7 @@
 // Copyright (C) 2018 Aleksey Melnikov
+// mailto: z9115011@gmail.com
 // This project is licensed under the terms of the MIT license.
-// https://github.com/m-alx/yn
+// https://github.com/m-alx/yopsilon-mask
 
 import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -8,6 +9,7 @@ import { Internationalization } from "../internationalization/internationalizati
 import { Mask } from "./mask.class";
 import { Keys } from "../keys/keys.class";
 import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
+import { MaskOptions } from "./mask-options.class";
 
 
 @Directive({
@@ -49,9 +51,7 @@ export class MaskDirective implements ControlValueAccessor {
 
     // Formatter: Ctrl --> View
     writeValue(value: any): void {
-
       this._txtValue = value;
-      console.log(value);
       this._renderer.setProperty(this._elementRef.nativeElement, 'value', this._txtValue);
     }
 
@@ -62,6 +62,11 @@ export class MaskDirective implements ControlValueAccessor {
 
     public get mask(): string {
       return this._mask.mask;
+    }
+
+    @Input("yn-mask-options")
+    set options(v: MaskOptions) {
+      this._mask.options = v;
     }
 
     @HostListener("keydown", ["$event"])
@@ -96,13 +101,10 @@ export class MaskDirective implements ControlValueAccessor {
         return;
       }
 
-
       if(e.ctrlKey && keyCode == "KeyZ") {
-        //console.log("UNDO");
         // UNDO
         let undoRes = this._undo.pop();
-        if(undoRes) {
-          console.log(undoRes);
+        if(undoRes) {          
           this._redo.push(this.getRes(s, selStart, selEnd));
           this.setRes(undoRes);
         }
@@ -166,6 +168,7 @@ export class MaskDirective implements ControlValueAccessor {
       e.preventDefault();
     }
 
+    // Установить значение и положение курсора
     private setRes(res: MaskSectionKeyResult) {
 
       this.writeValue(res.newValue);
@@ -173,6 +176,7 @@ export class MaskDirective implements ControlValueAccessor {
       this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.newSelStart + res.newSelLength);
     }
 
+    // Получить текущее значение маски и положение курсора
     private getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
       let res = new MaskSectionKeyResult(s, MaskSectionAction.APPLY, 0);
       res.newSelStart = selStart;
@@ -185,7 +189,6 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
     constructor(private _renderer: Renderer2, private _elementRef: ElementRef, private intl: Internationalization) {
-      //
       this._mask = new Mask(this.intl);
     }
 
