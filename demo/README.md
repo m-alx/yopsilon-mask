@@ -1,5 +1,9 @@
 # Demo
 
+1. From root folder: npm run build
+2. cd demo
+3. npm install
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.1.
 
 ## Development server

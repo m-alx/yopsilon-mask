@@ -2,3 +2,4 @@
 [1223/164742.085:ERROR:process_reader_win.cc(151)] SuspendThread: Отказано в доступе. (0x5)
 [1223/164742.089:ERROR:process_reader_win.cc(151)] SuspendThread: Отказано в доступе. (0x5)
 [1223/164742.089:ERROR:exception_snapshot_win.cc(88)] thread ID 25232 not found in process
+[1231/211912.469:ERROR:process_info.cc(359)] UncheckedAllocate

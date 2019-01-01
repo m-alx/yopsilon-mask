@@ -5,14 +5,15 @@ import { NgModule } from '@angular/core';
 import { YopsilonMaskModule } from 'yopsilon-mask';
 
 import { AppComponent } from './app.component';
+import { MaskExampleComponent } from './mask-example/mask-example.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, MaskExampleComponent
   ],
   imports: [
-    BrowserModule, FormsModule, YopsilonMaskModule
+    BrowserModule, FormsModule, YopsilonMaskModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

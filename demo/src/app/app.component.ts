@@ -1,4 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef } from "@angular/core";
+import * as YN from 'yopsilon-mask';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +17,20 @@ export class AppComponent {
   testValue6: string = '';
   testValue7: string = '';
 
-  constructor() {
+  ip_options: YN.MaskOptions = new YN.MaskOptions(" ", false);
 
-    /*
-    let intl = new Internationalization();
-    let m = new Mask(intl);
-    m.mask = "dd.MM.yyyy";
-    */
+  initMaskOptions() {
+    //this.intl.setCurrentLocale("ru-RU");
+    this.ip_options.appendPlaceholders = true;
+    this.ip_options.placeholder = " ";    
+  }
+
+  constructor(
+    private intl: YN.Internationalization,
+    private localeRu: YN.LocaleRu,
+    private Mask: YN.Mask
+  ) {
+    YN.Mask.defaultOptions.appendPlaceholders = true;
+    this.initMaskOptions();
   }
 }
