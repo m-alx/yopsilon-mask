@@ -35,9 +35,7 @@ import {Component} from '@angular/core';
 
 @Component({
     selector: 'simple-yn',
-    template: `
-<input yn-mask="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" /><br />
-`
+    template: `<input yn-mask="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" />`
 })
 export class SimpleYnComponent {
     //
