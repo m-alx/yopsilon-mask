@@ -3,44 +3,28 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Injectable } from '@angular/core';
+import { Observable, BehaviorSubject } from "rxjs/Rx";
 
-export class Locale {
-  public name: string;
-
-  public shortMonthNames: Array<string> = [];
-  public longMonthNames: Array<string> = [];
-
-  public shortDayNames: Array<string> = [];
-  public longDayNames: Array<string> = [];
-
-  public firstDayOfWeek: number = 0;
-
-  public dateFormat: string;
-  public timeHMFormat: string;
-  public timeHMSFormat: string;
-  public dateTimeHMFormat: string;
-  public dateTimeHMSFormat: string;
-
-  public decimalSeparator: string;
-  public thousandSeparator: string;
-
-  public digits: RegExp = /[0-9]/;
-  public letters: RegExp = /[a-z]/i;
-}
+import { Locale } from "./locale.class";
 
 @Injectable()
 export class Internationalization {
 
   public locales: Array<Locale> = [];
-  private currentLocaleName: string;
+  public currentLocaleName: string;
 
+  // При изменении локализации
+  private _onLocaleChanged: BehaviorSubject<Locale> = new BehaviorSubject<Locale>(this.currentLocale);
+  public readonly onLocaleChanged: Observable<Locale> = this._onLocaleChanged.asObservable();
+
+  //
   public addLocale(locale: Locale) {
-    if(!this.locales.find(l => l.name == locale.name))
+    if(!this.locales.find(l => l.shortName == locale.shortName))
       this.locales.push(locale);
   }
 
   public get currentLocale(): Locale {
-    let res = this.locales.find(l => l.name == this.currentLocaleName);
+    let res = this.locales.find(l => l.shortName == this.currentLocaleName);
     if(!res)
       return this.locales[0];
     else
@@ -49,6 +33,7 @@ export class Internationalization {
 
   public setCurrentLocale(name: string) {
     this.currentLocaleName = name;
+    this._onLocaleChanged.next(this.currentLocale);
   }
 
   public get shortMonthNames() {
@@ -67,7 +52,8 @@ export class Internationalization {
 
     this.locales.push(
       {
-        name: "default",
+        name: "English",
+        shortName: "en-US",
 
         shortMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
                           "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -94,6 +80,6 @@ export class Internationalization {
       }
     );
 
-    this.currentLocaleName = this.locales[0].name;
+    this.currentLocaleName = this.locales[0].shortName;
   }
 }
