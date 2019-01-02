@@ -9,6 +9,7 @@ import * as YN from "yopsilon-mask";
 export class MaskExampleComponent {
 
   private _mask: string = "";
+  private _options: YN.MaskOptions = null;
 
   @Input("mask")
   set mask(s: string) {
@@ -20,21 +21,23 @@ export class MaskExampleComponent {
   }
 
   @Input("options")
-  set options(o: any) {
-    //
+  set options(o: YN.MaskOptions) {
+    this._options = o;
   }
+
+  get options(): YN.MaskOptions {
+    return this._options;
+  }
+
+  @Input("placeholder")
+  public placeholder = "";
 
   @Input("caption")
   public caption: string;
 
-  public testValue: string = '13.12.1979';
+  public testValue: string = "";
 
   constructor() {
-    console.log(YN);
-    /*
-    let intl = new Internationalization();
-    let m = new Mask(intl);
-    m.mask = "dd.MM.yyyy";
-    */
+    //
   }
 }

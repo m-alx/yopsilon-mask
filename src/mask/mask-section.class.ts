@@ -40,6 +40,17 @@ export class MaskSectionKeyResult {
 // Секция маски
 export class MaskSection {
 
+  // Конструктор класса
+  constructor(
+    public intl: Internationalization,
+    public options: MaskOptions,
+    public section: string, // Общее значение маски
+    public delimiter: string,
+    public sectionType: MaskSectionType = null
+    ) {
+      //
+  }
+
   // Длина секции
   public get length(): number {
     return this.section.length;
@@ -153,9 +164,10 @@ export class MaskSection {
       return s;
     }
 
-    let res: string = this.removePlaceholders(s);
-    if(res != s)
-      return s;
+    //let res: string = this.removePlaceholders(s);
+    //if(res != s)
+      //return s;
+    let res = s;
 
     let n: number = this.numericValue(res);
 
@@ -423,7 +435,7 @@ export class MaskSection {
 
       if(key != this.delimiter[0] || !acceptDelimiterChars) {
 
-        if(this.section == "" || // Пустая секция
+        if(this.section == "" || // Пустая секция ИЛИ...
             (selStart == (sectionPos + mv.sectionValue.length) && // Мы находимся в конце секции
              mv.sectionValue.length == this.maxLength &&          // Содержимое этой секции внесено полностью
              key.length == 1)
@@ -436,51 +448,63 @@ export class MaskSection {
         }
       }
 
-      // Потенциально новое значение
-      let cValue = mv.sectionValue.beforeChars;
-      if(key.length == 1)
+      // Нажата одиночный символ
+      if(key.length == 1)  {
+
+        // Потенциально новое значение
+        let cValue = mv.sectionValue.beforeChars;
         cValue += key;
 
-      // Секция ограничена списком возможных значений
-      if(this.hasVariants && cValue != mv.sectionValue.beforeChars) {
-        let variantFound: string = null;
-        this.sectionType.variants.some(variant => {
-          if(selStart_local < variant.length && variant.substring(0, cValue.length).toLowerCase() == cValue.toLowerCase()) {
-            variantFound = variant;
-            return true;
-          }
-          return false;
-        });
+        // Секция ограничена списком возможных значений
+        if(this.hasVariants && cValue != mv.sectionValue.beforeChars) {
+          let variantFound: string = null;
+          this.sectionType.variants.some(variant => {
+            if(selStart_local < variant.length && variant.substring(0, cValue.length).toLowerCase() == cValue.toLowerCase()) {
+              variantFound = variant;
+              return true;
+            }
+            return false;
+          });
 
-        if(variantFound != null)
-          return this.apply(mv, variantFound, selStart, 1, isLast);
-      }
-
-      // Секция настроена типами символов
-      if(!this.hasVariants && this.section != "") {
-        let isOk: boolean = false;
-
-        if(selStart_local < this.maxLength) {
-
-          if(this.sectionType.digits && this.intl.isDigit(key))
-            isOk = true;
-
-          if(this.sectionType.alpha && this.intl.isLetter(key))
-            isOk = true;
-
-          if(this.section == "*" && (this.intl.isLetter(key) || this.intl.isDigit(key))) // Возможно специальные символы понадобятся
-            isOk = true;
+          if(variantFound != null)
+            return this.apply(mv, variantFound, selStart, 1, isLast);
         }
 
-        if(isOk)
-          return this.apply(mv, mv.sectionValue.value(key), selStart, 1, isLast);
-      }
+        // Регулярное выражение
+        if(this.sectionType.regExp != null) {
+          // Новое значение будет таким:
+          let nv: string = mv.sectionValue.value(key);
+          // И может нам подойти
+          if(nv.match(this.sectionType.regExp))
+            return this.apply(mv, nv, selStart, 1, isLast);
+        }
 
-      // Введен символ разделителя
-      if(this.delimiter != "" && key == this.delimiter[0] && acceptDelimiterChars) {
-        if(selStart_local == 0) // Если ничего не внесено, то смысла нет переходить на следующую секцию
-          return this.apply(mv, mv.sectionValue.value(), selStart, 0);
-        return this.applyDelimiter(mv, selStart);
+        // Секция настроена типами символов
+        if(!this.hasVariants && this.section != "" && this.sectionType.regExp == null) {
+          let isOk: boolean = false;
+
+          if(selStart_local < this.maxLength) {
+
+            if(this.sectionType.digits && this.intl.isDigit(key))
+              isOk = true;
+
+            if(this.sectionType.alpha && this.intl.isLetter(key))
+              isOk = true;
+
+            if(this.section == "*" && (this.intl.isLetter(key) || this.intl.isDigit(key))) // Возможно специальные символы понадобятся
+              isOk = true;
+          }
+
+          if(isOk)
+            return this.apply(mv, mv.sectionValue.value(key), selStart, 1, isLast);
+        }
+
+        // Введен символ разделителя. Переход на следующую секцию
+        if(this.delimiter != "" && key == this.delimiter[0] && acceptDelimiterChars) {
+          if(selStart_local == 0) // Если ничего не внесено, то смысла нет переходить на следующую секцию
+            return this.apply(mv, mv.sectionValue.value(), selStart, 0);
+          return this.applyDelimiter(mv, selStart);
+        }
       }
 
       // Клавиша Delete
@@ -609,16 +633,5 @@ export class MaskSection {
     res.newSelLength = 0;
 
     return res;
-  }
-
-  // Конструктор класса
-  constructor(
-    public intl: Internationalization,
-    public options: MaskOptions,
-    public section: string, // Общее значение маски
-    public delimiter: string,
-    public sectionType: MaskSectionType = null
-    ) {
-      //
   }
 }

@@ -82,3 +82,33 @@ describe(`Символ разделителя в пустой секции до�
   it(`Впечатываем точку. Должно остаться 172. . . `, () => expect(res.newValue).toBe("172. . . "));
   it(`Курсор должен остаться на месте`, () => expect(res.newSelStart).toBe(4));
 });
+
+describe(`Соответствие строки маске:`, () => {
+
+  //
+  let intl = new Internationalization();
+  let mask = new Mask(intl);
+  mask.mask = "dd.MM.yyyy";
+
+  it(`Значение 13.12.1979 соответствует маске`, () => expect(mask.checkMask("13.12.1979")).toBeTruthy());
+  it(`Значение 13.12.197 НЕ соответствует маске`, () => expect(mask.checkMask("13.12.197")).toBeFalsy());
+
+  it(`Значение 13._2.1979 НЕ соответствует маске`, () => expect(mask.checkMask("13._2.1979")).toBeFalsy());
+  it(`Значение 13.AA.1979 НЕ соответствует маске`, () => expect(mask.checkMask("13.AA.1979")).toBeFalsy());
+});
+
+describe(`Кастомная секция, regular expression`, () => {
+
+  let intl = new Internationalization();
+  let mask = new Mask(intl);
+
+  Mask.sectionTypes.push(
+    { selectors: ["A"], digits: true, alpha: true, regExp: /[a-b]/i },
+  );
+  mask.mask = "ANNN";
+  let res: MaskSectionKeyResult;
+
+
+  it(`Первый символ A или B или C: символ D нелья применить`, () => expect(mask.applyKeyAtPos("", "D", 0, 0)).toBe(null));
+  it(`Первый символ A или B или C: при нажатии A значение становится равным A `, () => expect(mask.applyKeyAtPos("", "A", 0, 0).newValue).toBe("A"));
+});

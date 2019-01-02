@@ -197,24 +197,48 @@ export class Mask {
 
   // Форматирование строки по маске
   // Пустая строка будет означать инвалидность
-  public applyMaskExact(value: string): string  {
+  public checkMask(value: string): boolean  {
     let sectionPos = 0;
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
       let v = section.extractSectionValue(res, sectionPos);
-      if(v.sectionValue.value() == "" && v.delimiter == "" && v.afterValue == "")
-        break;
 
-      v.delimiter = section.delimiter;
-      let sv = section.autoCorrectValue(v.sectionValue.value());
+      if(v.delimiter != section.delimiter) {
+        console.log(v);
+        console.log("Не соответствует разделитель");
+        return false;
+      }
 
-      res = v.update(sv, 0);
+      let s = v.sectionValue.value();
+
+      let s_autocorrected = section.autoCorrectValue(s);
+      console.log(s, s_autocorrected);
+
+      if(s != s_autocorrected) {
+        console.log("Скорректированное значение не равно исходному");
+        return false;
+      }
+
+      if(s.length > section.maxLength) {
+        console.log("Слишком длинное значение секции");
+        return false;
+      }
+
+      if(s.length < section.length) {
+        console.log("Слишком малое значение секции");
+        return false;
+      }
+
+      if(i == this.sections.length - 1 && v.afterValue != "") {
+        console.log("Что-то есть после последней секции");
+        return false;
+      }
+
       sectionPos = v.nextSectionPos();
     }
 
-    res = res.substring(0, sectionPos);
-    return res;
+    return true;
   }
 
   // Форматирование строки по маске

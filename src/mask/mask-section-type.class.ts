@@ -11,5 +11,21 @@ export class MaskSectionType {
   public max?: number = null;
   public variants?: Array<string>;
 
-  // public datePart: string = "";
+  public regExp?: RegExp;
+
+  // Минимальная и максимальная длина значения для тонкой настройки
+  // Если это не целочисленная секция - может пригодиться
+  public minL?: number = null;
+  public maxL?: number = null;
+
+  // Какая часть даты представляется данной секцией
+  //  d - день
+  //  m - месяц
+  //  y - год
+  //  h - час (0 - 12)
+  //  H - час (0 - 24)
+  //  mi - минуты
+  //  s - секунды
+  //  ms - миллисекунды
+  public datePart?: string = null;
 }

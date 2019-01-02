@@ -75,7 +75,7 @@ export class Internationalization {
         dateTimeHMSFormat: "mm/dd/yyyy hh:mi:ss am",
         decimalSeparator: ".",
         thousandSeparator: ",",
-        digits: /[0-9]/,
+        digits: /\d/,
         letters: /[a-z]/i
       }
     );

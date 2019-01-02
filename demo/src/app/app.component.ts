@@ -22,15 +22,18 @@ export class AppComponent {
   initMaskOptions() {
     //this.intl.setCurrentLocale("ru-RU");
     this.ip_options.appendPlaceholders = true;
-    this.ip_options.placeholder = " ";    
+    this.ip_options.placeholder = " ";
   }
 
   constructor(
     private intl: YN.Internationalization,
-    private localeRu: YN.LocaleRu,
-    private Mask: YN.Mask
+    private localeRu: YN.LocaleRu//,
+    //private mask: YN.Mask
   ) {
     YN.Mask.defaultOptions.appendPlaceholders = true;
+    YN.Mask.sectionTypes.push(
+      { selectors: ["A"], digits: true, alpha: true, regExp: /[a-b]/i },
+    );
     this.initMaskOptions();
   }
 }
