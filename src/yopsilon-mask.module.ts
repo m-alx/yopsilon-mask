@@ -9,23 +9,24 @@ import { BrowserModule } from "@angular/platform-browser";
 
 import { Internationalization } from "./internationalization/internationalization.class";
 import { LocaleRu } from "./internationalization/locales/ru-ru";
-import { Mask } from "./mask/mask.class";
-import { MaskOptions } from "./mask/mask-options.class";
+//import { Mask } from "./mask/mask.class";
+//import { MaskOptions } from "./mask/mask-options.class";
 import { MaskDirective } from "./mask/mask.directive";
+import { MaskDateDirective } from "./mask/mask-date.directive";
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [MaskDirective],
+  declarations: [MaskDirective, MaskDateDirective],
   entryComponents: [],
-  providers: [Internationalization, LocaleRu, Mask],
-  exports: [MaskDirective]
+  providers: [Internationalization, LocaleRu],
+  exports: [MaskDirective, MaskDateDirective]
 })
 export class YopsilonMaskModule {
 
   public static forRoot(): ModuleWithProviders {
       return {
         ngModule: YopsilonMaskModule,
-        providers: [Internationalization, LocaleRu, Mask]
+        providers: [Internationalization, LocaleRu]
       };
   }
 }

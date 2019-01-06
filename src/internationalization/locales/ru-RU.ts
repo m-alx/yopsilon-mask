@@ -26,6 +26,7 @@ export class LocaleRu {
                        "Четверг", "Пятница", "Суббота"],
 
       firstDayOfWeek: 1,
+
       dateFormat: "dd.mm.yyyy",
       timeHMFormat: "HH:mi",
       timeHMSFormat: "HH:mi:ss",

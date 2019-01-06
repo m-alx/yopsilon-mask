@@ -30,14 +30,14 @@ module.exports = function(config) {
             json: './coverage/coverage.json',
             html: './coverage/html'
         },
-        
+
         client:{
           clearContext: false // leave Jasmine Spec Runner output visible in browser
         },
         // Webpack please don't spam the console when running in karma!
         webpackMiddleware: { stats: 'errors-only'},
 
-        reporters: ['progress', 'kjhtml'],
+        reporters: ['progress', 'kjhtml', 'coverage', 'remap-coverage' ],
         //reporters: [ 'mocha', 'coverage', 'remap-coverage' ],
 
         // web server port

@@ -64,11 +64,11 @@ export class MaskSection {
       return this.section.length;
   }
 
-  public get hasVariants(): boolean {
+  public hasVariants(): boolean {
     return this.sectionType && this.sectionType.variants && this.sectionType.variants.length > 0;
   }
 
-  public get isNumeric(): boolean {
+  public isNumeric(): boolean {
     return this.sectionType && this.sectionType.digits && !this.sectionType.alpha;
   }
 
@@ -99,13 +99,13 @@ export class MaskSection {
   private incValue(value: string): string {
 
     // Следующий вариант
-    if(this.hasVariants) {
+    if(this.hasVariants()) {
       let i = this.sectionType.variants.indexOf(value);
       return i < this.sectionType.variants.length - 1 ? this.sectionType.variants[i + 1] : this.sectionType.variants[0];
     }
 
     // Следующее числовое значение
-    if(this.isNumeric && this.sectionType.max != undefined) {
+    if(this.isNumeric() && this.sectionType.max != undefined) {
       let n = this.numericValue(value);
       if(isNaN(n))
         n = this.sectionType.min == undefined ? 0 : this.sectionType.min;
@@ -127,13 +127,13 @@ export class MaskSection {
   private decValue(value: string): string {
 
     // Предыдущий вариант
-    if(this.hasVariants) {
+    if(this.hasVariants()) {
       let i = this.sectionType.variants.indexOf(value);
       return i > 0 ? this.sectionType.variants[i - 1] : this.sectionType.variants[this.sectionType.variants.length - 1];
     }
 
     // Предыдущее числовое значение
-    if(this.isNumeric && this.sectionType.min != undefined) {
+    if(this.isNumeric() && this.sectionType.min != undefined) {
       let n = this.numericValue(value);
       if(isNaN(n))
         n = this.sectionType.min == undefined ? 0 : this.sectionType.max;
@@ -157,7 +157,7 @@ export class MaskSection {
     if(!this.sectionType)
       return s;
 
-    if(this.hasVariants) {
+    if(this.hasVariants()) {
       let variant = this.sectionType.variants.find(v => v.toLowerCase() == s.toLowerCase());
       if(!variant)
         s = this.sectionType.variants.length > 0 ? this.sectionType.variants[0] : "";
@@ -171,7 +171,7 @@ export class MaskSection {
 
     let n: number = this.numericValue(res);
 
-    if(this.isNumeric) {
+    if(this.isNumeric()) {
 
       let n = this.numericValue(res);
 
@@ -456,7 +456,7 @@ export class MaskSection {
         cValue += key;
 
         // Секция ограничена списком возможных значений
-        if(this.hasVariants && cValue != mv.sectionValue.beforeChars) {
+        if(this.hasVariants() && cValue != mv.sectionValue.beforeChars) {
           let variantFound: string = null;
           this.sectionType.variants.some(variant => {
             if(selStart_local < variant.length && variant.substring(0, cValue.length).toLowerCase() == cValue.toLowerCase()) {
@@ -480,7 +480,7 @@ export class MaskSection {
         }
 
         // Секция настроена типами символов
-        if(!this.hasVariants && this.section != "" && this.sectionType.regExp == null) {
+        if(!this.hasVariants() && this.section != "" && this.sectionType.regExp == null) {
           let isOk: boolean = false;
 
           if(selStart_local < this.maxLength) {

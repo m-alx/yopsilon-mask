@@ -7,6 +7,7 @@ import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } fro
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Internationalization } from "../internationalization/internationalization.class";
 import { Mask } from "./mask.class";
+import { MaskDate } from "./mask-date.class";
 import { Keys } from "../keys/keys.class";
 import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
 import { MaskOptions } from "./mask-options.class";
@@ -14,19 +15,16 @@ import { MaskOptions } from "./mask-options.class";
 import { MaskBaseDirective } from "./mask-base.directive";
 
 @Directive({
-    selector: '[yn-mask]',
+    selector: '[yn-mask-date]',
     host: {'(input)': 'input($event.target.value)', '(blur)': 'blur()'},
     providers: [{
         provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => MaskDirective),
+        useExisting: forwardRef(() => MaskDateDirective),
         multi: true}]
 })
-export class MaskDirective extends MaskBaseDirective implements ControlValueAccessor {
+export class MaskDateDirective extends MaskBaseDirective implements ControlValueAccessor {
 
-//    private _undo: Array<MaskSectionKeyResult> = [];
-  //  private _redo: Array<MaskSectionKeyResult> = [];
-
-    // protected _mask: Mask;
+    private _dateValue: any;
 
     private onChange = (_: any) => {};
     private onTouched = () => {};
@@ -37,32 +35,51 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     blur() {
 
       // Очищаем, если маска неверна
-      if(!this._mask.checkMask(this._txtValue) && !this._mask.options.allowIncomplete)
+      this._dateValue = MaskDate.parseDate(this._mask.sections, this._txtValue);
+
+      let correctDate: boolean = true;
+      if(this._dateValue == null)
+        correctDate = false;
+
+      if(isNaN(this._dateValue))
+        correctDate = false;
+
+      if(!correctDate && !this._mask.options.allowIncomplete)
         this.setText("");
 
       this.onTouched();
     }
 
-    protected toModel(displayedValue: any): void {
-      this.onChange(displayedValue);
+    protected toModel(displayedValue: string): void {
+      this._dateValue = MaskDate.parseDate(this._mask.sections, displayedValue);
+      this.onChange(this._dateValue);
     }
 
-    // Пользователь вносит значение. Parser: View --> Ctrl
-    // Только то, что не обработано маской
+    // Parser: View --> Ctrl
     input(txt: any) {
-        // Поэтому пытаемся применить маску к введенному значению.
-        let masked = this._mask.applyMask(txt);
-        if(masked != this._txtValue)
-          this.setText(masked, true);
+      // Write back to model
+      let masked = this._mask.applyMask(txt);
+      if(masked != this._txtValue)
+        this.setText(masked, true); // С отправкой в модель
     }
 
-    // Отображаем значение в компоненте. Formatter: Ctrl --> View
-    writeValue(txt: any): void {
-      if(this._txtValue != txt)
-        this.setText(txt, false); // Не отправляем значение в модель, т.к. этот метод вызывается как раз после изменения модели
+    // Formatter: Ctrl --> View
+    writeValue(value: any): void {
+      let txt = MaskDate.formatDate(this._mask.sections, value);
+      if(txt != this._txtValue)
+        this.setText(txt, false); // Отправка в модель не нужна, т.к. этот обработчик и запущен после изменений в модели
     }
 
-    @Input("yn-mask")
+    /*
+    protected setText(txt: string) {
+      super.setText(txt);
+      this._dateValue = MaskDate.parseDate(this._mask.sections, txt);
+
+      // Вот оно! Но это сработает без реального изменения (при первом writeValue).. Нужно исправить.
+      this.onChange(this._dateValue);
+    }*/
+
+    @Input("yn-mask-date")
     public set mask(m: string) {
       this._mask.mask = m;
     }
@@ -71,7 +88,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       return this._mask.mask;
     }
 
-    @Input("yn-mask-options")
+    @Input("yn-mask-date-options")
     set options(v: MaskOptions) {
       this._mask.options = v;
     }
@@ -83,7 +100,6 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
     constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {
       super(_renderer, _elementRef, intl);
-      //this._mask = new Mask(this.intl);
     }
 
 }

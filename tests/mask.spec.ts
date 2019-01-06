@@ -101,10 +101,12 @@ describe(`Кастомная секция, regular expression`, () => {
 
   let intl = new Internationalization();
   let mask = new Mask(intl);
+  let opt = new MaskOptions("_", true);
 
-  Mask.sectionTypes.push(
+  opt.sectionTypes.push(
     { selectors: ["A"], digits: true, alpha: true, regExp: /[a-b]/i },
   );
+  mask.options = opt;
   mask.mask = "ANNN";
   let res: MaskSectionKeyResult;
 

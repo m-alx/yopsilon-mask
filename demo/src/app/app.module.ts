@@ -7,13 +7,14 @@ import { YopsilonMaskModule } from 'yopsilon-mask';
 import { AppComponent } from './app.component';
 import { MaskExampleComponent } from './mask-example/mask-example.component';
 
+import { TestDirective } from './test-directive/test.directive';
 
 @NgModule({
   declarations: [
-    AppComponent, MaskExampleComponent
+    AppComponent, MaskExampleComponent, TestDirective
   ],
   imports: [
-    BrowserModule, FormsModule, YopsilonMaskModule 
+    BrowserModule, FormsModule, YopsilonMaskModule
   ],
   providers: [],
   bootstrap: [AppComponent]

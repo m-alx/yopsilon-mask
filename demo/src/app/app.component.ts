@@ -9,6 +9,8 @@ import * as YN from 'yopsilon-mask';
 export class AppComponent {
   title = 'app';
 
+  testDate1: any = new Date(1979, 11, 13);
+
   testValue1: string = '';
   testValue2: string = '';
   testValue3: string = '';
@@ -19,9 +21,13 @@ export class AppComponent {
 
   ip_options: YN.MaskOptions = new YN.MaskOptions(" ", false);
 
+  onchange(e) {
+    console.log(e);
+  }
+
   initMaskOptions() {
     //this.intl.setCurrentLocale("ru-RU");
-    this.ip_options.appendPlaceholders = true;
+    this.ip_options.appendPlaceholders = false;
     this.ip_options.placeholder = " ";
   }
 
@@ -32,7 +38,7 @@ export class AppComponent {
   ) {
     YN.Mask.defaultOptions.appendPlaceholders = true;
     YN.Mask.sectionTypes.push(
-      { selectors: ["A"], digits: true, alpha: true, regExp: /[a-b]/i },
+      { selectors: ["A"], digits: true, alpha: true, regExp: /[a-c]/i },
     );
     this.initMaskOptions();
   }

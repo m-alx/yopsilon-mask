@@ -15,7 +15,8 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
   beforeEach(async(() => {
     let intl = new Internationalization();
     let options = new MaskOptions(" ");
-    let sType = Mask.selectSection("mm");
+    let m: Mask = new Mask(intl);
+    let sType = m.selectSectionType("mm");
 
     let section = new MaskSection(intl, options, "mm", ".", sType);
 
@@ -54,7 +55,6 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    // let sType = Mask.selectSection("mmm");
     let options = new MaskOptions(" ");
     options.appendPlaceholders = false;
 
@@ -74,7 +74,6 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    let sType = Mask.selectSection("mmm");
     let mask = new Mask(intl);
     mask.mask = "dd mmm yyyy";
     let section = mask.sections[1];
@@ -90,7 +89,6 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selS
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    let sType = Mask.selectSection("mmm");
     let mask = new Mask(intl);
     mask.mask = "dd mmm yyyy";
     let section = mask.sections[2];
