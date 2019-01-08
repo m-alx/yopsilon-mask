@@ -1,4 +1,5 @@
 // Copyright (C) 2018 Aleksey Melnikov
+// mailto: z9115011@gmail.com
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
@@ -31,7 +32,7 @@ export class Internationalization {
       return res;
   }
 
-  public setCurrentLocale(name: string) {
+  public setLocale(name: string) {
     this.currentLocaleName = name;
     this._onLocaleChanged.next(this.currentLocale);
   }

@@ -5,14 +5,19 @@
 
 import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+
 import { Internationalization } from "../internationalization/internationalization.class";
+import { Locale } from "../internationalization/locale.class";
+
 import { Mask } from "./mask.class";
-import { MaskDate } from "./mask-date.class";
 import { Keys } from "../keys/keys.class";
 import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
 import { MaskOptions } from "./mask-options.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
+
+import { DateParserPipe } from "./date-parser.pipe";
+import { DateFormatterPipe } from "./date-formatter.pipe";
 
 @Directive({
     selector: '[yn-mask-date]',
@@ -29,29 +34,31 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     private onChange = (_: any) => {};
     private onTouched = () => {};
 
+    private _parser = new DateParserPipe();
+    private _formatter = new DateFormatterPipe();
+
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 
     blur() {
+      // Очищаем, если дата неверна
+      this._dateValue = this._parser.transform(this._mask, this._txtValue); // MaskDate.parseDate(this._mask.sections, this._txtValue);
 
-      // Очищаем, если маска неверна
-      this._dateValue = MaskDate.parseDate(this._mask.sections, this._txtValue);
-
-      let correctDate: boolean = true;
+      let dateIsCorrect: boolean = true;
       if(this._dateValue == null)
-        correctDate = false;
+        dateIsCorrect = false;
 
       if(isNaN(this._dateValue))
-        correctDate = false;
+        dateIsCorrect = false;
 
-      if(!correctDate && !this._mask.options.allowIncomplete)
+      if(!dateIsCorrect && !this._mask.options.allowIncomplete)
         this.setText("");
 
       this.onTouched();
     }
 
     protected toModel(displayedValue: string): void {
-      this._dateValue = MaskDate.parseDate(this._mask.sections, displayedValue);
+      this._dateValue = this._parser.transform(this._mask, displayedValue); // MaskDate.parseDate(this._mask.sections, displayedValue);
       this.onChange(this._dateValue);
     }
 
@@ -65,19 +72,11 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
     // Formatter: Ctrl --> View
     writeValue(value: any): void {
-      let txt = MaskDate.formatDate(this._mask.sections, value);
+      this._dateValue = value;
+      let txt = this._formatter.transform(this._mask, value); // MaskDate.formatDate(this._mask.sections, value);
       if(txt != this._txtValue)
         this.setText(txt, false); // Отправка в модель не нужна, т.к. этот обработчик и запущен после изменений в модели
     }
-
-    /*
-    protected setText(txt: string) {
-      super.setText(txt);
-      this._dateValue = MaskDate.parseDate(this._mask.sections, txt);
-
-      // Вот оно! Но это сработает без реального изменения (при первом writeValue).. Нужно исправить.
-      this.onChange(this._dateValue);
-    }*/
 
     @Input("yn-mask-date")
     public set mask(m: string) {
@@ -88,7 +87,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       return this._mask.mask;
     }
 
-    @Input("yn-mask-date-options")
+    @Input("yn-mask-options")
     set options(v: MaskOptions) {
       this._mask.options = v;
     }
@@ -98,8 +97,25 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       this.processKey(e);
     }
 
+    setLocale(locale: Locale) {
+      this._mask.updateMask(); // Заменим формат
+      this.writeValue(this._dateValue); // Обновим представление
+    }
+
+    localeSubscription: any;
+
+    ngOnInit() {
+      // На смену локализации можем отреагировать изменением формата
+      this.localeSubscription = this.intl.onLocaleChanged.subscribe(locale => {
+        this.setLocale(locale);
+      });
+    }
+
+    ngOnDestroy() {
+      this.localeSubscription.unsubscribe();
+    }
+
     constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {
       super(_renderer, _elementRef, intl);
     }
-
 }

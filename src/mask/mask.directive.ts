@@ -23,11 +23,6 @@ import { MaskBaseDirective } from "./mask-base.directive";
 })
 export class MaskDirective extends MaskBaseDirective implements ControlValueAccessor {
 
-//    private _undo: Array<MaskSectionKeyResult> = [];
-  //  private _redo: Array<MaskSectionKeyResult> = [];
-
-    // protected _mask: Mask;
-
     private onChange = (_: any) => {};
     private onTouched = () => {};
 
@@ -83,7 +78,6 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
     constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {
       super(_renderer, _elementRef, intl);
-      //this._mask = new Mask(this.intl);
     }
 
 }

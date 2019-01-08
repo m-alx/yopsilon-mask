@@ -22,4 +22,5 @@ export class Locale {
 
   public digits: RegExp = /[0-9]/;
   public letters: RegExp = /[a-z]/i;
+  
 }

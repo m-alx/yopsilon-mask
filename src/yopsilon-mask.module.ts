@@ -9,17 +9,19 @@ import { BrowserModule } from "@angular/platform-browser";
 
 import { Internationalization } from "./internationalization/internationalization.class";
 import { LocaleRu } from "./internationalization/locales/ru-ru";
-//import { Mask } from "./mask/mask.class";
-//import { MaskOptions } from "./mask/mask-options.class";
+
 import { MaskDirective } from "./mask/mask.directive";
 import { MaskDateDirective } from "./mask/mask-date.directive";
 
+import { DateParserPipe } from "./mask/date-parser.pipe";
+import { DateFormatterPipe } from "./mask/date-formatter.pipe";
+
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [MaskDirective, MaskDateDirective],
+  declarations: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
   providers: [Internationalization, LocaleRu],
-  exports: [MaskDirective, MaskDateDirective]
+  exports: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe]
 })
 export class YopsilonMaskModule {
 

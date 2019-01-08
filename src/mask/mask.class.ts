@@ -89,7 +89,7 @@ export class Mask {
   private _mask: string;
   public set mask(v: string) {
     this._mask = v;
-    this.parse();
+    this.updateMask();
   }
 
   public get mask(): string {
@@ -141,7 +141,7 @@ export class Mask {
   }
 
   // Разбиваем строку маски на секции между разделителями
-  private parse(): void {
+  updateMask(): void {
 
     this.sections = [];
 
