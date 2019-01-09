@@ -3,12 +3,13 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Directive, ElementRef, Renderer2 } from "@angular/core";
+import { Output, Directive, ElementRef, Renderer2, EventEmitter } from "@angular/core";
 import { Internationalization } from "../internationalization/internationalization.class";
 import { Mask } from "./mask.class";
 import { Keys } from "../keys/keys.class";
 import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
 import { MaskOptions } from "./mask-options.class";
+import { MaskState } from "./mask-state.class";
 
 @Directive({
     selector: '[yn-mask-base]'
@@ -19,8 +20,30 @@ export abstract class MaskBaseDirective {
     private _redo: Array<MaskSectionKeyResult> = [];
 
     // Текущее текстовое значение
-    protected _txtValue: string;
+    protected _txtValue: string = "";
     protected _mask: Mask;
+
+    // Смена состояния
+    @Output("ynStateChange")
+    stateChange = new EventEmitter<MaskState>();
+
+    // Состояние маски
+    private _state: MaskState = null;
+
+    public get state(): MaskState {
+      return this._state;
+    }
+
+    public set state(v: MaskState) {
+      if(this._state != v) {
+        this._state = v;
+        this.stateChange.emit(this._state); // Излучаем событие
+      }
+    }
+
+    protected updateState() {
+      //
+    }
 
     protected processKey(e: any): void {
       let c: string = e.char;
@@ -121,16 +144,21 @@ export abstract class MaskBaseDirective {
     }
 
     // Установить значение и положение курсора
-    private setRes(res: MaskSectionKeyResult) {
-
-      //this.writeValue(res.newValue);
+    protected setRes(res: MaskSectionKeyResult) {
       this.setText(res.newValue);
       this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', res.newSelStart);
       this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.newSelStart + res.newSelLength);
     }
 
+    protected currentRes() {
+      let res = new MaskSectionKeyResult(this._txtValue, MaskSectionAction.APPLY, 0);
+      res.newSelStart = this._elementRef.nativeElement.selectionStart;
+      res.newSelLength = this._elementRef.nativeElement.selectionEnd - res.newSelStart;
+      return res;
+    }
+
     // Получить текущее значение маски и положение курсора
-    private getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
+    protected getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
       let res = new MaskSectionKeyResult(s, MaskSectionAction.APPLY, 0);
       res.newSelStart = selStart;
       res.newSelLength = selEnd - selStart;
@@ -138,7 +166,7 @@ export abstract class MaskBaseDirective {
     }
 
     // Необходимо будет переопределить этот метод..
-    protected abstract toModel(realValue: any): void;
+    protected abstract toModel(): void;
 
     // Записывает текст в контрол
     protected setText(displayedValue: string, toModel: boolean = true) {
@@ -149,7 +177,7 @@ export abstract class MaskBaseDirective {
 
       // Отправляем в модель
       if(toModel)
-        this.toModel(displayedValue);
+        this.toModel();
     }
 
     constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {

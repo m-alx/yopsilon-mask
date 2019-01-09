@@ -13,8 +13,8 @@ import { LocaleRu } from "./internationalization/locales/ru-ru";
 import { MaskDirective } from "./mask/mask.directive";
 import { MaskDateDirective } from "./mask/mask-date.directive";
 
-import { DateParserPipe } from "./mask/date-parser.pipe";
-import { DateFormatterPipe } from "./mask/date-formatter.pipe";
+import { DateParserPipe } from "./mask/pipes/date-parser.pipe";
+import { DateFormatterPipe } from "./mask/pipes/date-formatter.pipe";
 
 @NgModule({
   imports: [BrowserModule, FormsModule],

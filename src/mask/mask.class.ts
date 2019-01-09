@@ -24,6 +24,7 @@ export class Mask {
   public set options(o: MaskOptions) {
     this._options = o;
     this.sections.forEach(s => s.options = o);
+    this.updateMask();
   }
 
   // Настройки по умолчанию
@@ -39,7 +40,7 @@ export class Mask {
   // Разделители
   public static readonly delimiterChars: string[] = [" ", ".", ",", "(", ")", "/", "|", "-", ":", "+", "'"];
 
-  // Типы секций. Можете добавлять..
+  // Predefined section types. Можете добавлять..
   public static readonly sectionTypes: MaskSectionType[] = [
 
     // Всё, что касается времени
@@ -57,8 +58,8 @@ export class Mask {
     // Всё, что касается даты
     { selectors: ["dd", "DD"], digits: true, alpha: false, min: 1, max: 31, datePart: "d" },
     { selectors: ["mm", "MM"], digits: true, alpha: false, min: 1, max: 12, datePart: "m" },
-    { selectors: ["mmm"], digits: true, alpha: false, datePart: "m" },
-    { selectors: ["MMM"], digits: true, alpha: false, datePart: "m" },
+    { selectors: ["mmm"], digits: false, alpha: true, datePart: "m" },
+    { selectors: ["MMM"], digits: false, alpha: true, datePart: "m" },
     { selectors: ["yy", "YY"], digits: true, alpha: false, min: 0, max: 99, datePart: "yy" },
     { selectors: ["yyyy", "YYYY"], digits: true, alpha: false, min: 0, max: 9999, datePart: "yyyy" },
 
@@ -138,6 +139,47 @@ export class Mask {
     // Но пока не будем здесь усложнять...
     s.delimiter = delimiter;
     this.sections.push(s);
+  }
+
+  pureValue(value: string): string {
+    // Для преобразования из одного шаблона в другой.
+    // Годится только для шаблонов, в котором все секции имеют фиксированную длину
+
+    if(value == null)
+      return value;
+
+    let sectionPos = 0;
+    let res = "";
+    this.sections.forEach(section => {
+      let v = section.extractSectionValue(value, sectionPos);
+      res += section.removePlaceholders(v.sectionValue.value());
+      sectionPos = v.nextSectionPos();
+    });
+
+    return res;
+  }
+
+  applyPureValue(value: string): string {
+    //
+    if(value == null)
+      return value;
+
+    let sectionPos = 0;
+    let res = "";
+    let i = 0;
+    this.sections.forEach(section => {
+      let l = section.section.length;
+      let s = value.substring(i, i + l);
+      res += s;
+      i += l;
+      if(value.length >= i)
+        res += section.delimiter;
+    });
+
+    if(this.options.appendPlaceholders)
+      res = this.appendPlaceholders(res);
+
+    return res;
   }
 
   // Разбиваем строку маски на секции между разделителями
@@ -247,6 +289,10 @@ export class Mask {
   // Форматирование строки по маске
   // Пустая строка будет означать инвалидность
   public checkMask(value: string): boolean  {
+
+    if(value == null)
+      return false;
+
     let sectionPos = 0;
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
@@ -280,7 +326,8 @@ export class Mask {
 
   // Форматирование строки по маске
   // Пустая строка будет означать инвалидность
-  public applyMask(value: string): string  {
+  public applyMask(value: string, autoCorrect: boolean = true): string  {
+
     let sectionPos = 0;
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
@@ -290,7 +337,9 @@ export class Mask {
         break;
 
       v.delimiter = section.delimiter;
-      let sv = section.autoCorrectValue(v.sectionValue.value());
+      let sv = section.removePlaceholders(v.sectionValue.value());
+      if(autoCorrect)
+        sv = section.autoCorrectValue(sv);
 
       res = v.update(sv, 0);
       sectionPos = v.nextSectionPos();
@@ -346,7 +395,6 @@ export class Mask {
         return res;
       }
 
-
       if(res.action == MaskSectionAction.GO_BACK && prev_section != null) {
         // Идем в конец левой секции
         return prev_section.selectLast(res.newValue, prev_sectionStart);
@@ -356,7 +404,8 @@ export class Mask {
         if(i < this.sections.length - 1) {
           // Идем в начало следующей секции
           let next_section = this.sections[i + 1];
-          return next_section.selectFirst(res.newValue, res.nextSectionPos);
+          let valueWithDefaultVariant = next_section.setDefaultVariant(res.newValue, res.nextSectionPos);
+          return next_section.selectFirst(valueWithDefaultVariant, res.nextSectionPos);
         } else {
           // Секция последняя. Скорректируем значение.
           return section.autoCorrect(res.newValue, sectionStart, res.newSelStart, res.newSelLength);

@@ -21,6 +21,10 @@ export class MaskOptions {
   // Клавиши ArrowUp и ArrowDown меняют значения на следующее и предыдущее
   public incrementDecrementValueByArrows: boolean = true;
 
+  // Если включена эта опция, то при переходе на незаполненную секцию с заданными
+  // вариантами значений, автоматически подставится первое значение из списка вариантов
+  public defaultVariants: boolean = true;
+
   // Можно добавить новый тип секции
   public sectionTypes: Array<MaskSectionType> = [];
 

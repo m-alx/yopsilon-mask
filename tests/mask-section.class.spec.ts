@@ -69,6 +69,25 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
   it(`Новая позиция курсора должна быть 3`, () => expect(res.newSelStart).toBe(3));
 });
 
+describe(`Автоматическое заполнение секции первым вариантом: `, () => {
+  let res: any;
+
+  beforeEach(async(() => {
+    let options: MaskOptions = new MaskOptions("_", true);
+    options.appendPlaceholders = true;
+    options.defaultVariants = true;
+
+    let intl = new Internationalization();
+    let mask = new Mask(intl);
+    mask.options = options;
+    mask.mask = "dd mmm yyyy";
+    let section = mask.sections[1];
+    res = section.setDefaultVariant("13 ___ ____", 3);
+  }));
+
+  it(`Новое значение маски должно быть 13 jan ____`, () => expect(res).toBe("13 jan ____"));
+});
+
 describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3 : `, () => {
   let res: any;
 

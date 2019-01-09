@@ -5,9 +5,9 @@
 
 import { Pipe } from "@angular/core";
 
-import { Mask } from "./mask.class";
-import { MaskSection } from "./mask-section.class";
-import { MaskSectionType } from "./mask-section-type.class";
+import { Mask } from "../mask.class";
+import { MaskSection } from "../mask-section.class";
+import { MaskSectionType } from "../mask-section-type.class";
 
 // Парсинг даты по  заданной маске
 @Pipe({
@@ -52,7 +52,7 @@ export class DateFormatterPipe {
         if(datePart == "h") {
           n = date.getHours();
 
-          if(n = 0)
+          if(n == 0)
             n = 12;
           else
             if(n > 12)
@@ -77,7 +77,7 @@ export class DateFormatterPipe {
           s = section.sectionType.variants[n - 1];
         else
           s = section.autoCorrectValue(n + "");
-
+        
         res += s + section.delimiter;
       }
 

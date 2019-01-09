@@ -7,8 +7,7 @@ import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } fro
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Internationalization } from "../internationalization/internationalization.class";
 import { Mask } from "./mask.class";
-import { Keys } from "../keys/keys.class";
-import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
+import { MaskState } from "./mask-state.class";
 import { MaskOptions } from "./mask-options.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
@@ -38,8 +37,22 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       this.onTouched();
     }
 
-    protected toModel(displayedValue: any): void {
-      this.onChange(displayedValue);
+    // Обновляем состояние
+    protected updateState() {
+      if(this._txtValue == "")
+        this.state = MaskState.EMPTY;           // Пустое значение
+      else
+        if(!this._mask.checkMask(this._txtValue))
+          this.state = MaskState.TYPING;       // Считаем, что пользователь не завершил ввод
+        else
+          this.state = MaskState.OK;
+    }
+
+    protected toModel(): void {
+      // Отправляем в модель
+      this.onChange(this._txtValue);
+      // Обновляем состояние
+      this.updateState();
     }
 
     // Пользователь вносит значение. Parser: View --> Ctrl
@@ -55,11 +68,23 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     writeValue(txt: any): void {
       if(this._txtValue != txt)
         this.setText(txt, false); // Не отправляем значение в модель, т.к. этот метод вызывается как раз после изменения модели
+
+      // Но обновить состояние нужно...
+      this.updateState();
     }
 
     @Input("yn-mask")
     public set mask(m: string) {
-      this._mask.mask = m;
+
+      if(this._txtValue != "" && this._mask.mask != "" && this._mask.mask != m) {
+        // По сложному пути
+        let res = this.currentRes();
+        let s = this._mask.pureValue(res.newValue);
+        this._mask.mask = m;
+        res.newValue = this._mask.applyPureValue(s);
+        this.setRes(res);
+      } else
+        this._mask.mask = m;
     }
 
     public get mask(): string {

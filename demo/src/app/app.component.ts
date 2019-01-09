@@ -7,39 +7,16 @@ import * as YN from 'yopsilon-mask';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+  title = 'DEMO PAGE';
 
-  testDate1: any = new Date(1979, 11, 13);
-
-  testValue1: string = '';
-  testValue2: string = '';
-  testValue3: string = '';
-  testValue4: string = '';
-  testValue5: string = '';
-  testValue6: string = '';
-  testValue7: string = '';
-
-  ip_options: YN.MaskOptions = new YN.MaskOptions(" ", false);
-
-  onchange(e) {
-    console.log(e);
-  }
-
-  initMaskOptions() {
-    //this.intl.setCurrentLocale("ru-RU");
-    this.ip_options.appendPlaceholders = false;
-    this.ip_options.placeholder = " ";
+  btnClick(e) {
+    this.intl.setLocale("ru-RU");
   }
 
   constructor(
     private intl: YN.Internationalization,
-    private localeRu: YN.LocaleRu//,
-    //private mask: YN.Mask
+    private localeRu: YN.LocaleRu
   ) {
-    YN.Mask.defaultOptions.appendPlaceholders = true;
-    YN.Mask.sectionTypes.push(
-      { selectors: ["A"], digits: true, alpha: true, regExp: /[a-c]/i },
-    );
-    this.initMaskOptions();
+    //
   }
 }

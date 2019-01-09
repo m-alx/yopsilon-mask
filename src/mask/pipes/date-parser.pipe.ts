@@ -5,9 +5,9 @@
 
 import { Pipe } from "@angular/core";
 
-import { Mask } from "./mask.class";
-import { MaskSection } from "./mask-section.class";
-import { MaskSectionType } from "./mask-section-type.class";
+import { Mask } from "../mask.class";
+import { MaskSection } from "../mask-section.class";
+import { MaskSectionType } from "../mask-section-type.class";
 
 // Парсинг даты по  заданной маске
 @Pipe({
@@ -18,12 +18,15 @@ export class DateParserPipe {
 
     transform(mask: Mask, value: string): any {
 
+      if(value == "")
+        return null;
+
       let sectionPos = 0;
       let res = value;
 
       let d: number = 1;
       let m: number = 1;
-      let y: number = 1900;
+      let y: number = 1970;
 
       let hh: number = 0;
       let mi: number = 0;
@@ -61,7 +64,7 @@ export class DateParserPipe {
               return this.invalidDate();
             n++; // Индекс начинается с нуля
           }
-
+        
         if(n == NaN)
           return this.invalidDate();
 

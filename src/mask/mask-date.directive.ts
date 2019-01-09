@@ -10,14 +10,13 @@ import { Internationalization } from "../internationalization/internationalizati
 import { Locale } from "../internationalization/locale.class";
 
 import { Mask } from "./mask.class";
-import { Keys } from "../keys/keys.class";
-import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
+import { MaskState } from "./mask-state.class";
 import { MaskOptions } from "./mask-options.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
 
-import { DateParserPipe } from "./date-parser.pipe";
-import { DateFormatterPipe } from "./date-formatter.pipe";
+import { DateParserPipe } from "./pipes/date-parser.pipe";
+import { DateFormatterPipe } from "./pipes/date-formatter.pipe";
 
 @Directive({
     selector: '[yn-mask-date]',
@@ -29,37 +28,52 @@ import { DateFormatterPipe } from "./date-formatter.pipe";
 })
 export class MaskDateDirective extends MaskBaseDirective implements ControlValueAccessor {
 
+    // Имплементируем ControlValueAccessor
     private _dateValue: any;
 
     private onChange = (_: any) => {};
     private onTouched = () => {};
 
-    private _parser = new DateParserPipe();
-    private _formatter = new DateFormatterPipe();
-
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 
+    // Заранее подготовим парсер и форматтер
+    private _parser = new DateParserPipe();
+    private _formatter = new DateFormatterPipe();
+
+    // Потеря фокуса
     blur() {
+
+      // Нет необходимости еще раз парсить, если всё произошло так, как ожидается.
+      // this._dateValue = this._parser.transform(this._mask, this._txtValue);
+
       // Очищаем, если дата неверна
-      this._dateValue = this._parser.transform(this._mask, this._txtValue); // MaskDate.parseDate(this._mask.sections, this._txtValue);
-
-      let dateIsCorrect: boolean = true;
-      if(this._dateValue == null)
-        dateIsCorrect = false;
-
-      if(isNaN(this._dateValue))
-        dateIsCorrect = false;
-
-      if(!dateIsCorrect && !this._mask.options.allowIncomplete)
-        this.setText("");
+      if(this._dateValue == null || isNaN(this._dateValue.getTime()))
+        if(!this._mask.options.allowIncomplete)
+          this.setText("");
 
       this.onTouched();
     }
 
-    protected toModel(displayedValue: string): void {
-      this._dateValue = this._parser.transform(this._mask, displayedValue); // MaskDate.parseDate(this._mask.sections, displayedValue);
+    // Обновляем состояние
+    protected updateState() {
+      if(this._dateValue == null)
+        this.state = MaskState.EMPTY; // Пустое значение
+      else
+        if(isNaN(this._dateValue.getTime()))
+          this.state = MaskState.TYPING; // Считаем, что пользователь не завершил ввод
+        else
+          this.state = MaskState.OK;
+    }
+
+    // Отправка значения в модель
+    protected toModel() {
+      // Получаем значение
+      this._dateValue = this._parser.transform(this._mask, this._txtValue);
+      // Отправляем в модель
       this.onChange(this._dateValue);
+      // Обновляем состояние
+      this.updateState();
     }
 
     // Parser: View --> Ctrl
@@ -67,15 +81,18 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       // Write back to model
       let masked = this._mask.applyMask(txt);
       if(masked != this._txtValue)
-        this.setText(masked, true); // С отправкой в модель
+        this.setText(masked); // С отправкой в модель и обновлением состояния
     }
 
     // Formatter: Ctrl --> View
-    writeValue(value: any): void {
+    writeValue(value: any) {
       this._dateValue = value;
-      let txt = this._formatter.transform(this._mask, value); // MaskDate.formatDate(this._mask.sections, value);
+      let txt = this._formatter.transform(this._mask, value);
       if(txt != this._txtValue)
         this.setText(txt, false); // Отправка в модель не нужна, т.к. этот обработчик и запущен после изменений в модели
+
+      // Но обновить состояние нужно...
+      this.updateState();
     }
 
     @Input("yn-mask-date")
@@ -112,6 +129,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     }
 
     ngOnDestroy() {
+      // Отписываемся
       this.localeSubscription.unsubscribe();
     }
 

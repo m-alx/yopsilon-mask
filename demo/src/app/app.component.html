@@ -1,17 +1,13 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Input mask demo
-  </h1>
+<div class="wrapper">
+  <div class="logo"></div>
+  <h1>{{title}}</h1>
+  <form-field caption="Simple date"><date-example example-field></date-example></form-field>
+  <form-field caption="Date"><date2-example example-field></date2-example></form-field>
+  <form-field caption="Time 24 hours"><time-example example-field></time-example></form-field>
+  <form-field caption="Time 12 hours"><time12-example example-field></time12-example></form-field>
+  <form-field caption="Phone"><phone-example example-field></phone-example></form-field>
+  <form-field caption="IP"><ip-example example-field></ip-example></form-field>
+  <form-field caption="Credit card"><credit-card-example example-field></credit-card-example></form-field>
+  <form-field caption="Canadian postal code"><canadian-postal-code-example example-field></canadian-postal-code-example></form-field>
+  <button name="button" (click)="btnClick($event)">Set another locale (Ru)</button><br />
 </div>
-<!--<mask-example mask="dd.mm.yyyy"></mask-example>-->
-<input id="test0" yn-mask-date="dd.mm.yyyy HH:mi" placeholder="dd.mm.yyyy" type="text" [(ngModel)]="testDate1" (onchange)="onchange($event)" /><br />
-{{testDate1}}<br />
-<input id="test1" yn-mask="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" [(ngModel)]="testValue1" />{{testValue1}}<br />
-<input id="test2" yn-mask="HH:mi" placeholder="hh:mi" type="text" [(ngModel)]="testValue2" /><br />
-<input id="test3" yn-mask="+7 NNN NNN-NN-NN" placeholder="+7 XXX XXX-XX-XX" type="text" [(ngModel)]="testValue3" /><br />
-<input id="test4" yn-mask="dd mmm yyyy" placeholder="dd mmm yyyy" type="text" [(ngModel)]="testValue4" /><br />
-<input id="test5" yn-mask="h:mi tt" placeholder="h:mm am/pm" type="text" [(ngModel)]="testValue5" /><br />
-<input id="test6" yn-mask="b.b.b.b" [yn-mask-options]="ip_options" placeholder=" . . . " type="text" [(ngModel)]="testValue6" /><br />
-<input id="test7" yn-mask="NNNN NNNN NNNN NNNN" placeholder="" type="text" [(ngModel)]="testValue7" /><br />
-<input id="test8" yn-mask="ANNN" placeholder="AXXX" type="text" [(ngModel)]="testValue7" />

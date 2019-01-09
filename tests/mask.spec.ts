@@ -97,6 +97,18 @@ describe(`Соответствие строки маске:`, () => {
   it(`Значение 13.AA.1979 НЕ соответствует маске`, () => expect(mask.checkMask("13.AA.1979")).toBeFalsy());
 });
 
+describe(`Соответствие строки маске 2:`, () => {
+
+  //
+  let intl = new Internationalization();
+  let mask = new Mask(intl);
+  mask.mask = "+7 NNN NNN-NN-NN";
+
+  it(`NULL не соответствует маске`, () => expect(mask.checkMask(null)).toBeFalsy());
+  it(`Пустая строка не соответствует маске`, () => expect(mask.checkMask("")).toBeFalsy());
+  it(`Значение +7 921 911-00-00 соответствует маске`, () => expect(mask.checkMask("+7 921 911-00-00")).toBeTruthy());
+});
+
 describe(`Кастомная секция, regular expression`, () => {
 
   let intl = new Internationalization();
@@ -110,7 +122,25 @@ describe(`Кастомная секция, regular expression`, () => {
   mask.mask = "ANNN";
   let res: MaskSectionKeyResult;
 
-
   it(`Первый символ A или B или C: символ D нелья применить`, () => expect(mask.applyKeyAtPos("", "D", 0, 0)).toBe(null));
   it(`Первый символ A или B или C: при нажатии A значение становится равным A `, () => expect(mask.applyKeyAtPos("", "A", 0, 0).newValue).toBe("A"));
+});
+
+describe(`Преобразование из одного шаблона в другой`, () => {
+
+  let intl = new Internationalization();
+  let mask1 = new Mask(intl);
+  let mask2 = new Mask(intl);
+  let opt = new MaskOptions("_", true);
+  opt.appendPlaceholders = true;
+
+  mask1.options = opt;
+  mask2.options = opt;
+
+  mask1.mask = "NNNN NNNN NNNN NNNN";
+  mask2.mask = "NNN NNNNNN NNNNN";
+
+  it(`Чистое значение старой маски`, () => expect(mask1.pureValue("34__ ____ ____ ____")).toBe("34"));
+  it(`Значение для новой маски`, () => expect(mask2.applyPureValue("34")).toBe("34_ ______ _____"));
+
 });

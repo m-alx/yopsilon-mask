@@ -1,4 +1,4 @@
-$axInputPadding: 0.25em; // 0.2em;
+$axInputPadding: 0.4em 0.25em; // 0.2em;
 $axInputBtnWidth: 2.0em;
 
 $border-color: #dedede;
@@ -6,11 +6,18 @@ $accent-color: #ea6b0c;
 $error-color: #d9534f;
 $selection-color: #b6e2fc;
 
+.logo {
+  height: 100px;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../assets/y_logo3.svg");
+}
+
 /deep/ input {
   font-family: "Open Sans", sans-serif;
   font-size: 1em;
   padding: $axInputPadding;
-  margin: 0.5em;
   border: 1px solid $border-color;
   outline: 0;
 }
@@ -30,6 +37,21 @@ $selection-color: #b6e2fc;
   text-shadow: none;
 }
 
+/deep/ ::placeholder {
+  color: #aaa;
+}
+
 h1 {
-  font-size: 150%;
+  // border-radius: 50px;
+  // background-color: rgba(255,255,155,0.5);
+  margin-top: -36px;
+  margin-left: 170px;
+  color: #555;
+  font-size: 1.4em;
+  text-align: center;
+}
+
+.wrapper {
+  margin: 0 auto;
+  max-width: 650px;
 }
