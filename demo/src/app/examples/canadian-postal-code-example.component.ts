@@ -32,7 +32,7 @@ export class CanadianPostalCodeExampleComponent {
     this.stateClass = state == YN.MaskState.OK ? "green" : "";
   }
 
-  constructor() {
+  constructor() {    
     this.options.sectionTypes.push(
       { selectors: ["A"], digits: false, alpha: true, regExp: /[ABCEGHJKLMNPRSTVXY]/i },
     );

@@ -17,6 +17,6 @@ export class AppComponent {
     private intl: YN.Internationalization,
     private localeRu: YN.LocaleRu
   ) {
-    //
+    // ...
   }
 }

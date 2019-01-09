@@ -13,7 +13,7 @@ export class MaskOptions {
   public autoCorrect: boolean = true;
 
   // При начале внесения автоматически добавляются плэйсхолдеры
-  public appendPlaceholders: boolean = false;
+  public appendPlaceholders: boolean = true;
 
   // Разрешить значения, внесение которых не завершено (имеются плэйсхолдеры или длина не соответствует маске)
   public allowIncomplete: boolean = false;
