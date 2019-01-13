@@ -58,10 +58,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     // Пользователь вносит значение. Parser: View --> Ctrl
     // Только то, что не обработано маской
     input(txt: any) {
-        // Поэтому пытаемся применить маску к введенному значению.
-        let masked = this._mask.applyMask(txt);
-        if(masked != this._txtValue)
-          this.setText(masked, true);
+      this.doInput(txt);
     }
 
     // Отображаем значение в компоненте. Formatter: Ctrl --> View
@@ -98,7 +95,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
     @HostListener("keydown", ["$event"])
     keyDown(e: any) {
-      this.processKey(e);
+      return this.processKey(e);
     }
 
     constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {

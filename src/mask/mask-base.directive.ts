@@ -11,9 +11,6 @@ import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
 import { MaskOptions } from "./mask-options.class";
 import { MaskState } from "./mask-state.class";
 
-@Directive({
-    selector: '[yn-mask-base]'
-})
 export abstract class MaskBaseDirective {
 
     private _undo: Array<MaskSectionKeyResult> = [];
@@ -45,7 +42,96 @@ export abstract class MaskBaseDirective {
       //
     }
 
-    protected processKey(e: any): void {
+    protected wichKeyIsPressed(txt1: string, txt2: string,
+      selStart1: number, selStart2: number,
+      selLength: number): string
+      {
+
+      if(txt1 == txt2 && selStart1 == selStart2 - 1)
+        return "ArrowRight";
+
+      if(txt1 == txt2 && selStart1 == selStart2 + 1)
+        return "ArrowLeft";
+
+      if(selLength == 1) {
+        //
+        if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
+          if(txt1.substring(selStart2 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
+            return "Backspace";
+
+        if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
+          if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
+            if(selStart1 == selStart2 + 1)
+              return "Backspace";
+
+        return txt2.substring(selStart1, selStart1 + 1);
+      }
+
+      // прове|рка
+      // пров|рка
+      if(txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1) )
+        if(txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length))
+          return "Backspace";
+
+      // пров|ерка
+      // пров|рка
+      if(txt1.substring(0, selStart1) == txt2.substring(0, selStart1) )
+        if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length))
+          return "Delete";
+
+      return txt2.substring(selStart1, selStart1 + 1);
+    }
+
+    protected processAndroid(txt: any): void {
+      //
+      let res = this.currentRes();
+
+      // Теоретически положение курсора у нас есть..
+      let key: string = this.wichKeyIsPressed(this.last_res.newValue, txt,
+          this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
+
+      let r = this.processKey(
+        {
+          keyCode: -1,
+          key: key,
+          shiftKey: false,
+          ctrlKey: false,
+          target: { selectionStart: this.last_res.newSelStart, selectionEnd: 0 },
+          preventDefault: (_: any) => {}
+        });
+
+      if(!r)
+        this.setRes(this.last_res); // Не приняли, вернули всё назад
+
+      // Зачем это здесь?.. А вдруг..
+      this.android_behavior = false;
+      return;
+    }
+
+    protected android_behavior: boolean = false;
+    protected last_res: MaskSectionKeyResult;
+
+    protected doInput(txt: any) {
+      if(this.android_behavior) {
+        this.processAndroid(txt);
+        return;
+      }
+
+      // Поэтому пытаемся применить маску к введенному значению.
+      let masked = this._mask.applyMask(txt);
+      if(masked != this._txtValue)
+        this.setText(masked, true);
+    }
+
+    protected processKey(e: any): boolean {
+
+      if(e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) {
+        // Android detected
+        this.android_behavior = true;
+        this.last_res = this.currentRes();
+        return;
+      }
+
       let c: string = e.char;
       if(c == undefined)
         c = e.key;
@@ -58,22 +144,22 @@ export abstract class MaskBaseDirective {
       let s = this._txtValue;
 
       if(Keys.isFunctional(e.keyCode))
-        return;
+        return true;
 
       if(key == "Tab")
-        return;
+        return true;
 
       if(key == "Alt")
-        return;
+        return true;
 
       if(key == "Home" || key == "End")
-        return;
+        return true;
 
       if(e.ctrlKey && (keyCode == "KeyA" || keyCode == "KeyX" || keyCode == "KeyC" || keyCode == "KeyV" || key == "Insert"))
-        return;
+        return true;
 
       if(e.shiftKey && (key == "Delete" || key == "Insert")) {
-        return;
+        return true;
       }
 
       if(e.ctrlKey && keyCode == "KeyZ") {
@@ -84,7 +170,7 @@ export abstract class MaskBaseDirective {
           this.setRes(undoRes);
         }
         e.preventDefault();
-        return;
+        return false;
       }
 
       if(e.ctrlKey && keyCode == "KeyY") {
@@ -95,28 +181,28 @@ export abstract class MaskBaseDirective {
           this.setRes(redoRes);
         }
         e.preventDefault();
-        return;
+        return false;
       }
 
       // Если выделено всё
       if(selStart == 0 && selEnd == this._txtValue.length)
       {
         if(key == "Delete" || key == "Backspace")
-          return;
+          return true;
 
         // Если стрелка влево, то всё равно что Home
         if(key == "ArrowLeft") {
           selStart = 0;
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', selStart);
-          return;
+          return false;
         }
 
         if(key == "ArrowRight") {
           selStart = this._txtValue.length;
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', selStart);
-          return;
+          return false;
         }
       }
 
@@ -138,13 +224,22 @@ export abstract class MaskBaseDirective {
         }
 
         this.setRes(res);
+
+        if(this.android_behavior)
+          return true; // ???? Для процесскея норм, а для инпута не очень.
+
       }
 
       e.preventDefault();
+      return false;
     }
 
     // Установить значение и положение курсора
     protected setRes(res: MaskSectionKeyResult) {
+
+      if(this.android_behavior)
+        res.newSelLength = 0;
+
       this.setText(res.newValue);
       this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', res.newSelStart);
       this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.newSelStart + res.newSelLength);

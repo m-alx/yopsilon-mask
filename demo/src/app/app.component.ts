@@ -9,6 +9,8 @@ import * as YN from 'yopsilon-mask';
 export class AppComponent {
   title = 'DEMO PAGE';
 
+  testValue: string = "";
+
   btnClick(e) {
     this.intl.setLocale("ru-RU");
   }

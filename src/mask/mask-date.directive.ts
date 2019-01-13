@@ -78,10 +78,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
     // Parser: View --> Ctrl
     input(txt: any) {
-      // Write back to model
-      let masked = this._mask.applyMask(txt);
-      if(masked != this._txtValue)
-        this.setText(masked); // С отправкой в модель и обновлением состояния
+      this.doInput(txt);
     }
 
     // Formatter: Ctrl --> View
@@ -111,7 +108,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
     @HostListener("keydown", ["$event"])
     keyDown(e: any) {
-      this.processKey(e);
+      return this.processKey(e);
     }
 
     setLocale(locale: Locale) {

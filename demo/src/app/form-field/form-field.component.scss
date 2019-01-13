@@ -7,7 +7,7 @@
 }
 
 :host > label {
-  width: 175px; padding: 5px 15px;
+  width: 175px;
 }
 
 :host > div {
@@ -35,7 +35,8 @@
 }
 
 /deep/ .input-wrapper {
-  display: flex;
+  display: inline-flex;
+  width: 100%;
   flex-wrap: nowrap;
   align-items: baseline;
   align-content: stretch;
