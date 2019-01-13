@@ -15,4 +15,5 @@ export { Locale } from './src/internationalization/locale.class';
 export { LocaleDe } from './src/internationalization/locales/de-de';
 export { LocaleEs } from './src/internationalization/locales/es-es';
 export { LocaleFr } from './src/internationalization/locales/fr-fr';
+export { LocalePt } from './src/internationalization/locales/pt-pt';
 export { LocaleRu } from './src/internationalization/locales/ru-ru';

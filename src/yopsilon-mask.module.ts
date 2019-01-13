@@ -11,6 +11,7 @@ import { Internationalization } from "./internationalization/internationalizatio
 import { LocaleDe } from "./internationalization/locales/de-de";
 import { LocaleEs } from "./internationalization/locales/es-es";
 import { LocaleFr } from "./internationalization/locales/fr-fr";
+import { LocalePt } from "./internationalization/locales/pt-pt";
 import { LocaleRu } from "./internationalization/locales/ru-ru";
 
 import { Mask } from "./mask/mask.class";
@@ -26,10 +27,11 @@ import { DateFormatterPipe } from "./mask/pipes/date-formatter.pipe";
   declarations: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
   providers: [Mask, Internationalization,
-    LocaleRu,
     LocaleDe,
     LocallEs,
-    LocaleFr],
+    LocaleFr,
+    LocalePt,
+    LocaleRu],
   exports: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe]
 })
 export class YopsilonMaskModule {
