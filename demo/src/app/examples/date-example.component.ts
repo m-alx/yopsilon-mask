@@ -5,7 +5,7 @@ import * as YN from "yopsilon-mask";
   selector: "date-example",
   template:
     `<div class="input-wrapper">
-        <input yn-mask-date="date" [placeholder]="intl.currentLocale.dateFormat" (ynStateChange)="stateChange($event)" [(ngModel)]="dateValue" autofocus="1" />
+        <input yn-mask-date="date" [placeholder]="intl.locale.dateFormat" (ynStateChange)="stateChange($event)" [(ngModel)]="dateValue" autofocus="1" />
         <div class="state-indicator" [ngClass]="stateClass">{{state}}</div>
      </div>
      <span class="model-value">{{dateValue}}</span>

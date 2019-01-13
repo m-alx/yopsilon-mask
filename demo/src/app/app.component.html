@@ -1,7 +1,33 @@
 <div class="wrapper">
   <div class="logo"></div>
   <h1>{{title}}</h1>
-  <!--<input yn-test="dd.mm.yyyy" placeholder="dd.mm.yyyy" [(ngModel)]="testValue" />-->
+  <div class="options">
+    <div>
+      <label class="yn-cb">Append placeholders
+        <input type="checkbox" [(ngModel)]="appendPlaceholders" />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+    <div>
+      <label class="yn-cb">Replace mode
+        <input type="checkbox" [(ngModel)]="replaceMode" />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+    <div>
+      <label for="placeholderSel">Placeholder</label>
+      <select id="placeholderSel" [(ngModel)]="placeholder">
+        <option value="_">Underscore [_]</option>
+        <option [value]="whiteSpace">White space [ ]</option>
+      </select>
+    </div>
+    <div>
+      <label for="localeSel">Localization</label>
+      <select id="localeSel" [(ngModel)]="intl.currentLocale">
+        <option *ngFor="let locale of intl.locales" [value]="locale.shortName">{{locale.name}}</option>
+      </select>
+    </div>
+  </div>
   <form-field caption="Simple date"><date-example example-field></date-example></form-field>
   <form-field caption="Date"><date2-example example-field></date2-example></form-field>
   <form-field caption="Time 24 hours"><time-example example-field></time-example></form-field>
@@ -10,5 +36,7 @@
   <form-field caption="IP"><ip-example example-field></ip-example></form-field>
   <form-field caption="Credit card"><credit-card-example example-field></credit-card-example></form-field>
   <form-field caption="Canadian postal code"><canadian-postal-code-example example-field></canadian-postal-code-example></form-field>
-  <button name="button" (click)="btnClick($event)">Set another locale (Ru)</button><br />
+  <div class="footer">
+    <a href="https://github.com/m-alx/yopsilon-mask" target="_blank">GitHub</a>
+  </div>
 </div>
