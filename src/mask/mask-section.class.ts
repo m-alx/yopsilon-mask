@@ -58,6 +58,16 @@ export class MaskSection {
 
   // Наибольшая длина
   public get maxLength(): number {
+
+    if(this.hasVariants()) {
+      let ml: number = 0;
+      this.sectionType.variants.forEach(v => {
+        if(v.length > ml)
+          ml = v.length;
+      });
+      return ml;
+    }
+
     if(this.sectionType && this.sectionType.max && ("" + this.sectionType.max).length > this.section.length)
       return ("" + this.sectionType.max).length;
     else

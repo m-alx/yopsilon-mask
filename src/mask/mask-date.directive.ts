@@ -120,7 +120,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
     ngOnInit() {
       // На смену локализации можем отреагировать изменением формата
-      this.localeSubscription = this.intl.onLocaleChanged.subscribe(locale => {
+      this.localeSubscription = this.intl.onLocaleChange.subscribe(locale => {
         this.setLocale(locale);
       });
     }

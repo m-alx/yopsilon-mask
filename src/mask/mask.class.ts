@@ -16,6 +16,7 @@ import { MaskOptions } from "./mask-options.class";
 
 // Маска
 // @dynamic
+@Injectable()
 export class Mask {
 
   // Настройки
@@ -193,29 +194,29 @@ export class Mask {
     switch(this._mask) {
 
       case "date": {
-        s = this.intl.currentLocale.dateFormat;
+        s = this.intl.locale.dateFormat;
         break;
       }
 
       case "time":
       case "timeHM": {
-        s = this.intl.currentLocale.timeHMFormat;
+        s = this.intl.locale.timeHMFormat;
         break;
       }
 
       case "timeHMS": {
-        s = this.intl.currentLocale.timeHMSFormat;
+        s = this.intl.locale.timeHMSFormat;
         break;
       }
 
       case "dateTime":
       case "dateTimeHM": {
-        s = this.intl.currentLocale.dateTimeHMFormat;
+        s = this.intl.locale.dateTimeHMFormat;
         break;
       }
 
       case "dateTimeHMS": {
-        s = this.intl.currentLocale.dateTimeHMSFormat;
+        s = this.intl.locale.dateTimeHMSFormat;
         break;
       }
 
@@ -360,49 +361,58 @@ export class Mask {
     let prev_sectionStart = 0;
     let acceptDelimiterChars = true;
 
+    // Добавляем плэйсхолдеры перед обработкой. Чтобы обработчик мог их учитывать
+    // при расчете следующей позиции курсора
+    if(this.options.appendPlaceholders)
+      value = this.appendPlaceholders(value);
+
     for(let i = 0; i < this.sections.length; i++) {
 
       section = this.sections[i];
 
+      // Обработка пользовательского действия
       let res: MaskSectionKeyResult = section.applyKey(value, key, sectionStart,
                                                        selStart,
                                                        selLength,
                                                        acceptDelimiterChars,
                                                        i == this.sections.length - 1);
 
+      // Нельзя ничего применить
+      if(res.action == MaskSectionAction.NONE)
+       return null;
+
+      // Добавляем еще раз плэйсхолдеры
       if(this.options.appendPlaceholders)
         res.newValue = this.appendPlaceholders(res.newValue);
 
-      if(res.action == MaskSectionAction.APPLY) // Готово!
+      // Готово!
+      if(res.action == MaskSectionAction.APPLY)
         return res;
 
-      if(res.action == MaskSectionAction.NONE) // Нельзя ничего применить
-        return null;
-
+      // Идем в конец предыдущей секции
+      // И применяем Delete
       if(res.action == MaskSectionAction.GO_BACK_AND_DELETE && prev_section != null) {
-        // Идем в конец левой секции
-        // И применяем Delete
         res = prev_section.selectLast(res.newValue, prev_sectionStart, true);
         res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.newSelStart, res.newSelLength);
         return res;
       }
 
+      // Идем в конец предыдущей секции
+      // И тоже применяем Delete
       if(res.action == MaskSectionAction.GO_BACK_AND_BACKSPACE && prev_section != null) {
-        // Идем в конец левой секции
-        // И применяем Delete
         res = prev_section.selectLast(res.newValue, prev_sectionStart);
         res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.newSelStart, res.newSelLength);
         return res;
       }
 
-      if(res.action == MaskSectionAction.GO_BACK && prev_section != null) {
-        // Идем в конец левой секции
+      // Идем в конец предыдущей секции
+      if(res.action == MaskSectionAction.GO_BACK && prev_section != null)
         return prev_section.selectLast(res.newValue, prev_sectionStart);
-      }
 
+
+      // Идем в начало следующей секции
       if(res.action == MaskSectionAction.GO_FWD) {
         if(i < this.sections.length - 1) {
-          // Идем в начало следующей секции
           let next_section = this.sections[i + 1];
           let valueWithDefaultVariant = next_section.setDefaultVariant(res.newValue, res.nextSectionPos);
           return next_section.selectFirst(valueWithDefaultVariant, res.nextSectionPos);
@@ -412,8 +422,8 @@ export class Mask {
         }
       }
 
+      // К этой секции ничего не применилось. Переходим к следующей секции..
       if(res.action == MaskSectionAction.SKIP) {
-        // Переходим к следующей секции
 
         // Запомним положение текущей секции и саму секцию для возврата по BACKSPACE
         // и стрелке влево
@@ -456,7 +466,7 @@ export class Mask {
 
   constructor(protected intl: Internationalization) {
     // Здесь нужно подписаться на смену локализации и поменять наименования месяцев
-    this.intl.onLocaleChanged.subscribe(locale => {
+    this.intl.onLocaleChange.subscribe(locale => {
       this.setLocale(locale);
     });
   }

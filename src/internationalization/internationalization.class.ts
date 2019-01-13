@@ -11,42 +11,50 @@ import { Locale } from "./locale.class";
 @Injectable()
 export class Internationalization {
 
+  // Список локализаций
   public locales: Array<Locale> = [];
-  public currentLocaleName: string;
 
   // При изменении локализации
-  private _onLocaleChanged: BehaviorSubject<Locale> = new BehaviorSubject<Locale>(this.currentLocale);
-  public readonly onLocaleChanged: Observable<Locale> = this._onLocaleChanged.asObservable();
+  private _onLocaleChange: BehaviorSubject<Locale> = new BehaviorSubject<Locale>(this.locale);
+  public readonly onLocaleChange: Observable<Locale> = this._onLocaleChange.asObservable();
 
-  //
+  // Текущая локализация
+  public _currentLocale: string;
+
+  public get currentLocale(): string {
+    return this._currentLocale;
+  }
+
+  public set currentLocale(shortName: string) {
+    this._currentLocale = shortName;
+    this._onLocaleChange.next(this.locale);
+  }
+
+  // Добавить локализацию
   public addLocale(locale: Locale) {
     if(!this.locales.find(l => l.shortName == locale.shortName))
       this.locales.push(locale);
   }
 
-  public get currentLocale(): Locale {
-    let res = this.locales.find(l => l.shortName == this.currentLocaleName);
+  //
+  public get locale(): Locale {
+    let res = this.locales.find(l => l.shortName == this._currentLocale);
     if(!res)
       return this.locales[0];
     else
       return res;
   }
 
-  public setLocale(name: string) {
-    this.currentLocaleName = name;
-    this._onLocaleChanged.next(this.currentLocale);
-  }
-
   public get shortMonthNames() {
-    return this.currentLocale.shortMonthNames;
+    return this.locale.shortMonthNames;
   }
 
   public isDigit(c: string): boolean {
-    return c.length === 1 && c.match(this.currentLocale.digits) != null;
+    return c.length === 1 && c.match(this.locale.digits) != null;
   }
 
   public isLetter(c: string): boolean {
-    return c.length === 1 && c.match(this.currentLocale.letters) != null;
+    return c.length === 1 && c.match(this.locale.letters) != null;
   }
 
   constructor() {
@@ -81,6 +89,6 @@ export class Internationalization {
       }
     );
 
-    this.currentLocaleName = this.locales[0].shortName;
+    this.currentLocale = this.locales[0].shortName;
   }
 }
