@@ -28,7 +28,7 @@ import { DateFormatterPipe } from "./mask/pipes/date-formatter.pipe";
   entryComponents: [],
   providers: [Mask, Internationalization,
     LocaleDe,
-    LocallEs,
+    LocaleEs,
     LocaleFr,
     LocalePt,
     LocaleRu],

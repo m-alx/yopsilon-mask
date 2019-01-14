@@ -48,8 +48,10 @@ export class AppComponent {
     // список синглтона Internationalization
     // и могут быть активированы указанием свойства currentLocale:
     //    intl.currentLocale = "ru-RU";
+    private localeEs: YN.LocaleEs,
     private localeFr: YN.LocaleFr,
     private localeDe: YN.LocaleDe,
+    private localePt: YN.LocalePt,
     private localeRu: YN.LocaleRu
   ) {
     // ...

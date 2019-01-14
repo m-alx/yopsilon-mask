@@ -11,7 +11,9 @@ export { MaskSectionAction } from './src/mask/mask-section.class';
 export { MaskSectionKeyResult } from './src/mask/mask-section.class';
 
 export { Internationalization } from './src/internationalization/internationalization.class';
+
 export { Locale } from './src/internationalization/locale.class';
+
 export { LocaleDe } from './src/internationalization/locales/de-de';
 export { LocaleEs } from './src/internationalization/locales/es-es';
 export { LocaleFr } from './src/internationalization/locales/fr-fr';
