@@ -58,7 +58,7 @@ import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-root',
-    template: `<input yn-mask="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" [(ngModel)]="dateValue" />`
+    template: `<input yn-mask-date="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" [(ngModel)]="dateValue" />`
 })
 export class AppComponent {
   dateValue: any = new Date();

@@ -37,6 +37,12 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       this.onTouched();
     }
 
+    // Пользователь вносит значение. Parser: View --> Ctrl
+    // Только то, что не обработано маской
+    input(txt: any) {
+      this.doInput(txt);
+    }
+
     // Обновляем состояние
     protected updateState() {
       if(this._txtValue == "")
@@ -53,12 +59,6 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       this.onChange(this._txtValue);
       // Обновляем состояние
       this.updateState();
-    }
-
-    // Пользователь вносит значение. Parser: View --> Ctrl
-    // Только то, что не обработано маской
-    input(txt: any) {
-      this.doInput(txt);
     }
 
     // Отображаем значение в компоненте. Formatter: Ctrl --> View
