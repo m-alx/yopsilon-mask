@@ -52,7 +52,8 @@ export class AppComponent {
     private localeFr: YN.LocaleFr,
     private localeDe: YN.LocaleDe,
     private localePt: YN.LocalePt,
-    private localeRu: YN.LocaleRu
+    private localeRu: YN.LocaleRu,
+    private localeChinese: YN.LocaleChinese,
   ) {
     // ...
   }

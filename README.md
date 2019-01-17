@@ -66,6 +66,8 @@ export class AppComponent {
 }
 ```
 
+#### 3. Predefined patterns
+
 #### 4. Options
 
 #### 5. Custom sections

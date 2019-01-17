@@ -9,6 +9,16 @@ import { MaskOptions } from "../src/mask/mask-options.class";
 import { Mask } from "../src/mask/mask.class";
 import { async } from '@angular/core/testing';
 
+describe(`Получение списка секций маски [yyyy年mm月dd日]: `, () => {
+  let intl = new Internationalization();
+  let mask = new Mask(intl);
+  mask.mask = "yyyy年mm月dd日";
+
+  it(`Всего три секции`, () => expect(mask.sections.length).toBe(3));
+  it(`Первая секция yyyy`, () => expect(mask.sections[0].section).toBe("yyyy"));
+  it(`Разделитель первой секции 年`, () => expect(mask.sections[0].delimiter).toBe("年"));
+});
+
 describe(`Нажатие [ArrowRight] с selLength=0 при значении [13.12.2018] перед [018]: `, () => {
   let res: MaskSectionKeyResult;
 

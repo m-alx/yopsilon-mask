@@ -68,13 +68,13 @@ export class Internationalization {
                           "Aug", "Sep", "Oct", "Nov", "Dec"],
 
         longMonthNames: ["January", "February", "March", "April", "May", "June",
-                         "July", "August", "September", "October", "November",
-                         "December"],
+                     "July", "August", "September", "October", "November",
+                     "December"],
 
         shortDayNames:  ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 
         longDayNames:   ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-                         "Friday", "Saturday"],
+                     "Friday", "Saturday"],
 
         firstDayOfWeek: 0,
         dateFormat: "mm/dd/yyyy",

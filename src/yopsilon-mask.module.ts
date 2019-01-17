@@ -13,6 +13,7 @@ import { LocaleEs } from "./internationalization/locales/es-es";
 import { LocaleFr } from "./internationalization/locales/fr-fr";
 import { LocalePt } from "./internationalization/locales/pt-pt";
 import { LocaleRu } from "./internationalization/locales/ru-ru";
+import { LocaleChinese } from "./internationalization/locales/zh-cn";
 
 import { Mask } from "./mask/mask.class";
 
@@ -27,6 +28,7 @@ import { DateFormatterPipe } from "./mask/pipes/date-formatter.pipe";
   declarations: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
   providers: [Mask, Internationalization,
+    LocaleChinese,
     LocaleDe,
     LocaleEs,
     LocaleFr,

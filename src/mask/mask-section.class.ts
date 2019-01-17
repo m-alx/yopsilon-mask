@@ -53,6 +53,14 @@ export class MaskSection {
 
   // Длина секции
   public get length(): number {
+    if(this.hasVariants()) {
+      let min: number = 99;
+      this.sectionType.variants.forEach(v => {
+        if(v.length < min)
+          min = v.length;
+      });
+      return min;
+    }
     return this.section.length;
   }
 

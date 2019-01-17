@@ -109,6 +109,17 @@ export class Mask {
     return Mask.sectionTypes.find(i => (i.selectors.find(sel => sel == s) != null));
   }
 
+  private selectSectionTypeByFirstChar(char: string): MaskSectionType {
+
+    // Сначала поищем в опциях
+    let res: MaskSectionType = this.options.sectionTypes.find(i => (i.selectors.find(sel => sel[0] == char) != null));
+    if(res != null)
+      return res;
+
+    // Затем, среди стандартных
+    return Mask.sectionTypes.find(i => (i.selectors.find(sel => sel[0] == char) != null));
+  }
+
   // Добавляет в список секций пустую секцию, имеющую разделитель
   private addEmptySection(delimiter: string) {
     this.sections.push(new MaskSection(this.intl, this.options, "", delimiter));
@@ -223,7 +234,6 @@ export class Mask {
       default: s = this._mask;
     }
 
-
     if(!s || s.length==0)
       return;
 
@@ -256,6 +266,15 @@ export class Mask {
           del += s[i];
           i++;
         }
+
+        if(del == "") // Не найден разделитель
+        {
+          if(i < s.length && this.selectSectionTypeByFirstChar(s[i]) == null) { // Если на текущий символ не найдется секции..
+            del = s[i];                               // ..то это тоже разделитель
+            i++;
+          }
+        }
+
         this.addSection(part, del);
         continue;
       }
