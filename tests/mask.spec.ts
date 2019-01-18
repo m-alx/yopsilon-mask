@@ -19,6 +19,47 @@ describe(`Получение списка секций маски [yyyy年mm月d
   it(`Разделитель первой секции 年`, () => expect(mask.sections[0].delimiter).toBe("年"));
 });
 
+describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日]: `, () => {
+  let intl = new Internationalization();
+  let opt = new MaskOptions("_", true);
+  let mask = new Mask(intl);
+  mask.options = opt;
+  mask.mask = "yyyy年mm月dd日";
+
+  let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
+  it(`ReplaceMode=true. ArrowLeft. New selectionStart must be 9`, () => expect(res.newSelStart).toBe(9));
+  it(`ReplaceMode=true. ArrowLeft. Должен быть выделен последний символ последней секции`, () => expect(res.newSelLength).toBe(1));
+});
+
+describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем Backspace: `, () => {
+  let intl = new Internationalization();
+  let opt = new MaskOptions("_", true);
+  let mask = new Mask(intl);
+  mask.options = opt;
+  mask.mask = "yyyy年mm月dd日";
+
+  let res = mask.applyKeyAtPos("2019年01月18日", "Backspace", 11, 0);
+  it(`ReplaceMode=true. New Value must be 2019年01月1_日`, () => expect(res.newValue).toBe("2019年01月1_日"));
+  it(`ReplaceMode=true. New SelectionStart must be 9`, () => expect(res.newSelStart).toBe(9));
+  it(`ReplaceMode=true. New SelectionLength must be 1`, () => expect(res.newSelLength).toBe(1));
+
+});
+
+
+describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем ArrowLeft при ReplaceMode = false: `, () => {
+  let intl = new Internationalization();
+  let opt = new MaskOptions("_", true);
+  let mask = new Mask(intl);
+  mask.options = opt;
+  mask.mask = "yyyy年mm月dd日";
+
+  mask.options.replaceMode = false;
+  let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
+  it(`ReplaceMode=false. New SelectionStart must be 10`, () => expect(res.newSelStart).toBe(10));
+  it(`ReplaceMode=false. New SelectionLength must be 0`, () => expect(res.newSelLength).toBe(0));
+
+});
+
 describe(`Нажатие [ArrowRight] с selLength=0 при значении [13.12.2018] перед [018]: `, () => {
   let res: MaskSectionKeyResult;
 
@@ -78,9 +119,8 @@ describe(`Символ разделителя в пустой секции до�
 
   beforeEach(async(() => {
 
-    let opt = new MaskOptions("_", true);
+    let opt = new MaskOptions(" ", true);
     opt.appendPlaceholders = false;
-    // opt.placeholder = "_";
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
@@ -91,6 +131,26 @@ describe(`Символ разделителя в пустой секции до�
 
   it(`Впечатываем точку. Должно остаться 172. . . `, () => expect(res.newValue).toBe("172. . . "));
   it(`Курсор должен остаться на месте`, () => expect(res.newSelStart).toBe(4));
+});
+
+describe(`Символ разделителя не должен приниматься пустой секцией, если одна из секций уже отвергла его: `, () => {
+  let res: MaskSectionKeyResult;
+  let opt: MaskOptions;
+
+  beforeEach(async(() => {
+
+    let opt = new MaskOptions("_", true);
+    opt.appendPlaceholders = false;
+
+    let intl = new Internationalization();
+    let mask = new Mask(intl);
+    mask.mask = "+1 NNN NNN-NN-NN";
+    mask.options = opt;
+    res = mask.applyKeyAtPos("", "1", 0, 0);
+  }));
+
+  it(`С маской [+1 NNN NNN-NN-NN] впечатываем 1 при пустой строке. Должна приняться первой  секцией N`, () => expect(res.newValue).toBe("+1 1"));
+  //it(`Курсор должен остаться на месте`, () => expect(res.newSelStart).toBe(4));
 });
 
 describe(`Соответствие строки маске:`, () => {

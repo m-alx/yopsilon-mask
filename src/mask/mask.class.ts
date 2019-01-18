@@ -369,6 +369,13 @@ export class Mask {
     return res;
   }
 
+  public applyKeyForNumeric(value: string, key: string, selStart: number, selEnd: number = 0) {
+    // Для числового значения мы просто вставляем символ в нужное место..
+    // И форматируем по маске от десятичного разделителя, если он есть.
+
+    // Если превышено максимальное
+  }
+
   // Применяем заданный символ к заданному значению в заданном месте
   public applyKeyAtPos(value: string, key: string, selStart: number, selEnd: number = 0): any {
 
@@ -406,7 +413,7 @@ export class Mask {
 
       // Готово!
       if(res.action == MaskSectionAction.APPLY)
-        return res;
+        return res;  
 
       // Идем в конец предыдущей секции
       // И применяем Delete
@@ -427,7 +434,6 @@ export class Mask {
       // Идем в конец предыдущей секции
       if(res.action == MaskSectionAction.GO_BACK && prev_section != null)
         return prev_section.selectLast(res.newValue, prev_sectionStart);
-
 
       // Идем в начало следующей секции
       if(res.action == MaskSectionAction.GO_FWD) {
