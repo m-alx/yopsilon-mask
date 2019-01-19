@@ -206,6 +206,13 @@ export class MaskSection {
       if(isNaN(n))
         n = this.sectionType.min == undefined ? 0 : this.sectionType.min;
 
+      if(this.sectionType.datePart == "yyyy" && n < 100) {
+        if(n < 30)
+          n += 2000;
+        else
+          n += 1900;
+      }
+
       // Число распознано. Проверяем минимальное и максимальное значения.
       // Но только если включена опция автокорректировки.
       // Иначе вернется просто чистое числовое значение нужной длины.
@@ -426,6 +433,7 @@ export class MaskSection {
       // Ну попробуем автокорректировку
       let v = this.autoCorrectValue(mv.sectionValue.value());
 
+      mv.delimiter = this.delimiter;
       // После этого положение курсора и следующей секции может измениться
       mv.update(v, selStart);
       res.newValue = mv.value();
@@ -455,9 +463,10 @@ export class MaskSection {
     ): MaskSectionKeyResult
     {
       // Парсим
+      console.log("====", value, this.delimiter, key, acceptDelimiterChars);
+
       let mv: MaskValue = this.extractSectionValue(value, sectionPos, selStart, selLength);
 
-      console.log(value, key);
       // Курсор находится до секции. Не реагируем.
       if(selStart < sectionPos)
           return this.none(mv);
@@ -543,6 +552,7 @@ export class MaskSection {
         }
 
         // Введен символ разделителя. Переход на следующую секцию
+        console.log("-----", value, this.delimiter, key, acceptDelimiterChars);
         if(this.delimiter != "" && key == this.delimiter[0] && acceptDelimiterChars) {
           // Если ничего не внесено, то смысла нет переходить на следующую секцию
           if(this.removePlaceholders(mv.sectionValue.value()) == "" && !this.isEmptySection())

@@ -326,8 +326,19 @@ export class Mask {
 
       let s_autocorrected = section.autoCorrectValue(s);
 
-      if(s != s_autocorrected)
-        return false;
+      if(s != s_autocorrected) {
+        if(section.isNumeric())
+        {
+          let n = section.numericValue(s_autocorrected);
+          if(isNaN(n))
+            return false;
+
+          if((n + "").trim().length < section.length)
+            return false;
+
+        } else
+          return false;
+      }
 
       if(s.length > section.maxLength)
         return false;
@@ -413,7 +424,7 @@ export class Mask {
 
       // Готово!
       if(res.action == MaskSectionAction.APPLY)
-        return res;  
+        return res;
 
       // Идем в конец предыдущей секции
       // И применяем Delete
@@ -463,7 +474,7 @@ export class Mask {
         // мы его отвергли в одной из предыдущей секций
         // Пример - +7 921 911 11 11 - в начале строки жмем 7, но + его не принял
         // Тогда это будет значащий символ уже
-        if(section.section == "" && value != res.newValue)
+        if(section.section == "" && /*value != res.newValue &&*/ selStart < res.nextSectionPos)
           acceptDelimiterChars = false;
 
         // Даже если мы передали управление следующей секции, значение может

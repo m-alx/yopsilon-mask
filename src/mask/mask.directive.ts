@@ -33,6 +33,12 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       // Очищаем, если маска неверна
       if(!this._mask.checkMask(this._txtValue) && !this._mask.options.allowIncomplete)
         this.setText("");
+      else {
+        // Маска верна, но нужно автокоррекцию провернуть
+        let autoCorrected = this._mask.applyMask(this._txtValue);
+        if(autoCorrected != this._txtValue)
+          this.setText(autoCorrected);
+      }
 
       this.onTouched();
     }

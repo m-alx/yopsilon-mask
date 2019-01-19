@@ -46,11 +46,17 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
       // Нет необходимости еще раз парсить, если всё произошло так, как ожидается.
       // this._dateValue = this._parser.transform(this._mask, this._txtValue);
+      let autoCorrected = this._mask.applyMask(this._txtValue);
+      if(autoCorrected != this._txtValue)
+        this.setText(autoCorrected);
 
       // Очищаем, если дата неверна
-      if(this._dateValue == null || isNaN(this._dateValue.getTime()))
+      if(this._dateValue == null || isNaN(this._dateValue.getTime())) {
+
+
         if(!this._mask.options.allowIncomplete)
           this.setText("");
+      }
 
       this.onTouched();
     }

@@ -45,7 +45,6 @@ describe(`Последний символ маски - разделитель. �
 
 });
 
-
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем ArrowLeft при ReplaceMode = false: `, () => {
   let intl = new Internationalization();
   let opt = new MaskOptions("_", true);
@@ -72,6 +71,22 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
 
   it(`Положение курсора должно остаться 7`, () => expect(res.newSelStart).toBe(7));
   it(`SelLength должна стать 1`, () => expect(res.newSelLength).toBe(1));
+});
+
+describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимаем [ArrowRight] с selStart=2 при значении [11]: `, () => {
+  let res: MaskSectionKeyResult;
+
+  let intl = new Internationalization();
+  let mask = new Mask(intl);
+  let opt = new MaskOptions("_", true)
+  opt.appendPlaceholders = false;
+  mask.options = opt;
+  mask.mask = "dd mmm yyyy";
+  res = mask.applyKeyAtPos("11", "ArrowRight", 2, 0);
+
+  it(`Новое значение маски 11 jan`, () => expect(res.newValue).toBe("11 jan"));
+  it(`Положение курсора должно быть 3`, () => expect(res.newSelStart).toBe(3));
+  it(`SelLength должна быть 1`, () => expect(res.newSelLength).toBe(1));
 });
 
 describe(`Опция AppendPlaceholders=true: `, () => {
@@ -101,7 +116,6 @@ describe(`Маска с переменной длиной секции (255.255.
 
     let opt = new MaskOptions("_", true);
     opt.appendPlaceholders = false;
-    // opt.placeholder = "_";
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
@@ -140,7 +154,7 @@ describe(`Символ разделителя не должен принимат
   beforeEach(async(() => {
 
     let opt = new MaskOptions("_", true);
-    opt.appendPlaceholders = false;
+    opt.appendPlaceholders = true;
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
@@ -149,8 +163,26 @@ describe(`Символ разделителя не должен принимат
     res = mask.applyKeyAtPos("", "1", 0, 0);
   }));
 
-  it(`С маской [+1 NNN NNN-NN-NN] впечатываем 1 при пустой строке. Должна приняться первой  секцией N`, () => expect(res.newValue).toBe("+1 1"));
-  //it(`Курсор должен остаться на месте`, () => expect(res.newSelStart).toBe(4));
+  it(`С маской [+1 NNN NNN-NN-NN] впечатываем 1 при пустой строке. Должна приняться первой секцией N`, () => expect(res.newValue).toBe("+1 1__ ___-__-__"));
+
+});
+
+describe(`Символ разделителя должен приниматься пустой секцией, если ни одна из секций не отвергла его: `, () => {
+  console.log(">>>>>>>>>>");
+  let res: MaskSectionKeyResult;
+
+  let opt = new MaskOptions("_", true);
+  opt.appendPlaceholders = false;
+
+  let intl = new Internationalization();
+  let mask = new Mask(intl);
+  mask.mask = "+1 NNN NNN-NN-NN";
+  mask.options = opt;
+  res = mask.applyKeyAtPos("+", "1", 1, 0);
+
+  console.log(">>>>>>>>>>");
+  it(`С маской [+1 NNN NNN-NN-NN] впечатываем 1 после +.`, () => expect(res.newValue).toBe("+1"));
+
 });
 
 describe(`Соответствие строки маске:`, () => {
