@@ -177,7 +177,7 @@ And use it for canadian postal code with options:
 <input yn-mask="ANA NAN" [yn-mask-options]="options" />
 ```
 
-#### 5. Sections с переменной длиной
+#### 5. Sections with variable length
 
 Section value can accept variable value length.
 For example, section *[h]* in *[h:mm tt]* template can accept values 1 to 12 (value length - 1 or 2 chars).
