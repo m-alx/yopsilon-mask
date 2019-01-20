@@ -7,7 +7,6 @@ import { async } from '@angular/core/testing';
 import { Internationalization } from "../src/internationalization/internationalization.class";
 import { MaskSection, MaskSectionKeyResult } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
-import { MaskOptions } from "../src/mask/mask-options.class";
 import { Mask } from "../src/mask/mask.class";
 
 import { DateParserPipe } from "../src/mask/pipes/date-parser.pipe";

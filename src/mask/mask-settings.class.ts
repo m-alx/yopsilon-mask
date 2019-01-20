@@ -5,7 +5,7 @@
 
 import { MaskSectionType } from "./mask-section-type.class";
 
-export class MaskSettings {
+export class MaskSettings { 
 
   // Автоматическая корректировка значения секции. При внесении значения большего,
   // чем максимальное - заменяется максимальным, меньшего, чем минимальное -

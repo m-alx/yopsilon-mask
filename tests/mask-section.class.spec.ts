@@ -75,7 +75,7 @@ describe(`Автоматическое заполнение секции пер�
   beforeEach(async(() => {
     let settings: MaskSettings = new MaskSettings("_", true);
     settings.appendPlaceholders = true;
-    settings.defaultVariants = true;
+    settings.defaultOptions = true;
 
     let intl = new Internationalization();
     let mask = new Mask(intl);

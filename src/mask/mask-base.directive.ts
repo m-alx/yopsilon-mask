@@ -8,7 +8,7 @@ import { Internationalization } from "../internationalization/internationalizati
 import { Mask } from "./mask.class";
 import { Keys } from "../keys/keys.class";
 import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
-import { MaskOptions } from "./mask-options.class";
+import { MaskSettings } from "./mask-settings.class";
 import { MaskState } from "./mask-state.class";
 
 export abstract class MaskBaseDirective {
