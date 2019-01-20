@@ -8,10 +8,10 @@ Angular 2+ input masking directive.
 
   - Correct processing of user input in every Evergreen browser
   - Datetime autoformatting and parsing using mask pattern for Date Value bindings
-  - Ability to create array of possible values for every part of mask pattern (e.g., to emulate autocomplete or to enter Date values using *dd mmm yyyy* pattern or Time using *h:mi am/pm* pattern)
+  - Ability to create array of possible values for every part of mask pattern (e.g., to emulate autocomplete or to enter Date values using `dd mmm yyyy` pattern or Time using `h:mi am/pm` pattern)
   - Ability to define a regex to verify if user input is valid for each pattern section
   - Mobile browsers support
-  - Ability to define a pattern section requiring input with variable value length. For example, *h:mi tt* pattern's *h* section length could be 1 or 2 chars. And for *dd mm yyyy* pattern for French locale short month abbreviation length could be 3 to 5 chars.
+  - Ability to define a pattern section requiring input with variable value length. For example, `h:mi tt` pattern's `h` section length could be 1 or 2 chars. And for `dd mm yyyy` pattern for French locale short month abbreviation length could be 3 to 5 chars.
   - Date and Time formats are internationalized. Predefined locale set and ability to define your own custom locales. Directives are able to detect locale change - all Date values will be re-formatted and displayed in correct locale
 
 ## Installation
@@ -77,18 +77,18 @@ export class AppComponent {
 
 #### 1. Common information
 
-Directives use *Mask* class to split a pattern into sections and to process user input.
-Delimiters between sections are defined as a pre-defined symbol set (static property *Mask.delimiterChars*) or any other chars, which could not be identified as a beginning of section's start.
+Directives use `Mask` class to split a pattern into sections and to process user input.
+Delimiters between sections are defined as a pre-defined symbol set (static property `Mask.delimiterChars`) or any other chars, which could not be identified as a beginning of section's start.
 
 Each section processes user input autonomously (accepts/declines a char or redirects processor to next/previous section).
 
-After a mask pattern is parsed, each section's type is identified (*MaskSection.sectionType*) based on predefined section type set. Following parameters are defined for each section type:
+After a mask pattern is parsed, each section's type is identified (`MaskSection.sectionType`) based on predefined section type set. Following parameters are defined for each section type:
   - selector: string - to define a section type (e.g. yyyy - year)
   - alpha: boolean - char values
   - digits: boolean - numeric values
   - min: number - minimum value
   - max: number - maximum value (e.g. 59 for minutes)
-  - datePart: string - (*optional*) Date component binding. Used in *Formatter* and *Parser* Date values
+  - datePart: string - (*optional*) Date component binding. Used in `Formatter` and `Parser` Date values
   - regExp: RegExp - (*optional*) regexp which validates user input for a section
 
 *MaskSection.delimiter* contains trailing delimiter for a section.
