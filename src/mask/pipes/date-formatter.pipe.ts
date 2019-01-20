@@ -9,7 +9,7 @@ import { Mask } from "../mask.class";
 import { MaskSection } from "../mask-section.class";
 import { MaskSectionType } from "../mask-section-type.class";
 
-// Парсинг даты по  заданной маске
+// Formatting DateTime by Mask
 @Pipe({
   name: "ynDateFormatter",
   pure: true

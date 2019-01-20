@@ -13,13 +13,12 @@ import { MaskSectionType } from "./mask-section-type.class";
 import { MaskSection,
          MaskSectionKeyResult, MaskSectionAction } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
- 
-// Маска
+
 // @dynamic
 @Injectable()
 export class Mask {
 
-  // Настройки
+  // Settings
   private _settings: MaskSettings = null;
 
   public set settings(o: MaskSettings) {
@@ -28,7 +27,7 @@ export class Mask {
     this.updateMask();
   }
 
-  // Настройки по умолчанию
+  // Options by default
   public static readonly defaultSettings: MaskSettings = new MaskSettings("_");
 
   public get settings() {
@@ -82,10 +81,10 @@ export class Mask {
     { selectors: ["0"], digits: true, alpha: false, min: 0, max: 9 },
   ];
 
-  // Список секций маски
+  // The list of sections
   public sections: Array<MaskSection> = [];
 
-  // Маска
+  // Pattern of mask
   private _mask: string;
   public set mask(v: string) {
     this._mask = v;

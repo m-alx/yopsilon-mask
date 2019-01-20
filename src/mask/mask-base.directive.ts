@@ -16,17 +16,14 @@ export abstract class MaskBaseDirective {
     private _undo: Array<MaskSectionKeyResult> = [];
     private _redo: Array<MaskSectionKeyResult> = [];
 
-    // Текущее текстовое значение
     // Current text value
     protected _txtValue: string = "";
     protected _mask: Mask;
 
-    // Смена состояния
     // On state change
     @Output("ynStateChange")
     stateChange = new EventEmitter<MaskState>();
 
-    // Состояние маски
     // Fetching mask state
     private _state: MaskState = null;
 
@@ -37,7 +34,7 @@ export abstract class MaskBaseDirective {
     public set state(v: MaskState) {
       if(this._state != v) {
         this._state = v;
-        this.stateChange.emit(this._state); // Излучаем событие
+        this.stateChange.emit(this._state); // Emitting event
       }
     }
 
@@ -70,18 +67,12 @@ export abstract class MaskBaseDirective {
         return txt2.substring(selStart1, selStart1 + 1);
       }
 
-      // прове|рка
-      // tes|t
-      // пров|рка
-      // te|t
+      // tes|t -> te|t
       if(txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1) )
         if(txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length))
           return "Backspace";
 
-      // пров|ерка
-      // te|st
-      // пров|рка
-      // te|t
+      // te|st -> te|t
       if(txt1.substring(0, selStart1) == txt2.substring(0, selStart1) )
         if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length))
           return "Delete";
@@ -93,7 +84,6 @@ export abstract class MaskBaseDirective {
       //
       let res = this.currentRes();
 
-      // Теоретически положение курсора у нас есть..
       // Possibly we have carriage position
       let key: string = this.whichKeyIsPressed(this.last_res.newValue, txt,
           this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
@@ -109,9 +99,9 @@ export abstract class MaskBaseDirective {
         });
 
       if(!r)
-        this.setRes(this.last_res); // Не приняли, вернули всё назад // Reversing, value has not been accepted
+        this.setRes(this.last_res); // Reversing, value has not been accepted
 
-      // Зачем это здесь?.. А вдруг.. // Just to be safe
+      // Just to be safe
       this.android_behavior = false;
       return;
     }
@@ -125,7 +115,6 @@ export abstract class MaskBaseDirective {
         return;
       }
 
-      // Поэтому пытаемся применить маску к введенному значению.
       // Thus we're trying to apply a mask to value entered
       let masked = this._mask.applyMask(txt);
       if(masked != this._txtValue)
@@ -193,14 +182,12 @@ export abstract class MaskBaseDirective {
         return false;
       }
 
-      // Если выделено всё
       // If everything is selected
       if(selStart == 0 && selEnd == this._txtValue.length)
       {
         if(key == "Delete" || key == "Backspace")
           return true;
 
-        // Если стрелка влево, то всё равно что Home
         // If ArrowLeft key has been pressed, result should equal to pressing of Home
         if(key == "ArrowLeft") {
           selStart = 0;
@@ -223,13 +210,11 @@ export abstract class MaskBaseDirective {
         selEnd = 0;
       }
 
-      // Применяем всё, что осталось
       // Applying everything that's left
       let res: MaskSectionKeyResult = this._mask.applyKeyAtPos(s, key, selStart, selEnd);
 
       if(res != null && res.action == MaskSectionAction.APPLY) {
 
-        // При изменении значения внесем в стэк undo
         // If value has been changed we'll add it to UNDO stack
         if(res.newValue != s) {
           this._undo.push(this.getRes(s, selStart, selEnd));
@@ -239,7 +224,7 @@ export abstract class MaskBaseDirective {
         this.setRes(res);
 
         if(this.android_behavior)
-          return true; // ???? Для процесскея норм, а для инпута не очень.
+          return true;
 
       }
 
@@ -247,7 +232,6 @@ export abstract class MaskBaseDirective {
       return false;
     }
 
-    // Установить значение и положение курсора
     // Setting value and carriage position
     protected setRes(res: MaskSectionKeyResult) {
 
@@ -266,7 +250,6 @@ export abstract class MaskBaseDirective {
       return res;
     }
 
-    // Получить текущее значение маски и положение курсора
     // Retrieving current mask value and carriage position
     protected getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
       let res = new MaskSectionKeyResult(s, MaskSectionAction.APPLY, 0);
@@ -275,20 +258,16 @@ export abstract class MaskBaseDirective {
       return res;
     }
 
-    // Необходимо будет переопределить этот метод..
     // Following method should be overridden
     protected abstract toModel(): void;
 
-    // Записывает текст в контрол
     // Writing a text to control
     protected setText(displayedValue: string, toModel: boolean = true) {
 
-      // Отображаем
       // Displaying
       this._txtValue = displayedValue;
       this._renderer.setProperty(this._elementRef.nativeElement, 'value', this._txtValue);
 
-      // Отправляем в модель
       // Sending to model
       if(toModel)
         this.toModel();

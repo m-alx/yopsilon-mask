@@ -9,7 +9,7 @@ import { Mask } from "../mask.class";
 import { MaskSection } from "../mask-section.class";
 import { MaskSectionType } from "../mask-section-type.class";
 
-// Парсинг даты по  заданной маске
+// Parsing DateTime by Mask
 @Pipe({
   name: "ynDateParser",
   pure: true
@@ -40,13 +40,13 @@ export class DateParserPipe {
         let section: MaskSection = mask.sections[i];
         let datePart = section.sectionType.datePart;
 
-        if(datePart == null) // Не является частью даты
+        if(datePart == null) // Not datetime component
           continue;
 
         let v = section.extractSectionValue(res, sectionPos);
         sectionPos = v.nextSectionPos();
 
-        // Значение секции
+        // Get section value
         let s: string = v.sectionValue.value();
 
         let n: number;
@@ -54,7 +54,7 @@ export class DateParserPipe {
 
         if(section.isNumeric()) {
 
-          if(s.indexOf(mask.settings.placeholder) >= 0) // Содержит плэйсхолдеры
+          if(s.indexOf(mask.settings.placeholder) >= 0) // Contains placeholders
             return this.invalidDate();
 
           n = section.numericValue(s);
@@ -68,13 +68,13 @@ export class DateParserPipe {
             n = section.sectionType.options.indexOf(s);
             if(n < 0)
               return this.invalidDate();
-            n++; // Индекс начинается с нуля
+            n++; // Index starts from 0
           }
 
         if(n == NaN)
           return this.invalidDate();
 
-        // Время...
+        // Time components...
         if(datePart == "H")
           hh = n;
 
@@ -96,7 +96,7 @@ export class DateParserPipe {
         if(datePart == "ms")
           ms = n;
 
-        // Дата...
+        // Date components...
         if(datePart == "d")
           d = n;
 
@@ -117,7 +117,7 @@ export class DateParserPipe {
       if(tt.toLowerCase() == "pm")
         hh += 12;
 
-      // Лишь одно мы проверим. Количество дней в месяце...
+      // We should check number of days in month
       let maxDays: number = this.daysInMonth(y, m);
       if(d > maxDays)
         return this.invalidDate();
@@ -125,8 +125,7 @@ export class DateParserPipe {
       return new Date(y, m - 1, d, hh, mi, ss, ms);
     }
 
-    // Создаем Invalid Date
-    // Может быть кто-нибудь научит, как сделать это правильно
+    // Creating Invalid Date
     invalidDate() {
       return new Date('*');
     }

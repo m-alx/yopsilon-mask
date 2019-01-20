@@ -5,8 +5,6 @@
 
 export class MaskSectionValue {
 
-  //public inSection: boolean;
-
   public beforeChars: string;
   public currentChar: string;
   public afterChars: string;
@@ -35,19 +33,8 @@ export class MaskSectionValue {
       this.beforeChars = sectionValue;
       this.currentChar = "";
       this.afterChars = "";
-      //this.inSection = false;
       return;
     }
-
-    //this.inSection = true;
-
-    // Отрежем лишнее, если вдруг
-    // Trimming, if necessary
-    /*
-    if(sectionValue.length > maxLength) {
-      console.log("Invalid value length: " + sectionValue);
-      sectionValue = sectionValue.substring(0, maxLength - 1);
-    }*/
 
     this.beforeChars = sectionValue.substring(0, selStart_local);
     this.currentChar = sectionValue.substring(selStart_local, selStart_local + 1);

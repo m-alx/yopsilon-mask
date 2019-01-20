@@ -2,11 +2,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-// В разных браузерах разное наименование клавиш,
-// но нам удобнее испаользовать по имени. Поэтому приводим коды к
-// названиям таким же, как в Google Chrome.
-
-// Different browsers have different button names,
+// Different browsers have different key names,
 // But it's more convenient to use an alias. So we're mapping codes to
 // Names similar to those in Google Chrome
 
@@ -44,8 +40,7 @@ export class Keys {
   }
 
   public static initialize(): void {
-    // В принципе, пока все нам не нужны..
-    // Not every button is required as of this moment
+    // Not every key is required as of this moment
     this.keys[8] = "Backspace";
     this.keys[9] = "Tab";
 

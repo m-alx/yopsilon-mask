@@ -28,7 +28,6 @@ import { DateFormatterPipe } from "./pipes/date-formatter.pipe";
 })
 export class MaskDateDirective extends MaskBaseDirective implements ControlValueAccessor {
 
-    // Имплементируем ControlValueAccessor
     // implementing ControlValueAccessor
     private _dateValue: any;
 
@@ -38,23 +37,19 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 
-    // Заранее подготовим парсер и форматтер
     // Preparing parser and formatter in advance
     private _parser = new DateParserPipe();
     private _formatter = new DateFormatterPipe();
 
-    // Потеря фокуса
     // Focus lost
     blur() {
 
-      // Нет необходимости еще раз парсить, если всё произошло так, как ожидается.
       // No need to parse once more if result is as expected
       // this._dateValue = this._parser.transform(this._mask, this._txtValue);
       let autoCorrected = this._mask.applyMask(this._txtValue);
       if(autoCorrected != this._txtValue)
         this.setText(autoCorrected);
 
-      // Очищаем, если дата неверна
       // Clearing if Date is incorrect
       if(this._dateValue == null || isNaN(this._dateValue.getTime())) {
 
@@ -66,7 +61,6 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       this.onTouched();
     }
 
-    // Обновляем состояние
     // Updating the state
     protected updateState() {
       if(this._dateValue == null)
@@ -129,21 +123,20 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     }
 
     setLocale(locale: Locale) {
-      this._mask.updateMask(); // Заменим формат // Changing format
-      this.writeValue(this._dateValue); // Обновим представление // Updating view
+      this._mask.updateMask(); // Changing format
+      this.writeValue(this._dateValue); // Updating view
     }
 
     localeSubscription: any;
 
     ngOnInit() {
-      // На смену локализации можем отреагировать изменением формата // Format change can follow locale change
+      // Format change can follow locale change
       this.localeSubscription = this.intl.onLocaleChange.subscribe(locale => {
         this.setLocale(locale);
       });
     }
 
     ngOnDestroy() {
-      // Отписываемся
       // Unsubscribing
       this.localeSubscription.unsubscribe();
     }
