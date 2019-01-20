@@ -11,7 +11,7 @@ Angular 2+ input masking directive.
   - Ability to create array of possible values for every part of mask pattern (e.g., to emulate autocomplete or to enter Date values using *dd mmm yyyy* pattern or Time using *h:mi am/pm* pattern)
   - Ability to define a regex to verify if user input is valid for each pattern section
   - Mobile browsers support
-  - Ability to define a pattern section requiring input with variable value length. For example, *h:mi tt* template's *h* section length could be 1 or 2 chars. And for *dd mm yyyy* template for French locale short month abbreviation length could be 3 to 5 chars.
+  - Ability to define a pattern section requiring input with variable value length. For example, *h:mi tt* pattern's *h* section length could be 1 or 2 chars. And for *dd mm yyyy* pattern for French locale short month abbreviation length could be 3 to 5 chars.
   - Date and Time formats are internationalized. Predefined locale set and ability to define your own custom locales. Directives are able to detect locale change - all Date values will be re-formatted and displayed in correct locale
 
 ## Installation
@@ -77,12 +77,12 @@ export class AppComponent {
 
 #### 1. Common information
 
-Directives use *Mask* class to split a template into sections and to process user input.
+Directives use *Mask* class to split a pattern into sections and to process user input.
 Delimiters between sections are defined as a pre-defined symbol set (static property *Mask.delimiterChars*) or any other chars, which could not be identified as a beginning of section's start.
 
 Each section processes user input autonomously (accepts/declines a char or redirects processor to next/previous section).
 
-After a mask template is parsed, each section's type is identified (*MaskSection.sectionType*) based on predefined section type set. Following parameters are defined for each section type:
+After a mask pattern is parsed, each section's type is identified (*MaskSection.sectionType*) based on predefined section type set. Following parameters are defined for each section type:
   - selector: string - to define a section type (e.g. yyyy - year)
   - alpha: boolean - char values
   - digits: boolean - numeric values
@@ -144,9 +144,9 @@ public static readonly sectionTypes: Array<MaskSectionType> = [
 
 MaskSettings class contains attributes which determine directive's behaviour upon user input:
 
-  - placeholder: string - symbol which substitutes empty space in a template
+  - placeholder: string - symbol which substitutes empty space in a pattern
   - replaceMode: boolean - replace mode emulation (symbol to be processed is selected)
-  - appendPlaceholders: boolean - value is automatically extended with placeholder upon input according to chosen mask template
+  - appendPlaceholders: boolean - value is automatically extended with placeholder upon input according to chosen mask pattern
   - allowIncomplete: boolean - directive truncates bound value of input control on blur if value is incomplete
   - sectionTypes: Array<MaskSectionType> - list of your own custom section types.
 
@@ -180,7 +180,7 @@ And use it for canadian postal code with options:
 #### 5. Sections with variable length
 
 Section value can accept variable value length.
-For example, section `h` in `h:mm tt` template can accept values 1 to 12 (value length - 1 or 2 chars).
+For example, section `h` in `h:mm tt` pattern can accept values 1 to 12 (value length - 1 or 2 chars).
 Difference between it and fixed-length sections:
   - cursor moves to next section only if maximum value length is reached. If length is less than maximum, User can move to the next section pressing *ArrowRight* key or pressing section delimiter char key (*[:]* in this example).
 
@@ -206,7 +206,7 @@ constructor() {
 }
 ```
 
-Using the constructor to choose month:
+Using it to choose month:
 
 ```html
 <input yn-mask="mmmm" [yn-mask-settings]="settings" />
@@ -214,11 +214,11 @@ Using the constructor to choose month:
 
 #### 7. Events
 
-ynStateChange event (e: MaskState) - is triggered by directive state change.
+ynStateChange(e: MaskState) event - is triggered by directive state change.
 Possible values:
   - MaskState.EMPTY - empty value
-  - MaskState.TYPING - User started to enter some text, but value is invalid according to selected mask template
-  - MaskState.OK - value is valid according to mask template
+  - MaskState.TYPING - User started to enter some text, but value is invalid according to selected mask pattern
+  - MaskState.OK - value is valid according to mask pattern
 
 Example:
 
