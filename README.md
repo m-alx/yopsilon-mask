@@ -171,7 +171,7 @@ constructor() {
 }
 ```
 
-And use it for canadian postal code with options:
+And use it for canadian postal code with settings:
 
 ```html
 <input yn-mask="ANA NAN" [yn-mask-settings]="settings" />
@@ -279,7 +279,7 @@ export class AppComponent {
     private intl: YN.Internationalization    
   ) {
 
-    let locale: Locale = {
+    let locale: YN.Locale = {
       name: "Portuguese",
       shortName: "pt-PT",
       shortMonthNames: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul",
