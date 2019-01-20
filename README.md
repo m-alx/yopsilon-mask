@@ -162,10 +162,10 @@ More suitable option is to add section type to `MaskSettings` class instance whi
 As an example, let's define a section type, accepting only case-insensitive charset ABCEGHJKLMNPRSTVXY:
 
 ```ts
-options: YN.MaskOptions = new YN.MaskOptions("_", true);
+settings: YN.MaskSettings = new YN.MaskSettings("_");
 
 constructor() {    
-  this.options.sectionTypes.push(
+  this.settings.sectionTypes.push(
     { selectors: ["A"], regExp: /[ABCEGHJKLMNPRSTVXY]/i },
   );
 }
@@ -174,7 +174,7 @@ constructor() {
 And use it for canadian postal code with options:
 
 ```html
-<input yn-mask="ANA NAN" [yn-mask-options]="options" />
+<input yn-mask="ANA NAN" [yn-mask-settings]="settings" />
 ```
 
 #### 5. Sections with variable length
