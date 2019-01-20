@@ -42,7 +42,7 @@ export abstract class MaskBaseDirective {
       //
     }
 
-    protected wichKeyIsPressed(txt1: string, txt2: string,
+    protected whichKeyIsPressed(txt1: string, txt2: string,
       selStart1: number, selStart2: number,
       selLength: number): string
       {
@@ -87,7 +87,7 @@ export abstract class MaskBaseDirective {
       let res = this.currentRes();
 
       // Теоретически положение курсора у нас есть..
-      let key: string = this.wichKeyIsPressed(this.last_res.newValue, txt,
+      let key: string = this.whichKeyIsPressed(this.last_res.newValue, txt,
           this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
 
       let r = this.processKey(
