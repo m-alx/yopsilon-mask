@@ -13,7 +13,7 @@ import { MaskSectionType } from "./mask-section-type.class";
 import { MaskSection,
          MaskSectionKeyResult, MaskSectionAction } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
-
+ 
 // Маска
 // @dynamic
 @Injectable()
@@ -35,16 +35,16 @@ export class Mask {
     return this._settings == null ? Mask.defaultSettings : this._settings;
   }
 
-  // Одиночные символы
+  // Sections with section chars
   private readonly singles: string = "*aAnN#0";
 
-  // Разделители
+  // Delimiters
   public static readonly delimiterChars: string[] = [" ", ".", ",", "(", ")", "/", "|", "-", ":", "+", "'"];
 
-  // Predefined section types. Можете добавлять..
+  // Predefined section types
   public static readonly sectionTypes: MaskSectionType[] = [
 
-    // Всё, что касается времени
+    // Time components
     { selectors: ["HH"], digits: true, alpha: false, min: 0, max: 23, datePart: "H" },
     { selectors: ["h"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
     { selectors: ["hh"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
@@ -52,11 +52,9 @@ export class Mask {
     { selectors: ["ss", "SS"], digits: true, alpha: false, min: 0, max: 59, datePart: "ss" },
     { selectors: ["TT", "AM", "PM"], digits: false, alpha: true, options: ["AM", "PM"], datePart: "tt" },
     { selectors: ["tt", "am", "pm"], digits: false, alpha: true, options: ["am", "pm"], datePart: "tt" },
+    { selectors: ["fff"], digits: true, alpha: false, datePart: "ms" }, // Milliseconds
 
-    // Milliseconds
-    { selectors: ["fff"], digits: true, alpha: false, datePart: "ms" },
-
-    // Всё, что касается даты
+    // Date components
     { selectors: ["dd", "DD"], digits: true, alpha: false, min: 1, max: 31, datePart: "d" },
     { selectors: ["mm", "MM"], digits: true, alpha: false, min: 1, max: 12, datePart: "m" },
     { selectors: ["mmm"], digits: false, alpha: true, datePart: "m" },
@@ -64,22 +62,22 @@ export class Mask {
     { selectors: ["yy", "YY"], digits: true, alpha: false, min: 0, max: 99, datePart: "yy" },
     { selectors: ["yyyy", "YYYY"], digits: true, alpha: false, min: 0, max: 9999, datePart: "yyyy" },
 
-    // Байт - от 0 до 255 - для айпи-адреса или маски подсети
+    // Byte (from 0 to 255) - for ip-address or network mask
     { selectors: ["b"], digits: true, alpha: false, min: 0, max: 255 },
 
-    // Плюс или минус
+    // Plus/minus
     { selectors: ["~"], digits: true, alpha: true, options: ["-", "+"] },
 
-    // Всё, что угодно
+    // Any char
     { selectors: ["*"], digits: true, alpha: true },
 
-    // Буква
+    // Letters
     { selectors: ["l", "L"], digits: false, alpha: true },
 
-    // Цифра
+    // Digits
     { selectors: ["n", "N"], digits: true, alpha: false },
 
-    // Формат числовой
+    // Numeric format
     { selectors: ["#"], digits: true, alpha: false, min: 0, max: 9 },
     { selectors: ["0"], digits: true, alpha: false, min: 0, max: 9 },
   ];
