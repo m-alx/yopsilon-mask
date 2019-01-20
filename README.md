@@ -77,7 +77,7 @@ export class AppComponent {
 
 #### 1. Common information
 
-Directives use *Mask* class to divide a template into sections and to process user input.
+Directives use *Mask* class to split a template into sections and to process user input.
 Delimiters between sections are defined as a pre-defined symbol set (static property *Mask.delimiterChars*) or any other chars, which could not be identified as a beginning of section's start.
 
 Each section processes user input autonomously (accepts/declines a char or redirects processor to next/previous section).
