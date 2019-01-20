@@ -42,6 +42,7 @@ export class MaskSectionValue {
     //this.inSection = true;
 
     // Отрежем лишнее, если вдруг
+    // Trimming, if necessary
     /*
     if(sectionValue.length > maxLength) {
       console.log("Invalid value length: " + sectionValue);

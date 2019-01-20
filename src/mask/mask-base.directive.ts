@@ -17,14 +17,17 @@ export abstract class MaskBaseDirective {
     private _redo: Array<MaskSectionKeyResult> = [];
 
     // Текущее текстовое значение
+    // Current text value
     protected _txtValue: string = "";
     protected _mask: Mask;
 
     // Смена состояния
+    // On state change
     @Output("ynStateChange")
     stateChange = new EventEmitter<MaskState>();
 
     // Состояние маски
+    // Fetching mask state
     private _state: MaskState = null;
 
     public get state(): MaskState {
@@ -68,13 +71,17 @@ export abstract class MaskBaseDirective {
       }
 
       // прове|рка
+      // tes|t
       // пров|рка
+      // te|t
       if(txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1) )
         if(txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length))
           return "Backspace";
 
       // пров|ерка
+      // te|st
       // пров|рка
+      // te|t
       if(txt1.substring(0, selStart1) == txt2.substring(0, selStart1) )
         if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length))
           return "Delete";
@@ -87,6 +94,7 @@ export abstract class MaskBaseDirective {
       let res = this.currentRes();
 
       // Теоретически положение курсора у нас есть..
+      // Possibly we have carriage position
       let key: string = this.whichKeyIsPressed(this.last_res.newValue, txt,
           this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
 
@@ -101,9 +109,9 @@ export abstract class MaskBaseDirective {
         });
 
       if(!r)
-        this.setRes(this.last_res); // Не приняли, вернули всё назад
+        this.setRes(this.last_res); // Не приняли, вернули всё назад // Reversing, value has not been accepted
 
-      // Зачем это здесь?.. А вдруг..
+      // Зачем это здесь?.. А вдруг.. // Just to be safe
       this.android_behavior = false;
       return;
     }
@@ -118,6 +126,7 @@ export abstract class MaskBaseDirective {
       }
 
       // Поэтому пытаемся применить маску к введенному значению.
+      // Thus we're trying to apply a mask to value entered
       let masked = this._mask.applyMask(txt);
       if(masked != this._txtValue)
         this.setText(masked, true);
@@ -185,12 +194,14 @@ export abstract class MaskBaseDirective {
       }
 
       // Если выделено всё
+      // If everything is selected
       if(selStart == 0 && selEnd == this._txtValue.length)
       {
         if(key == "Delete" || key == "Backspace")
           return true;
 
         // Если стрелка влево, то всё равно что Home
+        // If ArrowLeft key has been pressed, result should equal to pressing of Home
         if(key == "ArrowLeft") {
           selStart = 0;
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
@@ -213,11 +224,13 @@ export abstract class MaskBaseDirective {
       }
 
       // Применяем всё, что осталось
+      // Applying everything that's left
       let res: MaskSectionKeyResult = this._mask.applyKeyAtPos(s, key, selStart, selEnd);
 
       if(res != null && res.action == MaskSectionAction.APPLY) {
 
         // При изменении значения внесем в стэк undo
+        // If value has been changed we'll add it to UNDO stack
         if(res.newValue != s) {
           this._undo.push(this.getRes(s, selStart, selEnd));
           this._redo = [];
@@ -235,6 +248,7 @@ export abstract class MaskBaseDirective {
     }
 
     // Установить значение и положение курсора
+    // Setting value and carriage position
     protected setRes(res: MaskSectionKeyResult) {
 
       if(this.android_behavior)
@@ -253,6 +267,7 @@ export abstract class MaskBaseDirective {
     }
 
     // Получить текущее значение маски и положение курсора
+    // Retrieving current mask value and carriage position
     protected getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
       let res = new MaskSectionKeyResult(s, MaskSectionAction.APPLY, 0);
       res.newSelStart = selStart;
@@ -261,16 +276,20 @@ export abstract class MaskBaseDirective {
     }
 
     // Необходимо будет переопределить этот метод..
+    // Following method should be overridden
     protected abstract toModel(): void;
 
     // Записывает текст в контрол
+    // Writing a text to control
     protected setText(displayedValue: string, toModel: boolean = true) {
 
       // Отображаем
+      // Displaying
       this._txtValue = displayedValue;
       this._renderer.setProperty(this._elementRef.nativeElement, 'value', this._txtValue);
 
       // Отправляем в модель
+      // Sending to model
       if(toModel)
         this.toModel();
     }

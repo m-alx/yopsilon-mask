@@ -12,13 +12,16 @@ import { Locale } from "./locale.class";
 export class Internationalization {
 
   // Список локализаций
+  // Locales list
   public locales: Array<Locale> = [];
 
   // При изменении локализации
+  // On locale change event
   private _onLocaleChange: BehaviorSubject<Locale> = new BehaviorSubject<Locale>(this.locale);
   public readonly onLocaleChange: Observable<Locale> = this._onLocaleChange.asObservable();
 
   // Текущая локализация
+  // Current locale
   public _currentLocale: string;
 
   public get currentLocale(): string {
@@ -39,6 +42,7 @@ export class Internationalization {
   }
 
   // Добавить локализацию
+  // Adding a locale
   public addLocale(locale: Locale) {
     if(!this.locales.find(l => l.shortName == locale.shortName))
       this.locales.push(locale);

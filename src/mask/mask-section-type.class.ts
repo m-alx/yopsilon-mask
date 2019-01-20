@@ -15,6 +15,8 @@ export class MaskSectionType {
 
   // Минимальная и максимальная длина значения для тонкой настройки
   // Если это не целочисленная секция - может пригодиться
+  // Minimum and maximum value length to fine-tune
+  // Can be useful if section is not integer 
   public minL?: number = null;
   public maxL?: number = null;
 
@@ -27,5 +29,15 @@ export class MaskSectionType {
   //  mi - минуты
   //  s - секунды
   //  ms - миллисекунды
+
+  // Which part of the date is represented with this section
+  //  d - day
+  //  m - month
+  //  y - year
+  //  h - hour (0 - 12)
+  //  H - hour (0 - 24)
+  //  mi - minutes
+  //  s - seconds
+  //  ms - milliseconds  
   public datePart?: string = null;
 }
