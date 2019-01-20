@@ -97,8 +97,48 @@ Custom section type can be created and applied (please refer to part 7. Custom s
 
 #### 2. Predefined section types
 
-Класс Mask включает в себя набор заранее определенных типов секций
-Mask class includes predefined section types set
+Mask class includes predefined section types set:
+
+```ts
+// Predefined section types.
+public static readonly sectionTypes: Array<MaskSectionType> = [
+
+  // Time components
+  { selectors: ["HH"], digits: true, alpha: false, min: 0, max: 23, datePart: "H" },
+  { selectors: ["h"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
+  { selectors: ["hh"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
+  { selectors: ["mi", "MI"], digits: true, alpha: false, min: 0, max: 59, datePart: "mi" },
+  { selectors: ["ss", "SS"], digits: true, alpha: false, min: 0, max: 59, datePart: "ss" },
+  { selectors: ["TT", "AM", "PM"], digits: false, alpha: true, options: ["AM", "PM"], datePart: "tt" },
+  { selectors: ["tt", "am", "pm"], digits: false, alpha: true, options: ["am", "pm"], datePart: "tt" },
+  { selectors: ["fff"], digits: true, alpha: false, datePart: "ms" },
+
+  // Date components
+  { selectors: ["dd", "DD"], digits: true, alpha: false, min: 1, max: 31, datePart: "d" },
+  { selectors: ["mm", "MM"], digits: true, alpha: false, min: 1, max: 12, datePart: "m" },
+  { selectors: ["mmm"], digits: false, alpha: true, datePart: "m" },
+  { selectors: ["MMM"], digits: false, alpha: true, datePart: "m" },
+  { selectors: ["yy", "YY"], digits: true, alpha: false, min: 0, max: 99, datePart: "yy" },
+  { selectors: ["yyyy", "YYYY"], digits: true, alpha: false, min: 0, max: 9999, datePart: "yyyy" },
+
+  // Byte (from 0 to 255)
+  { selectors: ["b"], digits: true, alpha: false, min: 0, max: 255 },
+
+  // Plus/minus
+  { selectors: ["~"], digits: true, alpha: true, options: ["-", "+"] },
+
+  // Letter
+  { selectors: ["l", "L"], digits: false, alpha: true },
+
+  // Digit
+  { selectors: ["n", "N"], digits: true, alpha: false },
+
+  // Numeric format
+  { selectors: ["#"], digits: true, alpha: false, min: 0, max: 9 },
+  { selectors: ["0"], digits: true, alpha: false, min: 0, max: 9 },
+];
+
+```
 
 #### 3. Settings
 
@@ -133,7 +173,9 @@ constructor() {
 
 And use it for canadian postal code with options:
 
+```html
 <input yn-mask="ANA NAN" [yn-mask-options]="options" />
+```
 
 #### 5. Sections с переменной длиной
 
