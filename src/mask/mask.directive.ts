@@ -8,7 +8,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Internationalization } from "../internationalization/internationalization.class";
 import { Mask } from "./mask.class";
 import { MaskState } from "./mask-state.class";
-import { MaskOptions } from "./mask-options.class";
+import { MaskSettings } from "./mask-settings.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
 
@@ -31,7 +31,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     blur() {
 
       // Очищаем, если маска неверна
-      if(!this._mask.checkMask(this._txtValue) && !this._mask.options.allowIncomplete)
+      if(!this._mask.checkMask(this._txtValue) && !this._mask.settings.allowIncomplete)
         this.setText("");
       else {
         // Маска верна, но нужно автокоррекцию провернуть
@@ -94,9 +94,9 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       return this._mask.mask;
     }
 
-    @Input("yn-mask-options")
-    set options(v: MaskOptions) {
-      this._mask.options = v;
+    @Input("yn-mask-settings")
+    set settings(v: MaskSettings) {
+      this._mask.settings = v;
     }
 
     @HostListener("keydown", ["$event"])

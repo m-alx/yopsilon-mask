@@ -11,7 +11,7 @@ import { Locale } from "../internationalization/locale.class";
 
 import { Mask } from "./mask.class";
 import { MaskState } from "./mask-state.class";
-import { MaskOptions } from "./mask-options.class";
+import { MaskSettings } from "./mask-settings.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
 
@@ -54,7 +54,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       if(this._dateValue == null || isNaN(this._dateValue.getTime())) {
 
 
-        if(!this._mask.options.allowIncomplete)
+        if(!this._mask.settings.allowIncomplete)
           this.setText("");
       }
 
@@ -107,9 +107,9 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       return this._mask.mask;
     }
 
-    @Input("yn-mask-options")
-    set options(v: MaskOptions) {
-      this._mask.options = v;
+    @Input("yn-mask-settings")
+    set settings(v: MaskSettings) {
+      this._mask.settings = v;
     }
 
     @HostListener("keydown", ["$event"])

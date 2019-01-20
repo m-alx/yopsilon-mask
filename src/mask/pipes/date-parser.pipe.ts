@@ -54,9 +54,7 @@ export class DateParserPipe {
 
         if(section.isNumeric()) {
 
-          //let s2 = section.removePlaceholders(s);
-
-          if(s.indexOf(mask.options.placeholder) >= 0) // Содержит плэйсхолдеры
+          if(s.indexOf(mask.settings.placeholder) >= 0) // Содержит плэйсхолдеры
             return this.invalidDate();
 
           n = section.numericValue(s);
@@ -64,14 +62,10 @@ export class DateParserPipe {
           if(n < section.sectionType.min || n > section.sectionType.max)
             return this.invalidDate();
 
-          if((n + "").length < section.length) {
-            console.log(n+"");
-            // return this.invalidDate(); // Это неправильно, т.к.  01/05/2018 превратится в 1/5/2018
-          }
         }
         else
-          if(section.hasVariants()) {
-            n = section.sectionType.variants.indexOf(s);
+          if(section.hasOptions()) {
+            n = section.sectionType.options.indexOf(s);
             if(n < 0)
               return this.invalidDate();
             n++; // Индекс начинается с нуля

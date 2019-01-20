@@ -5,7 +5,7 @@ import * as YN from "yopsilon-mask";
   selector: "credit-card-example",
   template:
     `<div class="input-wrapper">
-        <input [yn-mask]="mask" [placeholder]="mask" [yn-mask-options]="options" (ynStateChange)="stateChange($event)" [(ngModel)]="txtValue" (ngModelChange)="change($event)" />
+        <input [yn-mask]="mask" [placeholder]="mask" [yn-mask-settings]="settings" (ynStateChange)="stateChange($event)" [(ngModel)]="txtValue" (ngModelChange)="change($event)" />
         <div class="state-indicator" [ngClass]="stateClass">{{state}}</div>
      </div>
      <span class="model-value">{{card}}&nbsp;{{txtValue}}</span>
@@ -27,7 +27,7 @@ export class CreditCardExampleComponent {
 
   card: string = "";
 
-  options: YN.MaskOptions = new YN.MaskOptions("_", true);
+  settings: YN.MaskSettings = new YN.MaskSettings("_", true);
 
   cardTypes: Array<any> = [
     { regExp: /3\d/, cardType: "American Express", mask: "NNN NNNNNN NNNNN" },
@@ -58,6 +58,6 @@ export class CreditCardExampleComponent {
   }
 
   constructor() {
-    this.options.appendPlaceholders = true;
+    this.settings.appendPlaceholders = true;
   }
 }

@@ -5,7 +5,7 @@
 
 import { MaskSectionType } from "./mask-section-type.class";
 
-export class MaskOptions {
+export class MaskSettings {
 
   // Автоматическая корректировка значения секции. При внесении значения большего,
   // чем максимальное - заменяется максимальным, меньшего, чем минимальное -
@@ -23,7 +23,7 @@ export class MaskOptions {
 
   // Если включена эта опция, то при переходе на незаполненную секцию с заданными
   // вариантами значений, автоматически подставится первое значение из списка вариантов
-  public defaultVariants: boolean = true;
+  public defaultOptions: boolean = true;
 
   // Можно добавить новый тип секции
   public sectionTypes: Array<MaskSectionType> = [];

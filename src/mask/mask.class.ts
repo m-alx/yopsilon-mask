@@ -12,7 +12,7 @@ import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskSectionType } from "./mask-section-type.class";
 import { MaskSection,
          MaskSectionKeyResult, MaskSectionAction } from "./mask-section.class";
-import { MaskOptions } from "./mask-options.class";
+import { MaskSettings } from "./mask-settings.class";
 
 // Маска
 // @dynamic
@@ -20,19 +20,19 @@ import { MaskOptions } from "./mask-options.class";
 export class Mask {
 
   // Настройки
-  private _options: MaskOptions = null;
+  private _settings: MaskSettings = null;
 
-  public set options(o: MaskOptions) {
-    this._options = o;
-    this.sections.forEach(s => s.options = o);
+  public set settings(o: MaskSettings) {
+    this._settings = o;
+    this.sections.forEach(s => s.settings = o);
     this.updateMask();
   }
 
   // Настройки по умолчанию
-  public static readonly defaultOptions: MaskOptions = new MaskOptions("_");
+  public static readonly defaultSettings: MaskSettings = new MaskSettings("_");
 
-  public get options() {
-    return this._options == null ? Mask.defaultOptions : this._options;
+  public get settings() {
+    return this._settings == null ? Mask.defaultSettings : this._settings;
   }
 
   // Одиночные символы
@@ -50,8 +50,8 @@ export class Mask {
     { selectors: ["hh"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
     { selectors: ["mi", "MI"], digits: true, alpha: false, min: 0, max: 59, datePart: "mi" },
     { selectors: ["ss", "SS"], digits: true, alpha: false, min: 0, max: 59, datePart: "ss" },
-    { selectors: ["TT", "AM", "PM"], digits: false, alpha: true, variants: ["AM", "PM"], datePart: "tt" },
-    { selectors: ["tt", "am", "pm"], digits: false, alpha: true, variants: ["am", "pm"], datePart: "tt" },
+    { selectors: ["TT", "AM", "PM"], digits: false, alpha: true, options: ["AM", "PM"], datePart: "tt" },
+    { selectors: ["tt", "am", "pm"], digits: false, alpha: true, options: ["am", "pm"], datePart: "tt" },
 
     // Milliseconds
     { selectors: ["fff"], digits: true, alpha: false, datePart: "ms" },
@@ -68,7 +68,7 @@ export class Mask {
     { selectors: ["b"], digits: true, alpha: false, min: 0, max: 255 },
 
     // Плюс или минус
-    { selectors: ["~"], digits: true, alpha: true, variants: ["-", "+"] },
+    { selectors: ["~"], digits: true, alpha: true, options: ["-", "+"] },
 
     // Всё, что угодно
     { selectors: ["*"], digits: true, alpha: true },
@@ -101,7 +101,7 @@ export class Mask {
   public selectSectionType(s: string): MaskSectionType {
 
     // Сначала поищем в опциях
-    let res: MaskSectionType = this.options.sectionTypes.find(i => (i.selectors.find(sel => sel == s) != null));
+    let res: MaskSectionType = this.settings.sectionTypes.find(i => (i.selectors.find(sel => sel == s) != null));
     if(res != null)
       return res;
 
@@ -112,7 +112,7 @@ export class Mask {
   private selectSectionTypeByFirstChar(char: string): MaskSectionType {
 
     // Сначала поищем в опциях
-    let res: MaskSectionType = this.options.sectionTypes.find(i => (i.selectors.find(sel => sel[0] == char) != null));
+    let res: MaskSectionType = this.settings.sectionTypes.find(i => (i.selectors.find(sel => sel[0] == char) != null));
     if(res != null)
       return res;
 
@@ -122,7 +122,7 @@ export class Mask {
 
   // Добавляет в список секций пустую секцию, имеющую разделитель
   private addEmptySection(delimiter: string) {
-    this.sections.push(new MaskSection(this.intl, this.options, "", delimiter));
+    this.sections.push(new MaskSection(this.intl, this.settings, "", delimiter));
   }
 
   // Добавление секции в список
@@ -144,7 +144,7 @@ export class Mask {
       return;
     }
 
-    let s = new MaskSection(this.intl, this.options, section, delimiter, sType);
+    let s = new MaskSection(this.intl, this.settings, section, delimiter, sType);
 
     // Так-то вообще, если разделитель длиннее одного символа,
     // нам нужно добавить пустые секции для всех символов кроме первого.
@@ -188,7 +188,7 @@ export class Mask {
         res += section.delimiter;
     });
 
-    if(this.options.appendPlaceholders)
+    if(this.settings.appendPlaceholders)
       res = this.appendPlaceholders(res);
 
     return res;
@@ -294,7 +294,7 @@ export class Mask {
       let v = section.extractSectionValue(value, sectionStart);
 
       while(v.sectionValue.length < section.length)
-        v.sectionValue.append(this.options.placeholder);
+        v.sectionValue.append(this.settings.placeholder);
 
       v.delimiter = section.delimiter;
 
@@ -400,7 +400,7 @@ export class Mask {
 
     // Добавляем плэйсхолдеры перед обработкой. Чтобы обработчик мог их учитывать
     // при расчете следующей позиции курсора
-    if(this.options.appendPlaceholders)
+    if(this.settings.appendPlaceholders)
       value = this.appendPlaceholders(value);
 
     for(let i = 0; i < this.sections.length; i++) {
@@ -419,7 +419,7 @@ export class Mask {
        return null;
 
       // Добавляем еще раз плэйсхолдеры
-      if(this.options.appendPlaceholders)
+      if(this.settings.appendPlaceholders)
         res.newValue = this.appendPlaceholders(res.newValue);
 
       // Готово!
@@ -496,8 +496,8 @@ export class Mask {
 
   private setLocale(locale: Locale) {
     // Устанавливаем короткие названия месяцев
-    this.selectSectionType("mmm").variants = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
-    this.selectSectionType("MMM").variants = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
+    this.selectSectionType("mmm").options = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
+    this.selectSectionType("MMM").options = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
   }
 
   constructor(protected intl: Internationalization) {

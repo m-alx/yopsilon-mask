@@ -5,7 +5,7 @@ import * as YN from "yopsilon-mask";
   selector: "ip-example",
   template:
     `<div class="input-wrapper">
-        <input yn-mask="b.b.b.b" placeholder="0.0.0.0" [yn-mask-options]="options" (ynStateChange)="stateChange($event)" [(ngModel)]="txtValue" />
+        <input yn-mask="b.b.b.b" placeholder="0.0.0.0" [yn-mask-settings]="settings" (ynStateChange)="stateChange($event)" [(ngModel)]="txtValue" />
         <div class="state-indicator" [ngClass]="stateClass">{{state}}</div>
      </div>
      <span class="model-value">{{txtValue}}</span>
@@ -23,7 +23,7 @@ export class IpExampleComponent {
   state: string;
   stateClass: string;
 
-  options: YN.MaskOptions = new YN.MaskOptions(" ", false);
+  settings: YN.MaskSettings = new YN.MaskSettings(" ", false);
 
   stateChange(state: YN.MaskState) {
     this.state = state.name;
@@ -31,6 +31,6 @@ export class IpExampleComponent {
   }
 
   constructor() {
-    this.options.appendPlaceholders = false;
+    this.settings.appendPlaceholders = false;
   }
 }

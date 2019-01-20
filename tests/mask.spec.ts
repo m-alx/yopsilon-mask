@@ -5,7 +5,7 @@
 import { Internationalization } from "../src/internationalization/internationalization.class";
 import { MaskSection, MaskSectionKeyResult } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
-import { MaskOptions } from "../src/mask/mask-options.class";
+import { MaskSettings } from "../src/mask/mask-settings.class";
 import { Mask } from "../src/mask/mask.class";
 import { async } from '@angular/core/testing';
 
@@ -21,9 +21,9 @@ describe(`Получение списка секций маски [yyyy年mm月d
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日]: `, () => {
   let intl = new Internationalization();
-  let opt = new MaskOptions("_", true);
+  let s = new MaskSettings("_", true);
   let mask = new Mask(intl);
-  mask.options = opt;
+  mask.settings = s;
   mask.mask = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
@@ -33,9 +33,9 @@ describe(`Последний символ маски - разделитель. �
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем Backspace: `, () => {
   let intl = new Internationalization();
-  let opt = new MaskOptions("_", true);
+  let s = new MaskSettings("_", true);
   let mask = new Mask(intl);
-  mask.options = opt;
+  mask.settings = s;
   mask.mask = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "Backspace", 11, 0);
@@ -47,12 +47,14 @@ describe(`Последний символ маски - разделитель. �
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем ArrowLeft при ReplaceMode = false: `, () => {
   let intl = new Internationalization();
-  let opt = new MaskOptions("_", true);
+
+  let s = new MaskSettings("_", true);
+  s.replaceMode = false;
+
   let mask = new Mask(intl);
-  mask.options = opt;
+  mask.settings = s;
   mask.mask = "yyyy年mm月dd日";
 
-  mask.options.replaceMode = false;
   let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
   it(`ReplaceMode=false. New SelectionStart must be 10`, () => expect(res.newSelStart).toBe(10));
   it(`ReplaceMode=false. New SelectionLength must be 0`, () => expect(res.newSelLength).toBe(0));
@@ -78,9 +80,9 @@ describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимае
 
   let intl = new Internationalization();
   let mask = new Mask(intl);
-  let opt = new MaskOptions("_", true)
-  opt.appendPlaceholders = false;
-  mask.options = opt;
+  let s = new MaskSettings("_", true)
+  s.appendPlaceholders = false;
+  mask.settings = s;
   mask.mask = "dd mmm yyyy";
   res = mask.applyKeyAtPos("11", "ArrowRight", 2, 0);
 
@@ -91,16 +93,16 @@ describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимае
 
 describe(`Опция AppendPlaceholders=true: `, () => {
   let res: MaskSectionKeyResult;
-  let opt: MaskOptions;
+  let s: MaskSettings;
 
   beforeEach(async(() => {
 
-    let opt = new MaskOptions("_", true);
-    opt.appendPlaceholders = true;
+    let s = new MaskSettings("_", true);
+    s.appendPlaceholders = true;
     let intl = new Internationalization();
     let mask = new Mask(intl);
     mask.mask = "mm/dd/yyyy";
-    mask.options = opt;
+    mask.settings = s;
     res = mask.applyKeyAtPos("", "1", 0, 0);
   }));
 
@@ -110,17 +112,17 @@ describe(`Опция AppendPlaceholders=true: `, () => {
 
 describe(`Маска с переменной длиной секции (255.255.255.0): `, () => {
   let res: MaskSectionKeyResult;
-  let opt: MaskOptions;
+  let s: MaskSettings;
 
   beforeEach(async(() => {
 
-    let opt = new MaskOptions("_", true);
-    opt.appendPlaceholders = false;
+    let s = new MaskSettings("_", true);
+    s.appendPlaceholders = false;
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
     mask.mask = "b.b.b.b";
-    mask.options = opt;
+    mask.settings = s;
     res = mask.applyKeyAtPos("255.255.255.0", "Backspace", 3, 0);
   }));
 
@@ -129,17 +131,17 @@ describe(`Маска с переменной длиной секции (255.255.
 
 describe(`Символ разделителя в пустой секции должен игнорироваться: `, () => {
   let res: MaskSectionKeyResult;
-  let opt: MaskOptions;
+  let s: MaskSettings;
 
   beforeEach(async(() => {
 
-    let opt = new MaskOptions(" ", true);
-    opt.appendPlaceholders = false;
+    let s = new MaskSettings(" ", true);
+    s.appendPlaceholders = false;
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
     mask.mask = "b.b.b.b";
-    mask.options = opt;
+    mask.settings = s;
     res = mask.applyKeyAtPos("172. . . ", ".", 4, 0);
   }));
 
@@ -149,17 +151,17 @@ describe(`Символ разделителя в пустой секции до�
 
 describe(`Символ разделителя не должен приниматься пустой секцией, если одна из секций уже отвергла его: `, () => {
   let res: MaskSectionKeyResult;
-  let opt: MaskOptions;
+  let s: MaskSettings;
 
   beforeEach(async(() => {
 
-    let opt = new MaskOptions("_", true);
-    opt.appendPlaceholders = true;
+    let s = new MaskSettings("_", true);
+    s.appendPlaceholders = true;
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
     mask.mask = "+1 NNN NNN-NN-NN";
-    mask.options = opt;
+    mask.settings = s;
     res = mask.applyKeyAtPos("", "1", 0, 0);
   }));
 
@@ -171,13 +173,13 @@ describe(`Символ разделителя должен приниматьс�
   console.log(">>>>>>>>>>");
   let res: MaskSectionKeyResult;
 
-  let opt = new MaskOptions("_", true);
-  opt.appendPlaceholders = false;
+  let s = new MaskSettings("_", true);
+  s.appendPlaceholders = false;
 
   let intl = new Internationalization();
   let mask = new Mask(intl);
   mask.mask = "+1 NNN NNN-NN-NN";
-  mask.options = opt;
+  mask.settings = s;
   res = mask.applyKeyAtPos("+", "1", 1, 0);
 
   console.log(">>>>>>>>>>");
@@ -187,7 +189,6 @@ describe(`Символ разделителя должен приниматьс�
 
 describe(`Соответствие строки маске:`, () => {
 
-  //
   let intl = new Internationalization();
   let mask = new Mask(intl);
   mask.mask = "dd.MM.yyyy";
@@ -215,13 +216,13 @@ describe(`Кастомная секция, regular expression`, () => {
 
   let intl = new Internationalization();
   let mask = new Mask(intl);
-  let opt = new MaskOptions("_", true);
-  opt.appendPlaceholders = false;
+  let s = new MaskSettings("_", true);
+  s.appendPlaceholders = false;
 
-  opt.sectionTypes.push(
+  s.sectionTypes.push(
     { selectors: ["A"], digits: true, alpha: true, regExp: /[a-b]/i },
   );
-  mask.options = opt;
+  mask.settings = s;
   mask.mask = "ANNN";
   let res: MaskSectionKeyResult;
 
@@ -234,11 +235,11 @@ describe(`Преобразование из одного шаблона в др�
   let intl = new Internationalization();
   let mask1 = new Mask(intl);
   let mask2 = new Mask(intl);
-  let opt = new MaskOptions("_", true);
-  opt.appendPlaceholders = true;
+  let s = new MaskSettings("_", true);
+  s.appendPlaceholders = true;
 
-  mask1.options = opt;
-  mask2.options = opt;
+  mask1.settings = s;
+  mask2.settings = s;
 
   mask1.mask = "NNNN NNNN NNNN NNNN";
   mask2.mask = "NNN NNNNNN NNNNN";

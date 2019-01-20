@@ -9,7 +9,7 @@ export class MaskSectionType {
   public alpha: boolean = false;
   public min?: number = null;
   public max?: number = null;
-  public variants?: Array<string>;
+  public options?: Array<string>;
 
   public regExp?: RegExp;
 

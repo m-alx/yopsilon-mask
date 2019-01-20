@@ -5,7 +5,7 @@
 
 import { Internationalization } from "../internationalization/internationalization.class";
 import { MaskSectionType } from "./mask-section-type.class";
-import { MaskOptions } from "./mask-options.class";
+import { MaskSettings } from "./mask-settings.class";
 
 import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskValue } from "./mask-value.class";
@@ -44,7 +44,7 @@ export class MaskSection {
   // Конструктор класса
   constructor(
     public intl: Internationalization,
-    public options: MaskOptions,
+    public settings: MaskSettings,
     public section: string, // Общее значение маски
     public delimiter: string,
     public sectionType: MaskSectionType = null
@@ -54,9 +54,9 @@ export class MaskSection {
 
   // Длина секции
   public get length(): number {
-    if(this.hasVariants()) {
+    if(this.hasOptions()) {
       let min: number = 99;
-      this.sectionType.variants.forEach(v => {
+      this.sectionType.options.forEach(v => {
         if(v.length < min)
           min = v.length;
       });
@@ -68,9 +68,9 @@ export class MaskSection {
   // Наибольшая длина
   public get maxLength(): number {
 
-    if(this.hasVariants()) {
+    if(this.hasOptions()) {
       let ml: number = 0;
-      this.sectionType.variants.forEach(v => {
+      this.sectionType.options.forEach(v => {
         if(v.length > ml)
           ml = v.length;
       });
@@ -87,8 +87,8 @@ export class MaskSection {
     return this.section == "";
   }
 
-  public hasVariants(): boolean {
-    return this.sectionType != null && this.sectionType.variants != null && this.sectionType.variants.length > 0;
+  public hasOptions(): boolean {
+    return this.sectionType != null && this.sectionType.options != null && this.sectionType.options.length > 0;
   }
 
   public hasRegExp(): boolean {
@@ -119,16 +119,16 @@ export class MaskSection {
 
   // Очистка строки от плэйсхолдеров
   removePlaceholders(txt: string): string {
-    return txt.split(this.options.placeholder).join("");
+    return txt.split(this.settings.placeholder).join("");
   }
 
   // Следующее значение секции при нажатии стрелки вверх
   private incValue(value: string): string {
 
     // Следующий вариант
-    if(this.hasVariants()) {
-      let i = this.sectionType.variants.indexOf(value);
-      return i < this.sectionType.variants.length - 1 ? this.sectionType.variants[i + 1] : this.sectionType.variants[0];
+    if(this.hasOptions()) {
+      let i = this.sectionType.options.indexOf(value);
+      return i < this.sectionType.options.length - 1 ? this.sectionType.options[i + 1] : this.sectionType.options[0];
     }
 
     // Следующее числовое значение
@@ -154,9 +154,9 @@ export class MaskSection {
   private decValue(value: string): string {
 
     // Предыдущий вариант
-    if(this.hasVariants()) {
-      let i = this.sectionType.variants.indexOf(value);
-      return i > 0 ? this.sectionType.variants[i - 1] : this.sectionType.variants[this.sectionType.variants.length - 1];
+    if(this.hasOptions()) {
+      let i = this.sectionType.options.indexOf(value);
+      return i > 0 ? this.sectionType.options[i - 1] : this.sectionType.options[this.sectionType.options.length - 1];
     }
 
     // Предыдущее числовое значение
@@ -184,10 +184,10 @@ export class MaskSection {
     if(!this.sectionType)
       return s;
 
-    if(this.hasVariants()) {
-      let variant = this.sectionType.variants.find(v => v.toLowerCase() == s.toLowerCase());
+    if(this.hasOptions()) {
+      let variant = this.sectionType.options.find(v => v.toLowerCase() == s.toLowerCase());
       if(!variant)
-        s = this.sectionType.variants.length > 0 ? this.sectionType.variants[0] : "";
+        s = this.sectionType.options.length > 0 ? this.sectionType.options[0] : "";
       return s;
     }
 
@@ -216,7 +216,7 @@ export class MaskSection {
       // Число распознано. Проверяем минимальное и максимальное значения.
       // Но только если включена опция автокорректировки.
       // Иначе вернется просто чистое числовое значение нужной длины.
-      if(this.options.autoCorrect)
+      if(this.settings.autoCorrect)
         n = this.checkMinMax(n);
 
       res = "" + n;
@@ -225,7 +225,7 @@ export class MaskSection {
     }
 
     while(res.length < this.length)
-      res += this.options.placeholder;
+      res += this.settings.placeholder;
 
     return res;
   }
@@ -337,7 +337,7 @@ export class MaskSection {
         // Остаемся на месте
         let res: MaskSectionKeyResult = new MaskSectionKeyResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
         res.newSelStart = selStart;
-        res.newSelLength = this.options.replaceMode && selStart_local < this.length ? 1 : 0;
+        res.newSelLength = this.settings.replaceMode && selStart_local < this.length ? 1 : 0;
         return res;
       }
   }
@@ -370,11 +370,11 @@ export class MaskSection {
 
     // При последней секции и наличии разделителя для нас однозноачно,
     // находимся ли мы до или после разделителя
-    if(isLast && selStart > (mv.sectionPos + this.maxLength) && this.options.replaceMode)
+    if(isLast && selStart > (mv.sectionPos + this.maxLength) && this.settings.replaceMode)
       selStart = mv.sectionPos + this.maxLength;
 
     res.newSelStart = selStart - 1;
-    res.newSelLength = this.options.replaceMode ? 1 : 0;
+    res.newSelLength = this.settings.replaceMode ? 1 : 0;
 
     let selStart_local = res.newSelStart - mv.sectionPos;
 
@@ -405,7 +405,7 @@ export class MaskSection {
     let res: MaskSectionKeyResult = new MaskSectionKeyResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
 
     // Режим замены, selLength == 0 и что-то есть непустое.
-    if(this.options.replaceMode && selLength == 0 && mv.sectionValue.currentChar != "") {
+    if(this.settings.replaceMode && selLength == 0 && mv.sectionValue.currentChar != "") {
       // Остаемся на месте и выделяем следующий символ
       res.newSelStart = selStart;
       res.newSelLength = 1;
@@ -413,7 +413,7 @@ export class MaskSection {
       // Передвигаемся на один символ вперед
       if(mv.afterValue != "" || mv.sectionValue.afterChars != "") {
         res.newSelStart = selStart + 1;
-        res.newSelLength = (mv.sectionValue.currentChar != "" && this.options.replaceMode) ? 1 : 0;
+        res.newSelLength = (mv.sectionValue.currentChar != "" && this.settings.replaceMode) ? 1 : 0;
 
         // Секция с переменной длиной. Если мы в конце ее, то selLength = 0
         if(res.newSelStart - mv.sectionPos >= this.length && mv.sectionValue.afterChars == "")
@@ -463,8 +463,6 @@ export class MaskSection {
     ): MaskSectionKeyResult
     {
       // Парсим
-      console.log("====", value, this.delimiter, key, acceptDelimiterChars);
-
       let mv: MaskValue = this.extractSectionValue(value, sectionPos, selStart, selLength);
 
       // Курсор находится до секции. Не реагируем.
@@ -508,9 +506,9 @@ export class MaskSection {
         cValue += key;
 
         // Секция ограничена списком возможных значений
-        if(this.hasVariants() && cValue != mv.sectionValue.beforeChars) {
+        if(this.hasOptions() && cValue != mv.sectionValue.beforeChars) {
           let variantFound: string = null;
-          this.sectionType.variants.some(variant => {
+          this.sectionType.options.some(variant => {
             if(selStart_local < variant.length && variant.substring(0, cValue.length).toLowerCase() == cValue.toLowerCase()) {
               variantFound = variant;
               return true;
@@ -532,7 +530,7 @@ export class MaskSection {
         }
 
         // Секция настроена типами символов
-        if(!this.hasVariants() && !this.isEmptySection() && this.sectionType.regExp == null) {
+        if(!this.hasOptions() && !this.isEmptySection() && this.sectionType.regExp == null) {
           let isOk: boolean = false;
 
           if(selStart_local < this.maxLength) {
@@ -552,7 +550,6 @@ export class MaskSection {
         }
 
         // Введен символ разделителя. Переход на следующую секцию
-        console.log("-----", value, this.delimiter, key, acceptDelimiterChars);
         if(this.delimiter != "" && key == this.delimiter[0] && acceptDelimiterChars) {
           // Если ничего не внесено, то смысла нет переходить на следующую секцию
           if(this.removePlaceholders(mv.sectionValue.value()) == "" && !this.isEmptySection())
@@ -578,7 +575,7 @@ export class MaskSection {
           return this.apply(mv, mv.sectionValue.beforeChars, selStart, 0);
         }
         else
-          return this.apply(mv, mv.sectionValue.value(this.options.placeholder), selStart, 0);
+          return this.apply(mv, mv.sectionValue.value(this.settings.placeholder), selStart, 0);
       }
 
       // Клавиша Backspace
@@ -606,7 +603,7 @@ export class MaskSection {
         else // Заменяем плэйсхолдером
         {
           if(mv.sectionValue.beforeChars.length < this.length)
-            mv.sectionValue.beforeChars += this.options.placeholder;
+            mv.sectionValue.beforeChars += this.settings.placeholder;
         }
 
         return this.apply(mv, mv.sectionValue.value(), selStart, -1, isLast);
@@ -621,11 +618,11 @@ export class MaskSection {
         return this.goFwd(mv, selStart, selLength);
 
       // Инкрементируем значение секции клавишей "Вверх"
-      if(key == "ArrowUp" && this.options.incrementDecrementValueByArrows)
+      if(key == "ArrowUp" && this.settings.incrementDecrementValueByArrows)
         return this.apply(mv, this.incValue(mv.sectionValue.value()), selStart, 0);
 
       // Декрементируем значение секции клавишей "Вниз"
-      if(key == "ArrowDown" && this.options.incrementDecrementValueByArrows)
+      if(key == "ArrowDown" && this.settings.incrementDecrementValueByArrows)
         return this.apply(mv, this.decValue(mv.sectionValue.value()), selStart, 0);
 
     return this.none(mv);
@@ -634,10 +631,10 @@ export class MaskSection {
   // Если не заполнена секция - заполняем первым вариантом
   setDefaultVariant(value: string, sectionPos: number):string {
 
-    if(!this.options.defaultVariants)
+    if(!this.settings.defaultOptions)
       return value;
 
-    if(!this.hasVariants())
+    if(!this.hasOptions())
       return value;
 
     // Теми инструментами, которые есть у нас..
@@ -651,7 +648,7 @@ export class MaskSection {
     // Если пустое значение
     if(s == "")
     {
-      let applyResult: MaskSectionKeyResult = this.apply(mv, this.sectionType.variants[0], 0, 0);
+      let applyResult: MaskSectionKeyResult = this.apply(mv, this.sectionType.options[0], 0, 0);
       value = applyResult.newValue;
     }
 
@@ -665,7 +662,7 @@ export class MaskSection {
     let res: MaskSectionKeyResult = new MaskSectionKeyResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
 
     res.newSelStart = sectionPos;
-    res.newSelLength = this.options.replaceMode ? 1 : 0;
+    res.newSelLength = this.settings.replaceMode ? 1 : 0;
     if(this.isEmptySection())
       res.newSelLength = 0;
 
@@ -678,7 +675,7 @@ export class MaskSection {
     let mv: MaskValue = this.extractSectionValue(value, sectionPos, sectionPos, 0);
     let res: MaskSectionKeyResult = new MaskSectionKeyResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
 
-    if(!this.options.replaceMode) {
+    if(!this.settings.replaceMode) {
       // Нужно встать перед последним символом
       res.newSelStart = sectionPos + mv.sectionValue.length - 1;
       res.newSelLength = 0;

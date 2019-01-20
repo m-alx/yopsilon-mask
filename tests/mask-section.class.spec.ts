@@ -5,7 +5,7 @@
 import { Internationalization } from "../src/internationalization/internationalization.class";
 import { MaskSection } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
-import { MaskOptions } from "../src/mask/mask-options.class";
+import { MaskSettings } from "../src/mask/mask-settings.class";
 import { Mask } from "../src/mask/mask.class";
 import { async } from '@angular/core/testing';
 
@@ -14,11 +14,11 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    let options = new MaskOptions(" ");
+    let settings = new MaskSettings(" ");
     let m: Mask = new Mask(intl);
     let sType = m.selectSectionType("mm");
 
-    let section = new MaskSection(intl, options, "mm", ".", sType);
+    let section = new MaskSection(intl, settings, "mm", ".", sType);
 
     maskValue = section.extractSectionValue("13.12.2018", 3, 4, 0);
   }));
@@ -55,8 +55,8 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
 
   beforeEach(async(() => {
     let intl = new Internationalization();
-    let options = new MaskOptions(" ");
-    options.appendPlaceholders = false;
+    let settings = new MaskSettings(" ");
+    settings.appendPlaceholders = false;
 
 
     let mask = new Mask(intl);
@@ -73,13 +73,13 @@ describe(`Автоматическое заполнение секции пер�
   let res: any;
 
   beforeEach(async(() => {
-    let options: MaskOptions = new MaskOptions("_", true);
-    options.appendPlaceholders = true;
-    options.defaultVariants = true;
+    let settings: MaskSettings = new MaskSettings("_", true);
+    settings.appendPlaceholders = true;
+    settings.defaultVariants = true;
 
     let intl = new Internationalization();
     let mask = new Mask(intl);
-    mask.options = options;
+    mask.settings = settings;
     mask.mask = "dd mmm yyyy";
     let section = mask.sections[1];
     res = section.setDefaultVariant("13 ___ ____", 3);

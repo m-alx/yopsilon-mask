@@ -73,11 +73,11 @@ export class DateFormatterPipe {
 
         let s: string = "";
 
-        if(section.hasVariants())
-          s = section.sectionType.variants[n - 1];
+        if(section.hasOptions())
+          s = section.sectionType.options[n - 1];
         else
           s = section.autoCorrectValue(n + "");
-        
+
         res += s + section.delimiter;
       }
 
