@@ -88,12 +88,12 @@ After a mask pattern is parsed, each section's type is identified (`MaskSection.
   - digits: boolean - numeric values
   - min: number - minimum value
   - max: number - maximum value (e.g. 59 for minutes)
-  - datePart: string - (*optional*) Date component binding. Used in `Formatter` and `Parser` Date values
-  - regExp: RegExp - (*optional*) regexp which validates user input for a section
+  - datePart: string - (optional) Date component binding. Used in `Formatter` and `Parser` Date values
+  - regExp: RegExp - (optional) regexp which validates user input for a section
 
-*MaskSection.delimiter* contains trailing delimiter for a section.
+`MaskSection.delimiter` contains trailing delimiter for a section.
 
-Custom section type can be created and applied (please refer to part 7. Custom section types)
+Custom section type can be created and applied (please refer to part 4. Custom section types)
 
 #### 2. Predefined section types
 
@@ -151,13 +151,13 @@ MaskSettings class contains attributes which determine directive's behaviour upo
   - sectionTypes: Array<MaskSectionType> - list of your own custom section types.
 
 *placeholder* property value should not be set to a symbol which is a member of delimiters list (e.g. space) due to unability to tell delimiter from empty section.
-*whiteSpace* ("\u2000") could be used instead of space. Moreover, static property *Mask.delimiterChar* can be overridden, if there is no necessity to use that char as a delimiter.
+*whiteSpace* ("\u2000") could be used instead of space. Moreover, static property `Mask.delimiterChar` can be overridden, if there is no necessity to use that char as a delimiter.
 
 #### 4. Custom section types
 
-New section type can be added to list, defined in *Mask.sectionTypes* static property. These types of sections will be used by all *yn-mask* and *yn-mask-date* directives of your application.
+New section type can be added to list, defined in `Mask.sectionTypes` static property. These types of sections will be used by all `yn-mask` and `yn-mask-date` directives of your application.
 
-More suitable option is to add section type to *MaskSettings* class instance which is defined in *settings* property of a directive. Types defined in *settings* property has higher priority when section type is determined.
+More suitable option is to add section type to `MaskSettings` class instance which is defined in `settings` property of a directive. Types defined in `settings` property has higher priority when section type is determined.
 
 As an example, let's define a section type, accepting only case-insensitive charset ABCEGHJKLMNPRSTVXY:
 
@@ -182,7 +182,7 @@ And use it for canadian postal code with options:
 Section value can accept variable value length.
 For example, section `h` in `h:mm tt` pattern can accept values 1 to 12 (value length - 1 or 2 chars).
 Difference between it and fixed-length sections:
-  - cursor moves to next section only if maximum value length is reached. If length is less than maximum, User can move to the next section pressing *ArrowRight* key or pressing section delimiter char key (*[:]* in this example).
+  - cursor moves to next section only if maximum value length is reached. If length is less than maximum, User can move to the next section pressing `ArrowRight` key or pressing section delimiter char key (`:` in this example).
 
 #### 6. Sections with options
 
@@ -247,11 +247,11 @@ export class DateExampleComponent {
 
 #### 8. Localization
 
-Injectable class *Internationalization* contains available locales in *locales* array.
-Current locale can be retreived via *locale* property.
-*currentLocale* property contains current locale code.
+Injectable class `Internationalization` contains available locales in `locales` array.
+Current locale can be retreived via `locale` property.
+`currentLocale` property contains current locale code.
 
-*MaskDateDirective* subscribes to a *Internationalization.onLocaleChange* event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
+`MaskDateDirective` subscribes to a `Internationalization.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
 
   - Locale.dateFormat in case of "date";
   - Locale.timeHMFormat in case of "time" and "timeHM";
@@ -259,9 +259,9 @@ Current locale can be retreived via *locale* property.
   - Locale.dateTimeHMFormat in case of "dateTime" and "dateTimeHM";
   - Locale.dateTimeHMSFormat in case of "dateTimeHMS";
 
-Instances of class *Mask* subscrive to *Internationalization.onLocaleChange* event to fetch localized months names for sections of *[mmm]* type.
+Instances of class `Mask` subscribe to `Internationalization.onLocaleChange` event to fetch localized months names for sections of *mmm* type.
 Internationalization.
-You can add a custom locale via creating an instance of *Locale* class and setting it by calling method *setCurrentLocale(l:Locale)* of *Internationalization* class.
+You can add a custom locale via creating an instance of *Locale* class and setting it by calling method `*setCurrentLocale(l:Locale)` of `Internationalization` class.
 
 Example:
 
