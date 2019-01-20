@@ -75,7 +75,7 @@ export class AppComponent {
 
 ### Documentation
 
-#### 1. Общий принцип работы
+#### 1. Common information
 
 Directives use *Mask* class to divide a template into sections and to process user input.
 Delimiters between sections are defined as a pre-defined symbol set (static property *Mask.delimiterChars*) or any other chars, which could not be identified as a beginning of section's start.
@@ -91,7 +91,7 @@ After a mask template is parsed, each section's type is identified (*MaskSection
   - datePart: string - (*optional*) Date component binding. Used in *Formatter* and *Parser* Date values
   - regExp: RegExp - (*optional*) regexp which validates user input for a section
 
-MaskSection.delimiter contains trailing delimiter for a section.
+*MaskSection.delimiter* contains trailing delimiter for a section.
 
 Custom section type can be created and applied (please refer to part 7. Custom section types)
 
