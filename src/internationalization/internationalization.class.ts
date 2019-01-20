@@ -30,6 +30,14 @@ export class Internationalization {
     this._onLocaleChange.next(this.locale);
   }
 
+  public setLocale(l: Locale) {
+    let res = this.locales.find(l => l.shortName == this._currentLocale);
+    if(!res)
+      this.locales.push(l);
+
+    this.currentLocale = l.shortName;
+  }
+
   // Добавить локализацию
   public addLocale(locale: Locale) {
     if(!this.locales.find(l => l.shortName == locale.shortName))
