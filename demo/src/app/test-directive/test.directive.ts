@@ -8,14 +8,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import * as YN from "yopsilon-mask";
 
-/*
-import { Mask } from "./mask.class";
-import { Keys } from "../keys/keys.class";
-import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
-import { MaskOptions } from "./mask-options.class";
-import { MaskState } from "./mask-state.class";
-*/
-
 @Directive({
     selector: '[yn-test]',
     host: {'(input)': 'input($event.target.value)', '(blur)': 'blur()'},
@@ -35,7 +27,7 @@ export class TestDirective {
   blur() {
 
     // Очищаем, если маска неверна
-    if(!this._mask.checkMask(this._txtValue) && !this._mask.options.allowIncomplete)
+    if(!this._mask.checkMask(this._txtValue) && !this._mask.settings.allowIncomplete)
       this.setText("");
 
     this.onTouched();
@@ -192,9 +184,9 @@ export class TestDirective {
     return this._mask.mask;
   }
 
-  @Input("yn-mask-options")
-  set options(v: YN.MaskOptions) {
-    this._mask.options = v;
+  @Input("yn-mask-settings")
+  set settings(v: YN.MaskSettings) {
+    this._mask.settings = v;
   }
 
   android_behavior: boolean = false;
