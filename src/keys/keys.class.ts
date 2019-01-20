@@ -6,6 +6,10 @@
 // но нам удобнее испаользовать по имени. Поэтому приводим коды к
 // названиям таким же, как в Google Chrome.
 
+// Different browsers have different button names,
+// But it's more convenient to use an alias. So we're mapping codes to
+// Names similar to those in Google Chrome
+
 export class Keys {
 
   private static keys: Array<string> = new Array(255);
@@ -41,6 +45,7 @@ export class Keys {
 
   public static initialize(): void {
     // В принципе, пока все нам не нужны..
+    // Not every button is required as of this moment
     this.keys[8] = "Backspace";
     this.keys[9] = "Tab";
 
