@@ -14,29 +14,29 @@ export class AppComponent {
   whiteSpace = "\u2000";
 
   get placeholder(): string {
-    return YN.Mask.defaultOptions.placeholder;
+    return YN.Mask.defaultSettings.placeholder;
   }
 
   set placeholder(s: string) {
-    YN.Mask.defaultOptions.placeholder = s;
+    YN.Mask.defaultSettings.placeholder = s;
   }
 
   //
   get appendPlaceholders(): boolean {
-    return YN.Mask.defaultOptions.appendPlaceholders;
+    return YN.Mask.defaultSettings.appendPlaceholders;
   }
 
   set appendPlaceholders(v: boolean) {
-    YN.Mask.defaultOptions.appendPlaceholders = v;
+    YN.Mask.defaultSettings.appendPlaceholders = v;
   }
 
   //
   get replaceMode(): boolean {
-    return YN.Mask.defaultOptions.replaceMode;
+    return YN.Mask.defaultSettings.replaceMode;
   }
 
   set replaceMode(v: boolean) {
-    YN.Mask.defaultOptions.replaceMode = v;
+    YN.Mask.defaultSettings.replaceMode = v;
   }
 
 
