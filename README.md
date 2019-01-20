@@ -180,9 +180,9 @@ And use it for canadian postal code with options:
 #### 5. Sections with variable length
 
 Section value can accept variable value length.
-For example, section *[h]* in *[h:mm tt]* template can accept values 1 to 12 (value length - 1 or 2 chars).
+For example, section `h` in `h:mm tt` template can accept values 1 to 12 (value length - 1 or 2 chars).
 Difference between it and fixed-length sections:
-  - cursor moves to next section only if maximum value length is reached. If length is less than maximum, User can move to the next section pressing *[ArrowRight]* button or pressing section delimiter char button (*[:]* in this example).
+  - cursor moves to next section only if maximum value length is reached. If length is less than maximum, User can move to the next section pressing *ArrowRight* key or pressing section delimiter char key (*[:]* in this example).
 
 #### 6. Sections with options
 
