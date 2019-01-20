@@ -30,7 +30,7 @@ export class Internationalization {
     this._onLocaleChange.next(this.locale);
   }
 
-  public setLocale(l: Locale) {
+  public setCurrentLocale(l: Locale) {
     let res = this.locales.find(l => l.shortName == this._currentLocale);
     if(!res)
       this.locales.push(l);
