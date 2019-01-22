@@ -39,7 +39,5 @@ export class MaskSectionValue {
     this.beforeChars = sectionValue.substring(0, selStart_local);
     this.currentChar = sectionValue.substring(selStart_local, selStart_local + 1);
     this.afterChars = sectionValue.substring(selStart_local + 1);
-
   }
-
 }

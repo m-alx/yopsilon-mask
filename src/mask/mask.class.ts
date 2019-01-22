@@ -27,7 +27,7 @@ export class Mask {
     this.updateMask();
   }
 
-  // Options by default
+  // Settings by default
   public static readonly defaultSettings: MaskSettings = new MaskSettings("_");
 
   public get settings() {
@@ -95,17 +95,19 @@ export class Mask {
     return this._mask;
   }
 
+  // Определяем тип секции по шаблону
   public selectSectionType(s: string): MaskSectionType {
 
-    // Сначала поищем в опциях
+    //  First, look in the settings // Сначала в настройках
     let res: MaskSectionType = this.settings.sectionTypes.find(i => (i.selectors.find(sel => sel == s) != null));
     if(res != null)
       return res;
 
-    // Затем, среди стандартных
+    // Then, in predefined section types // Затем среди предустановленных
     return Mask.sectionTypes.find(i => (i.selectors.find(sel => sel == s) != null));
   }
 
+  // Определяем, существуют ли типы секций, которые начинаются на заданный символ.
   private selectSectionTypeByFirstChar(char: string): MaskSectionType {
 
     // Сначала поищем в опциях
@@ -150,9 +152,10 @@ export class Mask {
     this.sections.push(s);
   }
 
+  // Получаем чистое значение без разделителей
+  // Для преобразования из одного шаблона в другой.
+  // Годится только для шаблонов, в котором все секции имеют фиксированную длину
   pureValue(value: string): string {
-    // Для преобразования из одного шаблона в другой.
-    // Годится только для шаблонов, в котором все секции имеют фиксированную длину
 
     if(value == null)
       return value;
@@ -168,6 +171,7 @@ export class Mask {
     return res;
   }
 
+  // Применяем чистое значение к шаблону и возвращаем форматированное значение
   applyPureValue(value: string): string {
     //
     if(value == null)
@@ -310,6 +314,10 @@ export class Mask {
     if(value == null)
       return false;
 
+    // Содержит разделители. Не будем считать корректным значением
+    if(value.indexOf(this.settings.placeholder) >= 0)
+      return false;
+
     let sectionPos = 0;
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
@@ -356,6 +364,10 @@ export class Mask {
   // Пустая строка будет означать инвалидность
   public applyMask(value: string, autoCorrect: boolean = true): string  {
 
+    // Содержит разделители. Не будем считать корректным значением
+    if(value.indexOf(this.settings.placeholder) >= 0)
+      return "";
+
     let sectionPos = 0;
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
@@ -377,7 +389,9 @@ export class Mask {
     return res;
   }
 
+  // Применение клавиши к численному значению
   public applyKeyForNumeric(value: string, key: string, selStart: number, selEnd: number = 0) {
+    // Перевод не нужен, просто пытаюсь сообразить...
     // Для числового значения мы просто вставляем символ в нужное место..
     // И форматируем по маске от десятичного разделителя, если он есть.
 
