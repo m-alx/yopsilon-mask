@@ -2,7 +2,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Internationalization } from "../src/internationalization/internationalization.class";
+import { InternationalizationService } from "../src/internationalization/internationalization.service";
 import { MaskSection } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
 import { MaskSettings } from "../src/mask/mask-settings.class";
@@ -13,7 +13,7 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
   let maskValue: any;
 
   beforeEach(async(() => {
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let settings = new MaskSettings(" ");
     let m: Mask = new Mask(intl);
     let sType = m.selectSectionType("mm");
@@ -37,11 +37,11 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
   let res: any;
 
   beforeEach(async(() => {
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
 
     let mask = new Mask(intl);
 
-    mask.mask = "mm/dd/yyyy";
+    mask.pattern = "mm/dd/yyyy";
     let section = mask.sections[1];
     res = section.applyKey('12/', '3', 3, 3, 0);
   }));
@@ -54,13 +54,13 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
   let res: any;
 
   beforeEach(async(() => {
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let settings = new MaskSettings(" ");
     settings.appendPlaceholders = false;
 
 
     let mask = new Mask(intl);
-    mask.mask = "mm/dd/yyyy";
+    mask.pattern = "mm/dd/yyyy";
     let section = mask.sections[1];
     res = section.applyKey('1', '/', 0, 1, 0, true);
   }));
@@ -77,10 +77,10 @@ describe(`Автоматическое заполнение секции пер�
     settings.appendPlaceholders = true;
     settings.defaultOptions = true;
 
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.settings = settings;
-    mask.mask = "dd mmm yyyy";
+    mask.pattern = "dd mmm yyyy";
     let section = mask.sections[1];
     res = section.setDefaultVariant("13 ___ ____", 3);
   }));
@@ -92,9 +92,9 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3
   let res: any;
 
   beforeEach(async(() => {
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "dd mmm yyyy";
+    mask.pattern = "dd mmm yyyy";
     let section = mask.sections[1];
     res = section.applyKey('13 ', 'd', 3, 3, 0);
   }));
@@ -107,9 +107,9 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selS
   let res: any;
 
   beforeEach(async(() => {
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "dd mmm yyyy";
+    mask.pattern = "dd mmm yyyy";
     let section = mask.sections[2];
     res = section.applyKey('13 dec 1979', 'Delete', 7, 10, 0);
   }));

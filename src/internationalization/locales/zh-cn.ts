@@ -3,12 +3,12 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Injectable } from '@angular/core';
-import { Internationalization } from "../internationalization.class";
+import { InternationalizationService } from "../internationalization.service";
 import { Locale } from "../locale.class";
 
 @Injectable()
 export class LocaleChinese {
-  constructor(private intl: Internationalization) {
+  constructor(private intl: InternationalizationService) {
 
     let locale: Locale = {
       name: "Chinese",
@@ -35,8 +35,9 @@ export class LocaleChinese {
 
       decimalSeparator: ".",
       thousandSeparator: ",",
-      digits: /[0-9]/,
-      letters: /[a-z]/i
+      translates: {}  //,
+      //digits: /[0-9]/,
+      //letters: /[a-z]/i
     };
 
     this.intl.addLocale(locale);

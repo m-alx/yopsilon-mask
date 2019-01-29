@@ -4,7 +4,7 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Output, Directive, ElementRef, Renderer2, EventEmitter } from "@angular/core";
-import { Internationalization } from "../internationalization/internationalization.class";
+import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Mask } from "./mask.class";
 import { Keys } from "../keys/keys.class";
 import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
@@ -273,7 +273,7 @@ export abstract class MaskBaseDirective {
         this.toModel();
     }
 
-    constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {
+    constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: InternationalizationService) {
       this._mask = new Mask(this.intl);
     }
 }

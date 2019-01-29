@@ -20,7 +20,9 @@ export class Locale {
   public decimalSeparator: string;
   public thousandSeparator: string;
 
-  public digits: RegExp = /[0-9]/;
-  public letters: RegExp = /[a-z]/i;
-  
+  public translates: { [id: string]: any } = { };
+
+  //public digits: RegExp = /[0-9]/;
+  //public letters: RegExp = /[a-z]/i;
+
 }

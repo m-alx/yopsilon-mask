@@ -5,17 +5,15 @@
 
 import { Injectable } from '@angular/core';
 
-import { Internationalization } from "../internationalization/internationalization.class";
+import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Locale } from "../internationalization/locale.class";
 
 import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskSectionType } from "./mask-section-type.class";
-import { MaskSection,
-         MaskSectionKeyResult, MaskSectionAction } from "./mask-section.class";
+import { MaskSection, MaskSectionKeyResult, MaskSectionAction } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
 
 // @dynamic
-@Injectable()
 export class Mask {
 
   // Settings
@@ -44,55 +42,51 @@ export class Mask {
   public static readonly sectionTypes: MaskSectionType[] = [
 
     // Time components
-    { selectors: ["HH"], digits: true, alpha: false, min: 0, max: 23, datePart: "H" },
-    { selectors: ["h"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
-    { selectors: ["hh"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
-    { selectors: ["mi", "MI"], digits: true, alpha: false, min: 0, max: 59, datePart: "mi" },
-    { selectors: ["ss", "SS"], digits: true, alpha: false, min: 0, max: 59, datePart: "ss" },
-    { selectors: ["TT", "AM", "PM"], digits: false, alpha: true, options: ["AM", "PM"], datePart: "tt" },
-    { selectors: ["tt", "am", "pm"], digits: false, alpha: true, options: ["am", "pm"], datePart: "tt" },
-    { selectors: ["fff"], digits: true, alpha: false, datePart: "ms" }, // Milliseconds
+    { selectors: ["HH"], numeric: true, min: 0, max: 23, datePart: "H" },
+    { selectors: ["h"], numeric: true, min: 1, max: 12, datePart: "h" },
+    { selectors: ["hh"], numeric: true, min: 1, max: 12, datePart: "h" },
+    { selectors: ["mi", "MI"], numeric: true, min: 0, max: 59, datePart: "mi" },
+    { selectors: ["ss", "SS"], numeric: true, min: 0, max: 59, datePart: "ss" },
+    { selectors: ["TT", "AM", "PM"], numeric: false, options: ["AM", "PM"], datePart: "tt" },
+    { selectors: ["tt", "am", "pm"], numeric: false, options: ["am", "pm"], datePart: "tt" },
+    { selectors: ["fff"], numeric: true, datePart: "ms" }, // Milliseconds
 
     // Date components
-    { selectors: ["dd", "DD"], digits: true, alpha: false, min: 1, max: 31, datePart: "d" },
-    { selectors: ["mm", "MM"], digits: true, alpha: false, min: 1, max: 12, datePart: "m" },
-    { selectors: ["mmm"], digits: false, alpha: true, datePart: "m" },
-    { selectors: ["MMM"], digits: false, alpha: true, datePart: "m" },
-    { selectors: ["yy", "YY"], digits: true, alpha: false, min: 0, max: 99, datePart: "yy" },
-    { selectors: ["yyyy", "YYYY"], digits: true, alpha: false, min: 0, max: 9999, datePart: "yyyy" },
+    { selectors: ["dd", "DD"], numeric: true, min: 1, max: 31, datePart: "d" },
+    { selectors: ["mm", "MM"], numeric: true, min: 1, max: 12, datePart: "m" },
+    { selectors: ["mmm"], numeric: false, datePart: "m" },
+    { selectors: ["MMM"], numeric: false, datePart: "m" },
+    { selectors: ["yy", "YY"], numeric: true, min: 0, max: 99, datePart: "yy" },
+    { selectors: ["yyyy", "YYYY"], numeric: true, min: 0, max: 9999, datePart: "yyyy" },
 
     // Byte (from 0 to 255) - for ip-address or network mask
-    { selectors: ["b"], digits: true, alpha: false, min: 0, max: 255 },
+    { selectors: ["b"], numeric: true, min: 0, max: 255 },
 
     // Plus/minus
-    { selectors: ["~"], digits: true, alpha: true, options: ["-", "+"] },
+    { selectors: ["~"], numeric: false, regExp: /[-+]/ },
 
-    // Any char
-    { selectors: ["*"], digits: true, alpha: true },
+    // Letter or digit
+    { selectors: ["*"], numeric: false, regExp: /[\d\w]/ },
 
     // Letters
-    { selectors: ["l", "L"], digits: false, alpha: true },
+    { selectors: ["l", "L"], numeric: false, regExp: /\w/ },
 
     // Digits
-    { selectors: ["n", "N"], digits: true, alpha: false },
-
-    // Numeric format
-    { selectors: ["#"], digits: true, alpha: false, min: 0, max: 9 },
-    { selectors: ["0"], digits: true, alpha: false, min: 0, max: 9 },
+    { selectors: ["n", "N"], numeric: false, regExp: /\d/ },
   ];
 
   // The list of sections
   public sections: Array<MaskSection> = [];
 
   // Pattern of mask
-  private _mask: string;
-  public set mask(v: string) {
-    this._mask = v;
+  private _pattern: string;
+  public set pattern(v: string) {
+    this._pattern = v;
     this.updateMask();
   }
 
-  public get mask(): string {
-    return this._mask;
+  public get pattern(): string {
+    return this._pattern;
   }
 
   // Определяем тип секции по шаблону
@@ -203,7 +197,7 @@ export class Mask {
     let s: string;
 
     // Выбор формата на по локализации
-    switch(this._mask) {
+    switch(this._pattern) {
 
       case "date": {
         s = this.intl.locale.dateFormat;
@@ -232,7 +226,7 @@ export class Mask {
         break;
       }
 
-      default: s = this._mask;
+      default: s = this._pattern;
     }
 
     if(!s || s.length==0)
@@ -511,7 +505,7 @@ export class Mask {
     this.selectSectionType("MMM").options = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
   }
 
-  constructor(protected intl: Internationalization) {
+  constructor(protected intl: InternationalizationService) {
     // Здесь нужно подписаться на смену локализации и поменять наименования месяцев
     this.intl.onLocaleChange.subscribe(locale => {
       this.setLocale(locale);

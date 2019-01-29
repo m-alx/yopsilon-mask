@@ -34,7 +34,7 @@ export class CanadianPostalCodeExampleComponent {
 
   constructor() {
     this.settings.sectionTypes.push(
-      { selectors: ["A"], digits: false, alpha: true, regExp: /[ABCEGHJKLMNPRSTVXY]/i },
+      { selectors: ["A"], numeric: false, regExp: /[ABCEGHJKLMNPRSTVXY]/i },
     );
   }
 }

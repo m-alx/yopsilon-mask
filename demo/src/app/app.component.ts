@@ -42,7 +42,7 @@ export class AppComponent {
 
   constructor(
     // С помощью синглтона Internationalization можно менять текущую локализацию
-    public intl: YN.Internationalization,
+    public intl: YN.InternationalizationService,
 
     // При объявлении зависимости локализации сами добавляются в
     // список синглтона Internationalization

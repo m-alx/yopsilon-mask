@@ -9,7 +9,7 @@ import { Observable, BehaviorSubject } from "rxjs/Rx";
 import { Locale } from "./locale.class";
 
 @Injectable()
-export class Internationalization {
+export class InternationalizationService {
 
   // Locales list
   public locales: Array<Locale> = [];
@@ -57,14 +57,6 @@ export class Internationalization {
     return this.locale.shortMonthNames;
   }
 
-  public isDigit(c: string): boolean {
-    return c.length === 1 && c.match(this.locale.digits) != null;
-  }
-
-  public isLetter(c: string): boolean {
-    return c.length === 1 && c.match(this.locale.letters) != null;
-  }
-
   constructor() {
 
     this.locales.push(
@@ -75,14 +67,14 @@ export class Internationalization {
         shortMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
                           "Aug", "Sep", "Oct", "Nov", "Dec"],
 
-        longMonthNames: ["January", "February", "March", "April", "May", "June",
-                     "July", "August", "September", "October", "November",
-                     "December"],
+        longMonthNames:  ["January", "February", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November",
+                          "December"],
 
-        shortDayNames:  ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        shortDayNames:   ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 
-        longDayNames:   ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-                     "Friday", "Saturday"],
+        longDayNames:    ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+                          "Friday", "Saturday"],
 
         firstDayOfWeek: 0,
         dateFormat: "mm/dd/yyyy",
@@ -92,8 +84,7 @@ export class Internationalization {
         dateTimeHMSFormat: "mm/dd/yyyy hh:mi:ss am",
         decimalSeparator: ".",
         thousandSeparator: ",",
-        digits: /\d/,
-        letters: /[a-z]/i
+        translates: {}  
       }
     );
 

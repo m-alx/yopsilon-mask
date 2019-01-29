@@ -103,41 +103,40 @@ Mask class includes predefined section types set:
 // Predefined section types.
 public static readonly sectionTypes: Array<MaskSectionType> = [
 
-  // Time components
-  { selectors: ["HH"], digits: true, alpha: false, min: 0, max: 23, datePart: "H" },
-  { selectors: ["h"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
-  { selectors: ["hh"], digits: true, alpha: false, min: 1, max: 12, datePart: "h" },
-  { selectors: ["mi", "MI"], digits: true, alpha: false, min: 0, max: 59, datePart: "mi" },
-  { selectors: ["ss", "SS"], digits: true, alpha: false, min: 0, max: 59, datePart: "ss" },
-  { selectors: ["TT", "AM", "PM"], digits: false, alpha: true, options: ["AM", "PM"], datePart: "tt" },
-  { selectors: ["tt", "am", "pm"], digits: false, alpha: true, options: ["am", "pm"], datePart: "tt" },
-  { selectors: ["fff"], digits: true, alpha: false, datePart: "ms" },
+// Time components
+{ selectors: ["HH"], numeric: true, min: 0, max: 23, datePart: "H" },
+{ selectors: ["h"], numeric: true, min: 1, max: 12, datePart: "h" },
+{ selectors: ["hh"], numeric: true, min: 1, max: 12, datePart: "h" },
+{ selectors: ["mi", "MI"], numeric: true, min: 0, max: 59, datePart: "mi" },
+{ selectors: ["ss", "SS"], numeric: true, min: 0, max: 59, datePart: "ss" },
+{ selectors: ["TT", "AM", "PM"], numeric: false, options: ["AM", "PM"], datePart: "tt" },
+{ selectors: ["tt", "am", "pm"], numeric: false, options: ["am", "pm"], datePart: "tt" },
+{ selectors: ["fff"], numeric: true, datePart: "ms" }, // Milliseconds
 
-  // Date components
-  { selectors: ["dd", "DD"], digits: true, alpha: false, min: 1, max: 31, datePart: "d" },
-  { selectors: ["mm", "MM"], digits: true, alpha: false, min: 1, max: 12, datePart: "m" },
-  { selectors: ["mmm"], digits: false, alpha: true, datePart: "m" },
-  { selectors: ["MMM"], digits: false, alpha: true, datePart: "m" },
-  { selectors: ["yy", "YY"], digits: true, alpha: false, min: 0, max: 99, datePart: "yy" },
-  { selectors: ["yyyy", "YYYY"], digits: true, alpha: false, min: 0, max: 9999, datePart: "yyyy" },
+// Date components
+{ selectors: ["dd", "DD"], numeric: true, min: 1, max: 31, datePart: "d" },
+{ selectors: ["mm", "MM"], numeric: true, min: 1, max: 12, datePart: "m" },
+{ selectors: ["mmm"], numeric: false, datePart: "m" },
+{ selectors: ["MMM"], numeric: false, datePart: "m" },
+{ selectors: ["yy", "YY"], numeric: true, min: 0, max: 99, datePart: "yy" },
+{ selectors: ["yyyy", "YYYY"], numeric: true, min: 0, max: 9999, datePart: "yyyy" },
 
-  // Byte (from 0 to 255)
-  { selectors: ["b"], digits: true, alpha: false, min: 0, max: 255 },
+// Byte (from 0 to 255) - for ip-address or network mask
+{ selectors: ["b"], numeric: true, min: 0, max: 255 },
 
-  // Plus/minus
-  { selectors: ["~"], digits: true, alpha: true, options: ["-", "+"] },
+// Plus/minus
+{ selectors: ["~"], numeric: false, regExp: /[-+]/ },
 
-  // Letter
-  { selectors: ["l", "L"], digits: false, alpha: true },
+// Letter or digit
+{ selectors: ["*"], numeric: false, regExp: /[\d\w]/ },
 
-  // Digit
-  { selectors: ["n", "N"], digits: true, alpha: false },
+// Letters
+{ selectors: ["l", "L"], numeric: false, regExp: /\w/ },
 
-  // Numeric format
-  { selectors: ["#"], digits: true, alpha: false, min: 0, max: 9 },
-  { selectors: ["0"], digits: true, alpha: false, min: 0, max: 9 },
+// Digits
+{ selectors: ["n", "N"], numeric: false, regExp: /\d/ }
+
 ];
-
 ```
 
 #### 3. Settings
@@ -247,8 +246,7 @@ export class DateExampleComponent {
 
 #### 8. Localization
 
-Injectable class `Internationalization` contains available locales in `locales` array.
-Current locale can be retreived via `locale` property.
+Injectable class `Internationalization` contains available locales in `locales` array. Current locale can be retrieved via `locale` property.
 `currentLocale` property contains current locale code.
 
 `MaskDateDirective` subscribes to a `Internationalization.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
@@ -260,8 +258,8 @@ Current locale can be retreived via `locale` property.
   - Locale.dateTimeHMSFormat in case of "dateTimeHMS";
 
 Instances of class `Mask` subscribe to `Internationalization.onLocaleChange` event to fetch localized months names for sections of *mmm* type.
-Internationalization.
-You can add a custom locale via creating an instance of *Locale* class and setting it by calling method `*setCurrentLocale(l:Locale)` of `Internationalization` class.
+
+You can add a custom locale via creating an instance of *Locale* class and setting it by calling method `setCurrentLocale(l:Locale)` of `Internationalization` instance.
 
 Example:
 

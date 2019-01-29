@@ -28,5 +28,5 @@ export class Date2ExampleComponent {
     this.stateClass = state == YN.MaskState.OK ? "green" : "";
   }
 
-  constructor(public intl: YN.Internationalization) { }
+  constructor(public intl: YN.InternationalizationService) { }
 }

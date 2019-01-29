@@ -5,7 +5,7 @@
 
 import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Internationalization } from "../internationalization/internationalization.class";
+import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Mask } from "./mask.class";
 import { MaskState } from "./mask-state.class";
 import { MaskSettings } from "./mask-settings.class";
@@ -77,21 +77,21 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     }
 
     @Input("yn-mask")
-    public set mask(m: string) {
+    public set pattern(m: string) {
 
-      if(this._txtValue != "" && this._mask.mask != "" && this._mask.mask != m) {
+      if(this._txtValue != "" && this._mask.pattern != "" && this._mask.pattern != m) {
         // По сложному пути
         let res = this.currentRes();
         let s = this._mask.pureValue(res.newValue);
-        this._mask.mask = m;
+        this._mask.pattern = m;
         res.newValue = this._mask.applyPureValue(s);
         this.setRes(res);
       } else
-        this._mask.mask = m;
+        this._mask.pattern = m;
     }
 
-    public get mask(): string {
-      return this._mask.mask;
+    public get pattern(): string {
+      return this._mask.pattern;
     }
 
     @Input("yn-mask-settings")
@@ -104,7 +104,10 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       return this.processKey(e);
     }
 
-    constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {
+    constructor(
+      protected _renderer: Renderer2, 
+      protected _elementRef: ElementRef,
+      protected intl: InternationalizationService) {
       super(_renderer, _elementRef, intl);
     }
 

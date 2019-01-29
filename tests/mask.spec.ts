@@ -2,7 +2,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Internationalization } from "../src/internationalization/internationalization.class";
+import { InternationalizationService } from "../src/internationalization/internationalization.service";
 import { MaskSection, MaskSectionKeyResult } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
 import { MaskSettings } from "../src/mask/mask-settings.class";
@@ -10,9 +10,9 @@ import { Mask } from "../src/mask/mask.class";
 import { async } from '@angular/core/testing';
 
 describe(`Получение списка секций маски [yyyy年mm月dd日]: `, () => {
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask = new Mask(intl);
-  mask.mask = "yyyy年mm月dd日";
+  mask.pattern = "yyyy年mm月dd日";
 
   it(`Всего три секции`, () => expect(mask.sections.length).toBe(3));
   it(`Первая секция yyyy`, () => expect(mask.sections[0].section).toBe("yyyy"));
@@ -20,11 +20,11 @@ describe(`Получение списка секций маски [yyyy年mm月d
 });
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日]: `, () => {
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let s = new MaskSettings("_", true);
   let mask = new Mask(intl);
   mask.settings = s;
-  mask.mask = "yyyy年mm月dd日";
+  mask.pattern = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
   it(`ReplaceMode=true. ArrowLeft. New selectionStart must be 9`, () => expect(res.newSelStart).toBe(9));
@@ -32,11 +32,11 @@ describe(`Последний символ маски - разделитель. �
 });
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем Backspace: `, () => {
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let s = new MaskSettings("_", true);
   let mask = new Mask(intl);
   mask.settings = s;
-  mask.mask = "yyyy年mm月dd日";
+  mask.pattern = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "Backspace", 11, 0);
   it(`ReplaceMode=true. New Value must be 2019年01月1_日`, () => expect(res.newValue).toBe("2019年01月1_日"));
@@ -46,14 +46,14 @@ describe(`Последний символ маски - разделитель. �
 });
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем ArrowLeft при ReplaceMode = false: `, () => {
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
 
   let s = new MaskSettings("_", true);
   s.replaceMode = false;
 
   let mask = new Mask(intl);
   mask.settings = s;
-  mask.mask = "yyyy年mm月dd日";
+  mask.pattern = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
   it(`ReplaceMode=false. New SelectionStart must be 10`, () => expect(res.newSelStart).toBe(10));
@@ -65,9 +65,9 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
   let res: MaskSectionKeyResult;
 
   beforeEach(async(() => {
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "mm/dd/yyyy";
+    mask.pattern = "mm/dd/yyyy";
     res = mask.applyKeyAtPos("12/12/2018", "ArrowRight", 7, 7);
   }));
 
@@ -78,12 +78,12 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
 describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимаем [ArrowRight] с selStart=2 при значении [11]: `, () => {
   let res: MaskSectionKeyResult;
 
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask = new Mask(intl);
   let s = new MaskSettings("_", true)
   s.appendPlaceholders = false;
   mask.settings = s;
-  mask.mask = "dd mmm yyyy";
+  mask.pattern = "dd mmm yyyy";
   res = mask.applyKeyAtPos("11", "ArrowRight", 2, 0);
 
   it(`Новое значение маски 11 jan`, () => expect(res.newValue).toBe("11 jan"));
@@ -99,9 +99,9 @@ describe(`Опция AppendPlaceholders=true: `, () => {
 
     let s = new MaskSettings("_", true);
     s.appendPlaceholders = true;
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "mm/dd/yyyy";
+    mask.pattern = "mm/dd/yyyy";
     mask.settings = s;
     res = mask.applyKeyAtPos("", "1", 0, 0);
   }));
@@ -119,9 +119,9 @@ describe(`Маска с переменной длиной секции (255.255.
     let s = new MaskSettings("_", true);
     s.appendPlaceholders = false;
 
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "b.b.b.b";
+    mask.pattern = "b.b.b.b";
     mask.settings = s;
     res = mask.applyKeyAtPos("255.255.255.0", "Backspace", 3, 0);
   }));
@@ -138,9 +138,9 @@ describe(`Символ разделителя в пустой секции до�
     let s = new MaskSettings(" ", true);
     s.appendPlaceholders = false;
 
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "b.b.b.b";
+    mask.pattern = "b.b.b.b";
     mask.settings = s;
     res = mask.applyKeyAtPos("172. . . ", ".", 4, 0);
   }));
@@ -158,9 +158,9 @@ describe(`Символ разделителя не должен принимат
     let s = new MaskSettings("_", true);
     s.appendPlaceholders = true;
 
-    let intl = new Internationalization();
+    let intl = new InternationalizationService();
     let mask = new Mask(intl);
-    mask.mask = "+1 NNN NNN-NN-NN";
+    mask.pattern = "+1 NNN NNN-NN-NN";
     mask.settings = s;
     res = mask.applyKeyAtPos("", "1", 0, 0);
   }));
@@ -170,28 +170,26 @@ describe(`Символ разделителя не должен принимат
 });
 
 describe(`Символ разделителя должен приниматься пустой секцией, если ни одна из секций не отвергла его: `, () => {
-  console.log(">>>>>>>>>>");
   let res: MaskSectionKeyResult;
 
   let s = new MaskSettings("_", true);
   s.appendPlaceholders = false;
 
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask = new Mask(intl);
-  mask.mask = "+1 NNN NNN-NN-NN";
+  mask.pattern = "+1 NNN NNN-NN-NN";
   mask.settings = s;
   res = mask.applyKeyAtPos("+", "1", 1, 0);
 
-  console.log(">>>>>>>>>>");
   it(`С маской [+1 NNN NNN-NN-NN] впечатываем 1 после +.`, () => expect(res.newValue).toBe("+1"));
 
 });
 
 describe(`Соответствие строки маске:`, () => {
 
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask = new Mask(intl);
-  mask.mask = "dd.MM.yyyy";
+  mask.pattern = "dd.MM.yyyy";
 
   it(`Значение 13.12.1979 соответствует маске`, () => expect(mask.checkMask("13.12.1979")).toBeTruthy());
   it(`Значение 13.12.197 НЕ соответствует маске`, () => expect(mask.checkMask("13.12.197")).toBeFalsy());
@@ -203,9 +201,9 @@ describe(`Соответствие строки маске:`, () => {
 describe(`Соответствие строки маске 2:`, () => {
 
   //
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask = new Mask(intl);
-  mask.mask = "+7 NNN NNN-NN-NN";
+  mask.pattern = "+7 NNN NNN-NN-NN";
 
   it(`NULL не соответствует маске`, () => expect(mask.checkMask(null)).toBeFalsy());
   it(`Пустая строка не соответствует маске`, () => expect(mask.checkMask("")).toBeFalsy());
@@ -214,16 +212,16 @@ describe(`Соответствие строки маске 2:`, () => {
 
 describe(`Кастомная секция, regular expression`, () => {
 
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask = new Mask(intl);
   let s = new MaskSettings("_", true);
   s.appendPlaceholders = false;
 
   s.sectionTypes.push(
-    { selectors: ["A"], digits: true, alpha: true, regExp: /[a-b]/i },
+    { selectors: ["A"], numeric: false, regExp: /[a-b]/i },
   );
   mask.settings = s;
-  mask.mask = "ANNN";
+  mask.pattern = "ANNN";
   let res: MaskSectionKeyResult;
 
   it(`Первый символ A или B или C: символ D нелья применить`, () => expect(mask.applyKeyAtPos("", "D", 0, 0)).toBe(null));
@@ -232,7 +230,7 @@ describe(`Кастомная секция, regular expression`, () => {
 
 describe(`Преобразование из одного шаблона в другой`, () => {
 
-  let intl = new Internationalization();
+  let intl = new InternationalizationService();
   let mask1 = new Mask(intl);
   let mask2 = new Mask(intl);
   let s = new MaskSettings("_", true);
@@ -241,8 +239,8 @@ describe(`Преобразование из одного шаблона в др�
   mask1.settings = s;
   mask2.settings = s;
 
-  mask1.mask = "NNNN NNNN NNNN NNNN";
-  mask2.mask = "NNN NNNNNN NNNNN";
+  mask1.pattern = "NNNN NNNN NNNN NNNN";
+  mask2.pattern = "NNN NNNNNN NNNNN";
 
   it(`Чистое значение старой маски`, () => expect(mask1.pureValue("34__ ____ ____ ____")).toBe("34"));
   it(`Значение для новой маски`, () => expect(mask2.applyPureValue("34")).toBe("34_ ______ _____"));

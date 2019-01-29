@@ -6,7 +6,7 @@
 import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import { Internationalization } from "../internationalization/internationalization.class";
+import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Locale } from "../internationalization/locale.class";
 
 import { Mask } from "./mask.class";
@@ -15,8 +15,9 @@ import { MaskSettings } from "./mask-settings.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
 
-import { DateParserPipe } from "./pipes/date-parser.pipe";
-import { DateFormatterPipe } from "./pipes/date-formatter.pipe";
+import { DateParserPipe } from "../dates/date-parser.pipe";
+import { DateFormatterPipe } from "../dates/date-formatter.pipe";
+import { DateParserFormatter } from "../dates/date-parser-formatter.class";
 
 @Directive({
     selector: '[yn-mask-date]',
@@ -28,7 +29,7 @@ import { DateFormatterPipe } from "./pipes/date-formatter.pipe";
 })
 export class MaskDateDirective extends MaskBaseDirective implements ControlValueAccessor {
 
-    // implementing ControlValueAccessor
+    // implementing ControlValueAccessor 
     private _dateValue: any;
 
     private onChange = (_: any) => {};
@@ -36,10 +37,6 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-
-    // Preparing parser and formatter in advance
-    private _parser = new DateParserPipe();
-    private _formatter = new DateFormatterPipe();
 
     // Focus lost
     blur() {
@@ -52,7 +49,6 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
       // Clearing if Date is incorrect
       if(this._dateValue == null || isNaN(this._dateValue.getTime())) {
-
 
         if(!this._mask.settings.allowIncomplete)
           this.setText("");
@@ -77,7 +73,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     protected toModel() {
       // Получаем значение
       // Retrieving value
-      this._dateValue = this._parser.transform(this._mask, this._txtValue);
+      this._dateValue = DateParserFormatter.parse(this._txtValue, this._mask);
       // Отправляем в модель
       // Sending to model
       this.onChange(this._dateValue);
@@ -94,7 +90,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     // Formatter: Ctrl --> View
     writeValue(value: any) {
       this._dateValue = value;
-      let txt = this._formatter.transform(this._mask, value);
+      let txt = DateParserFormatter.format(value, this._mask);
       if(txt != this._txtValue)
         this.setText(txt, false); // Отправка в модель не нужна, т.к. этот обработчик и запущен после изменений в модели
         // No need to send to model, because this processor is called on model change
@@ -104,12 +100,12 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     }
 
     @Input("yn-mask-date")
-    public set mask(m: string) {
-      this._mask.mask = m;
+    public set pattern(m: string) {
+      this._mask.pattern = m;
     }
 
-    public get mask(): string {
-      return this._mask.mask;
+    public get pattern(): string {
+      return this._mask.pattern;
     }
 
     @Input("yn-mask-settings")
@@ -141,7 +137,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       this.localeSubscription.unsubscribe();
     }
 
-    constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: Internationalization) {
+    constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: InternationalizationService) {
       super(_renderer, _elementRef, intl);
     }
 }

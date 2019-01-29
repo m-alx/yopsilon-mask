@@ -34,7 +34,7 @@ export class CreditCardExampleComponent {
     { regExp: /4\d/, cardType: "Visa", mask: "NNNN NNNN NNNN NNNN" },
     { regExp: /5[1-5]/, cardType: "MasterCard", mask: "NNNN NNNN NNNN NNNN" },
     { regExp: /6\d/, cardType: "Discover", mask: "NNNN NNNN NNNN NNNN" }
-  ]
+  ];
 
   change(s) {
     if(s.length < 2)

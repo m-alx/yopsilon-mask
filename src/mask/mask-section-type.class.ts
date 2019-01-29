@@ -5,8 +5,9 @@
 
 export class MaskSectionType {
   public selectors: Array<string> = [];
-  public digits: boolean = false;
-  public alpha: boolean = false;
+  //public digits: boolean = false;
+  //public alpha: boolean = false;
+  public numeric: boolean = false;
   public min?: number = null;
   public max?: number = null;
   public options?: Array<string>;

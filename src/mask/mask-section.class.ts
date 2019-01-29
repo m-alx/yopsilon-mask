@@ -3,7 +3,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Internationalization } from "../internationalization/internationalization.class";
+import { InternationalizationService } from "../internationalization/internationalization.service";
 import { MaskSectionType } from "./mask-section-type.class";
 import { MaskSettings } from "./mask-settings.class";
 
@@ -40,9 +40,9 @@ export class MaskSectionKeyResult {
 
 // Section of pattern
 export class MaskSection {
-  
+
   constructor(
-    public intl: Internationalization,
+    public intl: InternationalizationService,
     public settings: MaskSettings,
     public section: string, // Value of the mask
     public delimiter: string,
@@ -95,7 +95,7 @@ export class MaskSection {
   }
 
   public isNumeric(): boolean {
-    return this.sectionType && this.sectionType.digits && !this.sectionType.alpha;
+    return this.sectionType && this.sectionType.numeric;
   }
 
   public numericValue(value: string): number {
@@ -440,6 +440,10 @@ export class MaskSection {
     return res;
   }
 
+  private isDigit(char: string): boolean {
+    return /\d/.test(char); //  char.match(/\d/) != "";
+  }
+
   // Checking if Button is applicable to section
   // We should return:
   //    - if button pressing has been applied
@@ -517,7 +521,7 @@ export class MaskSection {
           // New value will be:
           let nv: string = mv.sectionValue.value(key);
 
-          if(nv.match(this.sectionType.regExp)) // And we can accept it
+          if(this.sectionType.regExp.test(nv)) // And we can accept it
             return this.apply(mv, nv, selStart, 1, isLast);
         }
 
@@ -527,14 +531,14 @@ export class MaskSection {
 
           if(selStart_local < this.maxLength) {
 
-            if(this.sectionType.digits && this.intl.isDigit(key))
+            if(this.sectionType.numeric && this.isDigit(key))
               isOk = true;
 
-            if(this.sectionType.alpha && this.intl.isLetter(key))
-              isOk = true;
+            //if(this.sectionType.alpha && this.intl.isLetter(key))
+            //  isOk = true;
 
-            if(this.section == "*" && (this.intl.isLetter(key) || this.intl.isDigit(key)))
-              isOk = true;
+            //if(this.section == "*" && (this.intl.isLetter(key) || this.intl.isDigit(key)))
+              //isOk = true;
           }
 
           if(isOk)
