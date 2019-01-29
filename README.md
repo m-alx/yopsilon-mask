@@ -246,7 +246,7 @@ export class DateExampleComponent {
 
 #### 8. Localization
 
-Injectable class `Internationalization` contains available locales in `locales` array. Current locale can be retrieved via `locale` property.
+Service `InternationalizationService` contains available locales in `locales` array. Current locale can be retrieved via `locale` property.
 `currentLocale` property contains current locale code.
 
 `MaskDateDirective` subscribes to a `Internationalization.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
@@ -257,9 +257,9 @@ Injectable class `Internationalization` contains available locales in `locales` 
   - Locale.dateTimeHMFormat in case of "dateTime" and "dateTimeHM";
   - Locale.dateTimeHMSFormat in case of "dateTimeHMS";
 
-Instances of class `Mask` subscribe to `Internationalization.onLocaleChange` event to fetch localized months names for sections of *mmm* type.
+Instances of class `Mask` subscribe to `InternationalizationService.onLocaleChange` event to fetch localized months names for sections of *mmm* type.
 
-You can add a custom locale via creating an instance of *Locale* class and setting it by calling method `setCurrentLocale(l:Locale)` of `Internationalization` instance.
+You can add a custom locale via creating an instance of *Locale* class and setting it by calling method `setCurrentLocale(l:Locale)` of `InternationalizationService`.
 
 Example:
 
@@ -274,7 +274,7 @@ import * as YN from "yopsilon-mask";
 })
 export class AppComponent {
   constructor(    
-    private intl: YN.Internationalization    
+    private intl: YN.InternationalizationService    
   ) {
 
     let locale: YN.Locale = {
@@ -301,9 +301,7 @@ export class AppComponent {
       dateTimeHMSFormat: "dd-mm-yyyy HH:mi:ss",
 
       decimalSeparator: ",",
-      thousandSeparator: ".",
-      digits: /[0-9]/,
-      letters: /[a-záç]/i
+      thousandSeparator: "."
     };
 
     this.intl.setCurrentLocale(locale);
