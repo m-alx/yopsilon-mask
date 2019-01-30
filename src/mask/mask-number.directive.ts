@@ -37,7 +37,7 @@ export class MaskNumberDirective {
   blur() {
     // Очищаем, если формат неверен
     let value = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
-    if(isNaN(value))
+    if(value == null || isNaN(value))
       this.setText("");
     else
       this.setText(NumberParserFormatter.format(value, this.format, this._separators));
