@@ -82,9 +82,11 @@ export class InternationalizationService {
         timeHMSFormat: "hh:mi:ss am",
         dateTimeHMFormat: "mm/dd/yyyy hh:mi am",
         dateTimeHMSFormat: "mm/dd/yyyy hh:mi:ss am",
-        decimalSeparator: ".",
-        thousandSeparator: ",",
-        translates: {}  
+
+        separators: [",", "."],
+        currency: "${1.2}",
+        
+        translates: {}
       }
     );
 

@@ -16,6 +16,8 @@ import { Time12ExampleComponent } from "./examples/time12-example.component";
 import { PhoneExampleComponent } from "./examples/phone-example.component";
 import { IpExampleComponent } from "./examples/ip-example.component";
 import { CreditCardExampleComponent } from "./examples/credit-card-example.component";
+import { NumberExampleComponent } from "./examples/number-example.component";
+import { CurrencyExampleComponent } from "./examples/currency-example.component";
 import { CanadianPostalCodeExampleComponent } from "./examples/canadian-postal-code-example.component";
 
 @NgModule({
@@ -28,6 +30,8 @@ import { CanadianPostalCodeExampleComponent } from "./examples/canadian-postal-c
     PhoneExampleComponent,
     IpExampleComponent,
     CreditCardExampleComponent,
+    NumberExampleComponent,
+    CurrencyExampleComponent,
     CanadianPostalCodeExampleComponent
   ],
   imports: [

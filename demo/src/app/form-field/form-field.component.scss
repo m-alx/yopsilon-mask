@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   align-content: stretch;
-  margin: 0.5em 0;  
+  margin: 0.4em 0;
 }
 
 :host > label {
@@ -15,7 +15,7 @@
   flex-grow: 1;
   justify-content: center;
   box-sizing: border-box;
-  padding: 5px 0px;
+  padding: 2px 0px;
 }
 
 /deep/ .state-indicator {

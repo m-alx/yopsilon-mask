@@ -11,21 +11,21 @@ export class MaskValue {
 
   public sectionPos: number;
 
-  public beforeValue: string;
-  public sectionValue: MaskSectionValue;
-  public delimiter: string;   
-  public afterValue: string;
+  public before: string;
+  public section: MaskSectionValue;
+  public delimiter: string;
+  public after: string;
 
   public nextSectionPos(): number {
-    return this.beforeValue.length + this.sectionValue.length + this.delimiter.length;
+    return this.before.length + this.section.length + this.delimiter.length;
   }
 
   public update(s: string, selStart: number): string {
-    this.sectionValue = new MaskSectionValue(s, this.sectionPos, selStart);
+    this.section = new MaskSectionValue(s, this.sectionPos, selStart);
     return this.value();
   }
 
   public value() {
-    return this.beforeValue + this.sectionValue.value() + this.delimiter + this.afterValue;
+    return this.before + this.section.value() + this.delimiter + this.after;
   }
 }

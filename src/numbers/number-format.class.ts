@@ -8,6 +8,8 @@ export class NumberFormat {
   signum: boolean;          // Обязательно нужен знак (даже +)
 
   integerMin  : number = 1;
+  integerMax  : number = 16;
+
   fractionMin : number = 2;
   fractionMax : number = 2;
 
@@ -35,7 +37,7 @@ export class NumberFormat {
       let format = splitted[1].trim();
       res.postfix = splitted[2];
 
-      let digits = { int: "", fMin: "", fMax: ""};
+      let digits = { int: "", intMax: "", fMin: "", fMax: ""};
 
       let part = "spec";
       for(let pos = 0; pos < format.length; pos++) {
@@ -56,8 +58,17 @@ export class NumberFormat {
             continue;
         }
 
-        if((part == "spec" || part == "int") && isDigit)
+        if((part == "spec" || part == "int") && isDigit) {
           digits.int += char;
+          part = "int";
+          continue;
+        }
+
+        if(part == "int" && char == "-")
+          part = "intmax";
+
+        if(part == "intmax" && isDigit)
+          digits.intMax += char;
 
         if(char == ".")
           part = "fmin";
@@ -74,6 +85,9 @@ export class NumberFormat {
 
       if(digits.int != "")
         res.integerMin = +digits.int;
+
+      if(digits.intMax != "")
+        res.integerMax = +digits.intMax;
 
       if(digits.fMin != "")
         res.fractionMin = +digits.fMin;

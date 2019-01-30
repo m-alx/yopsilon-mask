@@ -19,13 +19,14 @@ import { Mask } from "./mask/mask.class";
 
 import { MaskDirective } from "./mask/mask.directive";
 import { MaskDateDirective } from "./mask/mask-date.directive";
+import { MaskNumberDirective } from "./mask/mask-number.directive";
 
 import { DateParserPipe } from "./dates/date-parser.pipe";
 import { DateFormatterPipe } from "./dates/date-formatter.pipe";
 
 @NgModule({
   imports: [BrowserModule, FormsModule],
-  declarations: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe],
+  declarations: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
   providers: [
     InternationalizationService,
@@ -35,7 +36,7 @@ import { DateFormatterPipe } from "./dates/date-formatter.pipe";
     LocaleFr,
     LocalePt,
     LocaleRu],
-  exports: [MaskDirective, MaskDateDirective, DateParserPipe, DateFormatterPipe]
+  exports: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe]
 })
 export class YopsilonMaskModule {
 

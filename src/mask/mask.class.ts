@@ -157,8 +157,8 @@ export class Mask {
     let sectionPos = 0;
     let res = "";
     this.sections.forEach(section => {
-      let v = section.extractSectionValue(value, sectionPos);
-      res += section.removePlaceholders(v.sectionValue.value());
+      let v = section.extractSection(value, sectionPos);
+      res += section.removePlaceholders(v.section.value());
       sectionPos = v.nextSectionPos();
     });
 
@@ -286,10 +286,10 @@ export class Mask {
     let i = 0;
     while(i < this.sections.length) {
       let section = this.sections[i];
-      let v = section.extractSectionValue(value, sectionStart);
+      let v = section.extractSection(value, sectionStart);
 
-      while(v.sectionValue.length < section.length)
-        v.sectionValue.append(this.settings.placeholder);
+      while(v.section.length < section.length)
+        v.section.append(this.settings.placeholder);
 
       v.delimiter = section.delimiter;
 
@@ -316,12 +316,12 @@ export class Mask {
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
-      let v = section.extractSectionValue(res, sectionPos);
+      let v = section.extractSection(res, sectionPos);
 
       if(v.delimiter != section.delimiter)
         return false;
 
-      let s = v.sectionValue.value();
+      let s = v.section.value();
 
       let s_autocorrected = section.autoCorrectValue(s);
 
@@ -345,7 +345,7 @@ export class Mask {
       if(s.length < section.length)
         return false;
 
-      if(i == this.sections.length - 1 && v.afterValue != "")
+      if(i == this.sections.length - 1 && v.after != "")
         return false;
 
       sectionPos = v.nextSectionPos();
@@ -366,12 +366,12 @@ export class Mask {
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
-      let v = section.extractSectionValue(res, sectionPos);
-      if(v.sectionValue.value() == "" && v.delimiter == "" && v.afterValue == "")
+      let v = section.extractSection(res, sectionPos);
+      if(v.section.value() == "" && v.delimiter == "" && v.after == "")
         break;
 
       v.delimiter = section.delimiter;
-      let sv = section.removePlaceholders(v.sectionValue.value());
+      let sv = section.removePlaceholders(v.section.value());
       if(autoCorrect)
         sv = section.autoCorrectValue(sv);
 

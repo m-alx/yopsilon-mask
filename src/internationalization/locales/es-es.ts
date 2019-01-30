@@ -27,15 +27,15 @@ export class LocaleEs {
 
       firstDayOfWeek: 1,
 
-      dateFormat: "dd/mm/yyyy",
+      dateFormat: "dd/mm/yyyy", 
       timeHMFormat: "HH:mi",
       timeHMSFormat: "HH:mi:ss",
       dateTimeHMFormat: "dd/mm/yyyy HH:mi",
       dateTimeHMSFormat: "dd/mm/yyyy HH:mi:ss",
 
-      decimalSeparator: ",",
-      thousandSeparator: ".",
-      translates: {}  
+      separators: [",", "."],
+      currency: "{1-12.2} €",
+      translates: {}
     };
 
     this.intl.addLocale(locale);

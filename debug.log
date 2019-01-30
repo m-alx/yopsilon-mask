@@ -3,3 +3,5 @@
 [1223/164742.089:ERROR:process_reader_win.cc(151)] SuspendThread: Отказано в доступе. (0x5)
 [1223/164742.089:ERROR:exception_snapshot_win.cc(88)] thread ID 25232 not found in process
 [1231/211912.469:ERROR:process_info.cc(359)] UncheckedAllocate
+[0125/191759.373:ERROR:file_io_win.cc(170)] CreateFile C:\Users\ALX\AppData\Local\Temp\karma-37371268\Crashpad\reports\ed3e92c0-be5d-4fbd-8b1e-f6d49540ac35.dmp: Системе не удается найти указанный путь. (0x3)
+[0125/191759.375:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed

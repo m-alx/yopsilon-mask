@@ -17,8 +17,8 @@ export class Locale {
   public dateTimeHMFormat: string;
   public dateTimeHMSFormat: string;
 
-  public decimalSeparator: string;
-  public thousandSeparator: string;
+  public separators: Array<string> = [];
+  public currency: string = "";
 
   public translates: { [id: string]: any } = { };
 

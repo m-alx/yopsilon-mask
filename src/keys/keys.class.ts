@@ -65,6 +65,43 @@ export class Keys {
     this.keyCodes[90] = "KeyZ";
   }
 
+  public static whichKeyHasBeenPressed(txt1: string, txt2: string,
+    selStart1: number, selStart2: number,
+    selLength: number): string {
+
+    if(txt1 == txt2 && selStart1 == selStart2 - 1)
+      return "ArrowRight";
+
+    if(txt1 == txt2 && selStart1 == selStart2 + 1)
+      return "ArrowLeft";
+
+    if(selLength == 1) {
+      //
+      if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
+        if(txt1.substring(selStart2 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
+          return "Backspace";
+
+      if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
+        if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
+          if(selStart1 == selStart2 + 1)
+            return "Backspace";
+
+      return txt2.substring(selStart1, selStart1 + 1);
+    }
+
+    // Tes|t -> Te|t
+    if(txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1) )
+      if(txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length))
+        return "Backspace";
+
+    // Te|st -> Te|t
+    if(txt1.substring(0, selStart1) == txt2.substring(0, selStart1) )
+      if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length))
+        return "Delete";
+
+    return txt2.substring(selStart1, selStart1 + 1);
+  }
+
   constructor() {
     //
   }

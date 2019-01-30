@@ -18,15 +18,16 @@ describe(`Parse format "L = {E1.2-3} km"`, () => {
 
 });
 
-describe(`Parse format "$ {+1.2}"`, () => {
+describe(`Parse format "$ {+1-3.2}"`, () => {
 
-  let fmt: NumberFormat = NumberFormat.parseFormat("$ {+1.2}");
+  let fmt: NumberFormat = NumberFormat.parseFormat("$ {+1-3.2}");
 
   it(`Prefix "$ "`, () => expect(fmt.prefix).toBe("$ "));
   it(`Signum = true`, () => expect(fmt.signum).toBeTruthy());
   it(`Decimal specifier`, () => expect(fmt.specifier).toBe("D"));
-  it(`Mimimum integer digits`, () => expect(fmt.integerMin).toBe(1));
-  it(`Mimimum fraction digits`, () => expect(fmt.fractionMin).toBe(2));
+  it(`Minimum integer digits`, () => expect(fmt.integerMin).toBe(1));
+  it(`Maximum integer digits`, () => expect(fmt.integerMax).toBe(3));
+  it(`Minimum fraction digits`, () => expect(fmt.fractionMin).toBe(2));
   it(`Maximum fraction digits`, () => expect(fmt.fractionMax).toBe(2));
   it(`No postfix`, () => expect(fmt.postfix).toBe(""));
 

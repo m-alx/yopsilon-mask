@@ -48,11 +48,11 @@ export class DateParserFormatter {
       if(datePart == null) // Not datetime component
         continue;
 
-      let v = section.extractSectionValue(res, sectionPos);
+      let v = section.extractSection(res, sectionPos);
       sectionPos = v.nextSectionPos();
 
       // Get section value
-      let s: string = v.sectionValue.value();
+      let s: string = v.section.value();
 
       let n: number;
       n = NaN;
@@ -87,7 +87,7 @@ export class DateParserFormatter {
         hh = n;
         if(hh == 12)
           hh = 0;
-      }      
+      }
 
       if(datePart == "tt")
         tt = s;

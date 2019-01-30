@@ -33,8 +33,9 @@ export class LocaleChinese {
       dateTimeHMFormat: "yyyy年mm月dd日 H时mi分",
       dateTimeHMSFormat: "yyyy年mm月dd日 HH时mi分ss秒",
 
-      decimalSeparator: ".",
-      thousandSeparator: ",",
+      separators: [".", ","],
+      currency: "￥{1-12.2}",
+
       translates: {}  //,
       //digits: /[0-9]/,
       //letters: /[a-z]/i

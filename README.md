@@ -73,6 +73,20 @@ export class AppComponent {
 }
 ```
 
+For binding to Number values use [yn-mask-number] directive:
+
+```ts
+import {Component} from "@angular/core";
+
+@Component({
+    selector: "app-root",
+    template: `<input yn-mask-number="{1.2}" type="text" [(ngModel)]="numValue" />`
+})
+export class AppComponent {
+  numValue: number = null;
+}
+```
+
 ### Documentation
 
 #### 1. Common information
@@ -249,7 +263,7 @@ export class DateExampleComponent {
 Service `InternationalizationService` contains available locales in `locales` array. Current locale can be retrieved via `locale` property.
 `currentLocale` property contains current locale code.
 
-`MaskDateDirective` subscribes to a `Internationalization.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
+`MaskDateDirective` subscribes to a `InternationalizationService.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
 
   - Locale.dateFormat in case of "date";
   - Locale.timeHMFormat in case of "time" and "timeHM";
@@ -264,7 +278,7 @@ You can add a custom locale via creating an instance of *Locale* class and setti
 Example:
 
 ```ts
-import { Component, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
 import * as YN from "yopsilon-mask";
 
 @Component({
@@ -300,8 +314,8 @@ export class AppComponent {
       dateTimeHMFormat: "dd-mm-yyyy HH:mi",
       dateTimeHMSFormat: "dd-mm-yyyy HH:mi:ss",
 
-      decimalSeparator: ",",
-      thousandSeparator: "."
+      separators: [",", "."],
+      currency: "{1-12.2} €"
     };
 
     this.intl.setCurrentLocale(locale);

@@ -42,6 +42,7 @@ export abstract class MaskBaseDirective {
       //
     }
 
+    /*
     protected whichKeyIsPressed(txt1: string, txt2: string,
       selStart1: number, selStart2: number,
       selLength: number): string
@@ -78,14 +79,14 @@ export abstract class MaskBaseDirective {
           return "Delete";
 
       return txt2.substring(selStart1, selStart1 + 1);
-    }
+    } */
 
     protected processAndroid(txt: any): void {
       //
       let res = this.currentRes();
 
       // Possibly we have carriage position
-      let key: string = this.whichKeyIsPressed(this.last_res.newValue, txt,
+      let key: string = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
           this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
 
       let r = this.processKey(

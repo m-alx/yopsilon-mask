@@ -29,8 +29,9 @@ import { DateParserFormatter } from "../dates/date-parser-formatter.class";
 })
 export class MaskDateDirective extends MaskBaseDirective implements ControlValueAccessor {
 
-    // implementing ControlValueAccessor 
     private _dateValue: any;
+
+    // Implementing ControlValueAccessor
 
     private onChange = (_: any) => {};
     private onTouched = () => {};
@@ -49,7 +50,6 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
       // Clearing if Date is incorrect
       if(this._dateValue == null || isNaN(this._dateValue.getTime())) {
-
         if(!this._mask.settings.allowIncomplete)
           this.setText("");
       }
@@ -60,24 +60,20 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     // Updating the state
     protected updateState() {
       if(this._dateValue == null)
-        this.state = MaskState.EMPTY; // Пустое значение // empty value
+        this.state = MaskState.EMPTY; // empty value
       else
         if(isNaN(this._dateValue.getTime()))
-          this.state = MaskState.TYPING; // Считаем, что пользователь не завершил ввод // User input is in progress
+          this.state = MaskState.TYPING; // User input is in progress
         else
           this.state = MaskState.OK;
     }
 
-    // Отправка значения в модель
     // Sending a value to model
     protected toModel() {
-      // Получаем значение
       // Retrieving value
       this._dateValue = DateParserFormatter.parse(this._txtValue, this._mask);
-      // Отправляем в модель
       // Sending to model
       this.onChange(this._dateValue);
-      // Обновляем состояние
       // Updating the state
       this.updateState();
     }
@@ -92,9 +88,9 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       this._dateValue = value;
       let txt = DateParserFormatter.format(value, this._mask);
       if(txt != this._txtValue)
-        this.setText(txt, false); // Отправка в модель не нужна, т.к. этот обработчик и запущен после изменений в модели
-        // No need to send to model, because this processor is called on model change
-      // Но обновить состояние нужно...
+        this.setText(txt, false);
+
+      // No need to send to model, because this processor is called on model change
       // but state still needs to be updated
       this.updateState();
     }

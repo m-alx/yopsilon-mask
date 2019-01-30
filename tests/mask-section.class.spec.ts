@@ -20,17 +20,17 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
 
     let section = new MaskSection(intl, settings, "mm", ".", sType);
 
-    maskValue = section.extractSectionValue("13.12.2018", 3, 4, 0);
+    maskValue = section.extractSection("13.12.2018", 3, 4, 0);
   }));
 
-  it(`beforeValue should be equal "13."`, () => expect(maskValue.beforeValue).toBe("13."));
-  it(`sectionValue should be equal "12"`, () => expect(maskValue.sectionValue.value()).toBe("12"));
+  it(`beforeValue should be equal "13."`, () => expect(maskValue.before).toBe("13."));
+  it(`sectionValue should be equal "12"`, () => expect(maskValue.section.value()).toBe("12"));
   it(`delimiter should be equal "."`, () => expect(maskValue.delimiter).toBe("."));
-  it(`afterValue should be equal "2018"`, () => expect(maskValue.afterValue).toBe("2018"));
+  it(`afterValue should be equal "2018"`, () => expect(maskValue.after).toBe("2018"));
   it(`nextPos should be equal 6`, () => expect(maskValue.nextSectionPos()).toBe(6));
 
-  it(`Начало секции перед курсором должно быть 1`, () => expect(maskValue.sectionValue.beforeChars).toBe("1"));
-  it(`Символ на позиции курсора должен быть 2`, () => expect(maskValue.sectionValue.currentChar).toBe("2"));
+  it(`Начало секции перед курсором должно быть 1`, () => expect(maskValue.section.beforeChars).toBe("1"));
+  it(`Символ на позиции курсора должен быть 2`, () => expect(maskValue.section.currentChar).toBe("2"));
 });
 
 describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {

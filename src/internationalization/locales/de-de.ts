@@ -25,7 +25,7 @@ export class LocaleDe {
       longDayNames:   ["Sonntag", "Montag", "Dienstag", "Mittwoch",
                        "Donnerstag", "Freitag", "Samstag"],
 
-      firstDayOfWeek: 1,
+      firstDayOfWeek: 1, 
 
       dateFormat: "dd.mm.yyyy",
       timeHMFormat: "HH:mi",
@@ -33,9 +33,9 @@ export class LocaleDe {
       dateTimeHMFormat: "dd.mm.yyyy HH:mi",
       dateTimeHMSFormat: "dd.mm.yyyy HH:mi:ss",
 
-      decimalSeparator: ",",
-      thousandSeparator: " ",
-      translates: {}  
+      separators: [",", " "],
+      currency: "{1-12.2} €",
+      translates: {}
     };
 
     this.intl.addLocale(locale);
