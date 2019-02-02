@@ -13,7 +13,7 @@ import { Keys } from "../keys/keys.class";
 
 import { MaskState } from "./mask-state.class";
 import { MaskSettings } from "./mask-settings.class";
-import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
+import { MaskSectionAction, MaskResult } from "./mask-section.class";
 
 import { NumberParserFormatter } from "../numbers/number-parser-formatter.class";
 
@@ -45,8 +45,8 @@ export class MaskNumberDirective {
     this.onTouched();
   }
 
-  private _undo: Array<MaskSectionKeyResult> = [];
-  private _redo: Array<MaskSectionKeyResult> = [];
+  private _undo: Array<MaskResult> = [];
+  private _redo: Array<MaskResult> = [];
 
   // Текущее числовое значение
   private _numValue: number = null;
@@ -202,7 +202,7 @@ export class MaskNumberDirective {
   }
 
   android_behavior: boolean = false;
-  last_res: MaskSectionKeyResult;
+  last_res: MaskResult;
 
   @HostListener("keydown", ["$event"])
   keyDown(e: any) {
@@ -368,7 +368,7 @@ export class MaskNumberDirective {
   }
 
   // Установить значение и положение курсора
-  protected setRes(res: MaskSectionKeyResult) {
+  protected setRes(res: MaskResult) {
 
     if(this.android_behavior)
       res.newSelLength = 0;
@@ -379,15 +379,15 @@ export class MaskNumberDirective {
   }
 
   protected currentRes() {
-    let res = new MaskSectionKeyResult(this._txtValue, MaskSectionAction.APPLY, 0);
+    let res = new MaskResult(this._txtValue, MaskSectionAction.APPLY, 0);
     res.newSelStart = this._elementRef.nativeElement.selectionStart;
     res.newSelLength = this._elementRef.nativeElement.selectionEnd - res.newSelStart;
     return res;
   }
 
   // Получить текущее значение маски и положение курсора
-  protected getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
-    let res = new MaskSectionKeyResult(s, MaskSectionAction.APPLY, 0);
+  protected getRes(s: string, selStart: number, selEnd: number): MaskResult {
+    let res = new MaskResult(s, MaskSectionAction.APPLY, 0);
     res.newSelStart = selStart;
     res.newSelLength = selEnd - selStart;
     return res;

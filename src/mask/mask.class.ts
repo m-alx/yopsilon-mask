@@ -10,7 +10,7 @@ import { Locale } from "../internationalization/locale.class";
 
 import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskSectionType } from "./mask-section-type.class";
-import { MaskSection, MaskSectionKeyResult, MaskSectionAction } from "./mask-section.class";
+import { MaskSection, MaskResult, MaskSectionAction } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
 
 // @dynamic
@@ -413,7 +413,7 @@ export class Mask {
       section = this.sections[i];
 
       // Обработка пользовательского действия
-      let res: MaskSectionKeyResult = section.applyKey(value, key, sectionStart,
+      let res: MaskResult = section.applyKey(value, key, sectionStart,
                                                        selStart,
                                                        selLength,
                                                        acceptDelimiterChars,

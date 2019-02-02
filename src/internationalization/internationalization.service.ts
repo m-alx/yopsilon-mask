@@ -17,7 +17,7 @@ export class InternationalizationService {
   // On locale change event
   private _onLocaleChange: BehaviorSubject<Locale> = new BehaviorSubject<Locale>(this.locale);
   public readonly onLocaleChange: Observable<Locale> = this._onLocaleChange.asObservable();
-
+ 
   // Current locale
   public _currentLocale: string;
 
@@ -84,7 +84,7 @@ export class InternationalizationService {
         dateTimeHMSFormat: "mm/dd/yyyy hh:mi:ss am",
 
         separators: [".", ","],
-        currency: "${1.2}",
+        currency: "${1-12.2}",
 
         translates: {}
       }

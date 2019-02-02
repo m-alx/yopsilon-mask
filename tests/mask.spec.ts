@@ -3,7 +3,7 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { InternationalizationService } from "../src/internationalization/internationalization.service";
-import { MaskSection, MaskSectionKeyResult } from "../src/mask/mask-section.class";
+import { MaskSection, MaskResult } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
 import { MaskSettings } from "../src/mask/mask-settings.class";
 import { Mask } from "../src/mask/mask.class";
@@ -62,7 +62,7 @@ describe(`Последний символ маски - разделитель. �
 });
 
 describe(`Нажатие [ArrowRight] с selLength=0 при значении [13.12.2018] перед [018]: `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
 
   beforeEach(async(() => {
     let intl = new InternationalizationService();
@@ -76,7 +76,7 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
 });
 
 describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимаем [ArrowRight] с selStart=2 при значении [11]: `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
 
   let intl = new InternationalizationService();
   let mask = new Mask(intl);
@@ -92,7 +92,7 @@ describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимае
 });
 
 describe(`Опция AppendPlaceholders=true: `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
   let s: MaskSettings;
 
   beforeEach(async(() => {
@@ -111,7 +111,7 @@ describe(`Опция AppendPlaceholders=true: `, () => {
 
 
 describe(`Маска с переменной длиной секции (255.255.255.0): `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
   let s: MaskSettings;
 
   beforeEach(async(() => {
@@ -130,7 +130,7 @@ describe(`Маска с переменной длиной секции (255.255.
 });
 
 describe(`Символ разделителя в пустой секции должен игнорироваться: `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
   let s: MaskSettings;
 
   beforeEach(async(() => {
@@ -150,7 +150,7 @@ describe(`Символ разделителя в пустой секции до�
 });
 
 describe(`Символ разделителя не должен приниматься пустой секцией, если одна из секций уже отвергла его: `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
   let s: MaskSettings;
 
   beforeEach(async(() => {
@@ -170,7 +170,7 @@ describe(`Символ разделителя не должен принимат
 });
 
 describe(`Символ разделителя должен приниматься пустой секцией, если ни одна из секций не отвергла его: `, () => {
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
 
   let s = new MaskSettings("_", true);
   s.appendPlaceholders = false;
@@ -222,7 +222,7 @@ describe(`Кастомная секция, regular expression`, () => {
   );
   mask.settings = s;
   mask.pattern = "ANNN";
-  let res: MaskSectionKeyResult;
+  let res: MaskResult;
 
   it(`Первый символ A или B или C: символ D нелья применить`, () => expect(mask.applyKeyAtPos("", "D", 0, 0)).toBe(null));
   it(`Первый символ A или B или C: при нажатии A значение становится равным A `, () => expect(mask.applyKeyAtPos("", "A", 0, 0).newValue).toBe("A"));

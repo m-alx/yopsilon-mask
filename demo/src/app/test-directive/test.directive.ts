@@ -144,8 +144,8 @@ export class TestDirective {
     this.onTouched();
   }
 
-  private _undo: Array<YN.MaskSectionKeyResult> = [];
-  private _redo: Array<YN.MaskSectionKeyResult> = [];
+  private _undo: Array<YN.MaskResult> = [];
+  private _redo: Array<YN.MaskResult> = [];
 
   // Текущее текстовое значение
   protected _txtValue: string = "";
@@ -344,7 +344,7 @@ export class TestDirective {
   }*/
 
   android_behavior: boolean = false;
-  last_res: YN.MaskSectionKeyResult;
+  last_res: YN.MaskResult;
 
   @HostListener("keydown", ["$event"])
   keyDown(e: any) {
@@ -578,7 +578,7 @@ export class TestDirective {
 
     /*
     // Применяем всё, что осталось
-    let res: YN.MaskSectionKeyResult = this.applyKeyAtPosNumeric(s, key, selStart, selEnd);
+    let res: YN.MaskResult = this.applyKeyAtPosNumeric(s, key, selStart, selEnd);
 
     if(res != null && res.action == YN.MaskSectionAction.APPLY) {
 
@@ -599,7 +599,7 @@ export class TestDirective {
   }
 
   // Установить значение и положение курсора
-  protected setRes(res: YN.MaskSectionKeyResult) {
+  protected setRes(res: YN.MaskResult) {
 
     if(this.android_behavior)
       res.newSelLength = 0;
@@ -610,15 +610,15 @@ export class TestDirective {
   }
 
   protected currentRes() {
-    let res = new YN.MaskSectionKeyResult(this._txtValue, YN.MaskSectionAction.APPLY, 0);
+    let res = new YN.MaskResult(this._txtValue, YN.MaskSectionAction.APPLY, 0);
     res.newSelStart = this._elementRef.nativeElement.selectionStart;
     res.newSelLength = this._elementRef.nativeElement.selectionEnd - res.newSelStart;
     return res;
   }
 
   // Получить текущее значение маски и положение курсора
-  protected getRes(s: string, selStart: number, selEnd: number): YN.MaskSectionKeyResult {
-    let res = new YN.MaskSectionKeyResult(s, YN.MaskSectionAction.APPLY, 0);
+  protected getRes(s: string, selStart: number, selEnd: number): YN.MaskResult {
+    let res = new YN.MaskResult(s, YN.MaskSectionAction.APPLY, 0);
     res.newSelStart = selStart;
     res.newSelLength = selEnd - selStart;
     return res;

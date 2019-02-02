@@ -23,9 +23,9 @@
       </select>
     </div>
     <div>
-      <label for="localeSel">Localization</label>
+      <label for="localeSel">Locale</label>
       <select id="localeSel" [(ngModel)]="intl.currentLocale">
-        <option *ngFor="let locale of intl.locales" [value]="locale.shortName">{{locale.name}}</option>
+        <option *ngFor="let locale of intl.locales" [value]="locale.shortName">{{locale.name}}&nbsp;({{locale.shortName}})</option>
       </select>
     </div>
   </div>

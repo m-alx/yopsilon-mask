@@ -5,7 +5,7 @@
 import { async } from '@angular/core/testing';
 
 import { InternationalizationService } from "../src/internationalization/internationalization.service";
-import { MaskSection, MaskSectionKeyResult } from "../src/mask/mask-section.class";
+import { MaskSection, MaskResult } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
 import { Mask } from "../src/mask/mask.class";
 

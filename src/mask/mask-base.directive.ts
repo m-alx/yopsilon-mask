@@ -7,14 +7,14 @@ import { Output, Directive, ElementRef, Renderer2, EventEmitter } from "@angular
 import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Mask } from "./mask.class";
 import { Keys } from "../keys/keys.class";
-import { MaskSectionAction, MaskSectionKeyResult } from "./mask-section.class";
+import { MaskSectionAction, MaskResult } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
 import { MaskState } from "./mask-state.class";
 
 export abstract class MaskBaseDirective {
 
-    private _undo: Array<MaskSectionKeyResult> = [];
-    private _redo: Array<MaskSectionKeyResult> = [];
+    private _undo: Array<MaskResult> = [];
+    private _redo: Array<MaskResult> = [];
 
     // Current text value
     protected _txtValue: string = "";
@@ -108,7 +108,7 @@ export abstract class MaskBaseDirective {
     }
 
     protected android_behavior: boolean = false;
-    protected last_res: MaskSectionKeyResult;
+    protected last_res: MaskResult;
 
     protected doInput(txt: any) {
       if(this.android_behavior) {
@@ -157,9 +157,11 @@ export abstract class MaskBaseDirective {
       if(e.ctrlKey && (keyCode == "KeyA" || keyCode == "KeyX" || keyCode == "KeyC" || keyCode == "KeyV" || key == "Insert"))
         return true;
 
-      if(e.shiftKey && (key == "Delete" || key == "Insert")) {
+      if(e.shiftKey && (key == "Delete" || key == "Insert"))
         return true;
-      }
+
+      if(e.altKey && (key == "ArrowDown" || key == "ArrowUp"))
+        return true;
 
       if(e.ctrlKey && keyCode == "KeyZ") {
         // UNDO
@@ -212,7 +214,7 @@ export abstract class MaskBaseDirective {
       }
 
       // Applying everything that's left
-      let res: MaskSectionKeyResult = this._mask.applyKeyAtPos(s, key, selStart, selEnd);
+      let res: MaskResult = this._mask.applyKeyAtPos(s, key, selStart, selEnd);
 
       if(res != null && res.action == MaskSectionAction.APPLY) {
 
@@ -234,7 +236,7 @@ export abstract class MaskBaseDirective {
     }
 
     // Setting value and carriage position
-    protected setRes(res: MaskSectionKeyResult) {
+    protected setRes(res: MaskResult) {
 
       if(this.android_behavior)
         res.newSelLength = 0;
@@ -245,15 +247,15 @@ export abstract class MaskBaseDirective {
     }
 
     protected currentRes() {
-      let res = new MaskSectionKeyResult(this._txtValue, MaskSectionAction.APPLY, 0);
+      let res = new MaskResult(this._txtValue, MaskSectionAction.APPLY, 0);
       res.newSelStart = this._elementRef.nativeElement.selectionStart;
       res.newSelLength = this._elementRef.nativeElement.selectionEnd - res.newSelStart;
       return res;
     }
 
     // Retrieving current mask value and carriage position
-    protected getRes(s: string, selStart: number, selEnd: number): MaskSectionKeyResult {
-      let res = new MaskSectionKeyResult(s, MaskSectionAction.APPLY, 0);
+    protected getRes(s: string, selStart: number, selEnd: number): MaskResult {
+      let res = new MaskResult(s, MaskSectionAction.APPLY, 0);
       res.newSelStart = selStart;
       res.newSelLength = selEnd - selStart;
       return res;

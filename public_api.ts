@@ -8,7 +8,7 @@ export { MaskSettings } from './src/mask/mask-settings.class';
 export { MaskSection } from './src/mask/mask-section.class';
 export { MaskSectionType } from './src/mask/mask-section-type.class';
 export { MaskSectionAction } from './src/mask/mask-section.class';
-export { MaskSectionKeyResult } from './src/mask/mask-section.class';
+export { MaskResult } from './src/mask/mask-section.class';
 
 export { DateFormatterPipe } from "./src/dates/date-formatter.pipe";
 export { DateParserPipe } from "./src/dates/date-parser.pipe";
