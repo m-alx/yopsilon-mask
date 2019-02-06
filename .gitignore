@@ -6,7 +6,8 @@ nbproject
 manifest.mf
 build.xml
 node_modules/*
-npm-debug.log
+npm-debug.log*
+dist.tgz
 *.js
 !config/*
 !karma.conf.js
@@ -43,4 +44,3 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
-
