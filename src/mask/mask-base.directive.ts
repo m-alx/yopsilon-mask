@@ -42,45 +42,6 @@ export abstract class MaskBaseDirective {
       //
     }
 
-    /*
-    protected whichKeyIsPressed(txt1: string, txt2: string,
-      selStart1: number, selStart2: number,
-      selLength: number): string
-      {
-
-      if(txt1 == txt2 && selStart1 == selStart2 - 1)
-        return "ArrowRight";
-
-      if(txt1 == txt2 && selStart1 == selStart2 + 1)
-        return "ArrowLeft";
-
-      if(selLength == 1) {
-        //
-        if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
-          if(txt1.substring(selStart2 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
-            return "Backspace";
-
-        if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
-          if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
-            if(selStart1 == selStart2 + 1)
-              return "Backspace";
-
-        return txt2.substring(selStart1, selStart1 + 1);
-      }
-
-      // tes|t -> te|t
-      if(txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1) )
-        if(txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length))
-          return "Backspace";
-
-      // te|st -> te|t
-      if(txt1.substring(0, selStart1) == txt2.substring(0, selStart1) )
-        if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length))
-          return "Delete";
-
-      return txt2.substring(selStart1, selStart1 + 1);
-    } */
-
     protected processAndroid(txt: any): void {
       //
       let res = this.currentRes();
@@ -228,7 +189,6 @@ export abstract class MaskBaseDirective {
 
         if(this.android_behavior)
           return true;
-
       }
 
       e.preventDefault();
