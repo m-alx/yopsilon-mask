@@ -1,4 +1,12 @@
 import { Component, ViewChild, ChangeDetectorRef } from "@angular/core";
+
+import { LocaleDe } from "./locales/de-de";
+import { LocaleEs } from "./locales/es-es";
+import { LocaleFr } from "./locales/fr-fr";
+import { LocalePt } from "./locales/pt-pt";
+import { LocaleRu } from "./locales/ru-ru";
+import { LocaleChinese } from "./locales/zh-cn";
+
 import * as YN from 'yopsilon-mask';
 
 @Component({
@@ -39,7 +47,6 @@ export class AppComponent {
     YN.Mask.defaultSettings.replaceMode = v;
   }
 
-
   constructor(
     // С помощью синглтона Internationalization можно менять текущую локализацию
     public intl: YN.InternationalizationService,
@@ -48,12 +55,12 @@ export class AppComponent {
     // список синглтона Internationalization
     // и могут быть активированы указанием свойства currentLocale:
     //    intl.currentLocale = "ru-RU";
-    private localeEs: YN.LocaleEs,
-    private localeFr: YN.LocaleFr,
-    private localeDe: YN.LocaleDe,
-    private localePt: YN.LocalePt,
-    private localeRu: YN.LocaleRu,
-    private localeChinese: YN.LocaleChinese,
+    private localeEs: LocaleEs,
+    private localeFr: LocaleFr,
+    private localeDe: LocaleDe,
+    private localePt: LocalePt,
+    private localeRu: LocaleRu,
+    private localeChinese: LocaleChinese,
   ) {
     // ...
   }

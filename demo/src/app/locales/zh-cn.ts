@@ -3,14 +3,13 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Injectable } from '@angular/core';
-import { InternationalizationService } from "../internationalization.service";
-import { Locale } from "../locale.class";
+import * as YN from 'yopsilon-mask';
 
 @Injectable()
 export class LocaleChinese {
-  constructor(private intl: InternationalizationService) {
+  constructor(private intl: YN.InternationalizationService) {
 
-    let locale: Locale = {
+    let locale: YN.Locale = {
       name: "Chinese",
       shortName: "zh-CN",
       shortMonthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月",

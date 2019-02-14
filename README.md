@@ -6,12 +6,11 @@ Angular 2+ input masking directive.
 
 ## Features
 
-  - Correct processing of user input in every Evergreen browser.
-  - Datetime autoformatting and parsing using pattern for Date Value bindings.
+  - Date/time and numbers autoformatting and parsing using pattern for Date Value bindings.
   - Ability to create array of possible values for every part of pattern (e.g., to emulate autocomplete or to enter Date values using `dd mmm yyyy` pattern or Time using `h:mi am/pm` pattern).
-  - Ability to define a RegExp to verify if user input is valid for each pattern section.
+  - RegExp to verify if user input is valid for each pattern section.
   - Ability to define a pattern section requiring input with variable value length. For example, `h:mi tt` pattern's `h` section length could be 1 or 2 chars. And for `dd mm yyyy` pattern for French locale short month abbreviation length could be 3 to 5 chars.
-  - Date and Time formats are internationalized. Predefined locale set and ability to define your own custom locales. Directives are able to detect locale change - all Date values will be re-formatted and displayed in correct locale.
+  - Date/time and number formats are internationalized. Ability to define your own custom locales. Directives are able to detect locale change - all Date values will be re-formatted and displayed in correct locale.
   - Mobile browsers support.
 
 ## Installation

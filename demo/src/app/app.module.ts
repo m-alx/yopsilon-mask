@@ -20,6 +20,13 @@ import { NumberExampleComponent } from "./examples/number-example.component";
 import { CurrencyExampleComponent } from "./examples/currency-example.component";
 import { CanadianPostalCodeExampleComponent } from "./examples/canadian-postal-code-example.component";
 
+import { LocaleDe } from "./locales/de-de";
+import { LocaleEs } from "./locales/es-es";
+import { LocaleFr } from "./locales/fr-fr";
+import { LocalePt } from "./locales/pt-pt";
+import { LocaleRu } from "./locales/ru-ru";
+import { LocaleChinese } from "./locales/zh-cn";
+
 @NgModule({
   declarations: [
     AppComponent, FormFieldComponent, TestDirective,
@@ -32,12 +39,19 @@ import { CanadianPostalCodeExampleComponent } from "./examples/canadian-postal-c
     CreditCardExampleComponent,
     NumberExampleComponent,
     CurrencyExampleComponent,
-    CanadianPostalCodeExampleComponent
+    CanadianPostalCodeExampleComponent,
   ],
   imports: [
     BrowserModule, FormsModule, YopsilonMaskModule
   ],
-  providers: [],
+  providers: [    
+    LocaleChinese,
+    LocaleDe,
+    LocaleEs,
+    LocaleFr,
+    LocalePt,
+    LocaleRu
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

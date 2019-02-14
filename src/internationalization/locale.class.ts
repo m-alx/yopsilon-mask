@@ -21,8 +21,4 @@ export class Locale {
   public currency: string = "";
 
   public translates: { [id: string]: any } = { };
-
-  //public digits: RegExp = /[0-9]/;
-  //public letters: RegExp = /[a-z]/i;
-
 }

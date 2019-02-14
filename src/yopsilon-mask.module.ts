@@ -8,13 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from "@angular/platform-browser";
 
 import { InternationalizationService } from "./internationalization/internationalization.service";
-import { LocaleDe } from "./internationalization/locales/de-de";
-import { LocaleEs } from "./internationalization/locales/es-es";
-import { LocaleFr } from "./internationalization/locales/fr-fr";
-import { LocalePt } from "./internationalization/locales/pt-pt";
-import { LocaleRu } from "./internationalization/locales/ru-ru";
-import { LocaleChinese } from "./internationalization/locales/zh-cn";
-
 import { Mask } from "./mask/mask.class";
 
 import { MaskDirective } from "./mask/mask.directive";
@@ -29,13 +22,7 @@ import { DateFormatterPipe } from "./dates/date-formatter.pipe";
   declarations: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
   providers: [
-    InternationalizationService,
-    LocaleChinese,
-    LocaleDe,
-    LocaleEs,
-    LocaleFr,
-    LocalePt,
-    LocaleRu],
+    InternationalizationService],
   exports: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe]
 })
 export class YopsilonMaskModule {

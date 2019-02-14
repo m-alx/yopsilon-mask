@@ -3,14 +3,13 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Injectable } from '@angular/core';
-import { InternationalizationService } from "../internationalization.service";
-import { Locale } from "../locale.class";
+import * as YN from 'yopsilon-mask';
 
 @Injectable()
 export class LocaleDe {
-  constructor(private intl: InternationalizationService) {
+  constructor(private intl: YN.InternationalizationService) {
 
-    let locale: Locale = {
+    let locale: YN.Locale = {
       name: "German",
       shortName: "de-DE",
       shortMonthNames: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
@@ -25,7 +24,7 @@ export class LocaleDe {
       longDayNames:   ["Sonntag", "Montag", "Dienstag", "Mittwoch",
                        "Donnerstag", "Freitag", "Samstag"],
 
-      firstDayOfWeek: 1, 
+      firstDayOfWeek: 1,
 
       dateFormat: "dd.mm.yyyy",
       timeHMFormat: "HH:mi",
