@@ -11,15 +11,15 @@ import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskValue } from "./mask-value.class";
 
 // Actions which are initialized by section
-export class MaskSectionAction {
+export class Action {
 
-  static NONE = new MaskSectionAction("NONE");
-  static APPLY = new MaskSectionAction("APPLY");
-  static SKIP = new MaskSectionAction("SKIP");
-  static GO_FWD = new MaskSectionAction("GO_FWD");
-  static GO_BACK = new MaskSectionAction("GO_BACK");
-  static GO_BACK_AND_DELETE = new MaskSectionAction("GO_BACK_AND_DELETE");
-  static GO_BACK_AND_BACKSPACE = new MaskSectionAction("GO_BACK_AND_BACKSPACE");
+  static NONE = new Action("NONE");
+  static APPLY = new Action("APPLY");
+  static SKIP = new Action("SKIP");
+  static GO_FWD = new Action("GO_FWD");
+  static GO_BACK = new Action("GO_BACK");
+  static GO_BACK_AND_DELETE = new Action("GO_BACK_AND_DELETE");
+  static GO_BACK_AND_BACKSPACE = new Action("GO_BACK_AND_BACKSPACE");
 
   constructor(public name: string) { }
 }
@@ -28,12 +28,12 @@ export class MaskSectionAction {
 export class MaskResult {
 
   public inSection: boolean;
-  public newSelStart: number;
-  public newSelLength: number;
+  public selStart: number;
+  public selLength: number;
 
   constructor(
       public newValue: string,
-      public action: MaskSectionAction,
+      public action: Action,
       public nextSectionPos: number
   ) { }
 }
@@ -178,7 +178,7 @@ export class MaskSection {
   }
 
   // Auto-correction of section's value
-  public autoCorrectValue(s: string): string {
+  public autoCorrectVal(s: string): string {
 
     if(!this.sectionType)
       return s;
@@ -191,7 +191,6 @@ export class MaskSection {
     }
 
     let res = s;
-
     let n: number = this.numericValue(res);
 
     if(this.isNumeric()) {
@@ -227,7 +226,7 @@ export class MaskSection {
   }
 
   // Section extracts its value from input using following method
-  public extractSection(
+  public extract(
     maskValue: string, // Input mask value
     sectionPos: number,   // Section value's first char index
     selStart: number = 0,
@@ -294,13 +293,13 @@ export class MaskSection {
   }
 
   private skip(mv: MaskValue, selStart: number): MaskResult {
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.SKIP, mv.nextSectionPos());
-    res.newSelStart = selStart;
+    let res: MaskResult = new MaskResult(mv.value(), Action.SKIP, mv.nextSectionPos());
+    res.selStart = selStart;
     return res;
   }
 
   private none(mv: MaskValue): MaskResult {
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.NONE, mv.nextSectionPos());
+    let res: MaskResult = new MaskResult(mv.value(), Action.NONE, mv.nextSectionPos());
     return res;
   }
 
@@ -316,7 +315,7 @@ export class MaskSection {
         && selStart_local >= newSectionValue.length - 1
         && direction > 0
       ) {
-      newSectionValue = this.autoCorrectValue(newSectionValue);
+      newSectionValue = this.autoCorrectVal(newSectionValue);
       mv.delimiter = this.delimiter;
     }
 
@@ -331,9 +330,9 @@ export class MaskSection {
         return this.goBack(mv, selStart, 1, false, isLast);  // Moving backwards
       else {
         // Stand still
-        let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
-        res.newSelStart = selStart;
-        res.newSelLength = this.settings.replaceMode && selStart_local < this.length ? 1 : 0;
+        let res: MaskResult = new MaskResult(mv.value(), Action.APPLY, mv.nextSectionPos());
+        res.selStart = selStart;
+        res.selLength = this.settings.replaceMode && selStart_local < this.length ? 1 : 0;
         return res;
       }
   }
@@ -342,25 +341,25 @@ export class MaskSection {
   private applyDelimiter(mv: MaskValue, selStart: number): MaskResult
   {
     // autoCorrection is necessary
-    let sv = this.autoCorrectValue(mv.section.value());
+    let sv = this.autoCorrectVal(mv.section.value());
 
     mv.update(sv, selStart)
     mv.delimiter = this.delimiter;
 
     // Moving forward
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.GO_FWD, mv.nextSectionPos());
-    res.newSelStart = mv.nextSectionPos();
+    let res: MaskResult = new MaskResult(mv.value(), Action.GO_FWD, mv.nextSectionPos());
+    res.selStart = mv.nextSectionPos();
     return res;
   }
 
   // Moving carriage backward
   private goBack(mv: MaskValue, selStart: number, selLength: number, byBackspace: boolean = false, isLast: boolean = false): MaskResult
   {
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
+    let res: MaskResult = new MaskResult(mv.value(), Action.APPLY, mv.nextSectionPos());
 
     if(selStart == 0 && selLength <= 1) {
       // Case when first symbol is selected. Carriage position is set to the beginning of the line
-      res.newSelLength = 0;
+      res.selLength = 0;
       return res;
     }
 
@@ -368,24 +367,24 @@ export class MaskSection {
     if(isLast && selStart > (mv.sectionPos + this.maxLength) && this.settings.replaceMode)
       selStart = mv.sectionPos + this.maxLength;
 
-    res.newSelStart = selStart - 1;
-    res.newSelLength = this.settings.replaceMode ? 1 : 0;
+    res.selStart = selStart - 1;
+    res.selLength = this.settings.replaceMode ? 1 : 0;
 
-    let selStart_local = res.newSelStart - mv.sectionPos;
+    let selStart_local = res.selStart - mv.sectionPos;
 
     // If we exceed minimal length...
     if(selStart_local >= this.length && selStart_local >= mv.section.length)
-      res.newSelLength = 0;
+      res.selLength = 0;
 
-    let newSelStart_local = res.newSelStart - mv.sectionPos;
+    let newSelStart_local = res.selStart - mv.sectionPos;
     if(newSelStart_local < 0 && mv.before != "")
-      res.action = byBackspace ? MaskSectionAction.GO_BACK_AND_DELETE : MaskSectionAction.GO_BACK;
+      res.action = byBackspace ? Action.GO_BACK_AND_DELETE : Action.GO_BACK;
 
-    if(res.newSelStart < 0)
-      res.newSelStart = 0;
+    if(res.selStart < 0)
+      res.selStart = 0;
 
-    if(res.newSelLength == 0 && selStart == 0)
-      res.newSelLength = 0;
+    if(res.selLength == 0 && selStart == 0)
+      res.selLength = 0;
 
     return res;
   }
@@ -395,46 +394,46 @@ export class MaskSection {
   {
     let selStart_local: number = selStart - mv.sectionPos;
 
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
+    let res: MaskResult = new MaskResult(mv.value(), Action.APPLY, mv.nextSectionPos());
 
     // replaceMode, selLength == 0 and something is present
     if(this.settings.replaceMode && selLength == 0 && mv.section.currentChar != "") {
       // Carriage stands still and next char is selected
-      res.newSelStart = selStart;
-      res.newSelLength = 1;
+      res.selStart = selStart;
+      res.selLength = 1;
     } else {
       // Moving one char forward
       if(mv.after != "" || mv.section.afterChars != "") {
-        res.newSelStart = selStart + 1;
-        res.newSelLength = (mv.section.currentChar != "" && this.settings.replaceMode) ? 1 : 0;
+        res.selStart = selStart + 1;
+        res.selLength = (mv.section.currentChar != "" && this.settings.replaceMode) ? 1 : 0;
 
         // Section with variable length. If we reached the end of it, then selLength = 0
-        if(res.newSelStart - mv.sectionPos >= this.length && mv.section.afterChars == "")
-          res.newSelLength = 0;
+        if(res.selStart - mv.sectionPos >= this.length && mv.section.afterChars == "")
+          res.selLength = 0;
       } else
         {
           // Nothing's present next, just positoning the carriage in the end of the section
-          res.newSelStart = selStart + 1;
-          res.newSelLength = 0;
+          res.selStart = selStart + 1;
+          res.selLength = 0;
         }
     }
 
-    let newSelStart_local = res.newSelStart - mv.sectionPos;
+    let newSelStart_local = res.selStart - mv.sectionPos;
 
     // We're out of bounds
     if(newSelStart_local > mv.section.length || (newSelStart_local == this.maxLength && mv.after != "")) {
       // Trying to apply autoCorrection
-      let v = this.autoCorrectValue(mv.section.value());
+      let v = this.autoCorrectVal(mv.section.value());
 
       mv.delimiter = this.delimiter;
       // After that carriage's position and next section's position could be different
-      mv.update(v, selStart);
+      mv.update(v, newSelStart_local);
       res.newValue = mv.value();
       res.nextSectionPos = mv.nextSectionPos();
-      res.newSelStart = mv.section.length;
+      res.selStart = mv.section.length;
 
       // Moving forward to next section
-      res.action = MaskSectionAction.GO_FWD;
+      res.action = Action.GO_FWD;
     }
 
     return res;
@@ -460,7 +459,7 @@ export class MaskSection {
     ): MaskResult
     {
       // Parsing the value
-      let mv: MaskValue = this.extractSection(value, sectionPos, selStart, selLength);
+      let mv: MaskValue = this.extract(value, sectionPos, selStart, selLength);
 
       // Cursor's positioned before the section. Doing nothing
       if(selStart < sectionPos)
@@ -490,7 +489,7 @@ export class MaskSection {
           // Adding a delimiter if necessary
           // Setting a corrected value and asking to move to a next section
           mv.delimiter = this.delimiter;
-          mv.update(this.autoCorrectValue(mv.section.value()), selStart);
+          mv.update(this.autoCorrectVal(mv.section.value()), selStart);
           return this.skip(mv, mv.nextSectionPos()); // To the beginning of next section
         }
       }
@@ -614,11 +613,11 @@ export class MaskSection {
         return this.goFwd(mv, selStart, selLength);
 
       // Incrementing value of the section upon "Up" key pressing
-      if(key == "ArrowUp" && this.settings.incrementDecrementValueByArrows)
+      if(key == "ArrowUp" && this.settings.incDecByArrows)
         return this.apply(mv, this.incValue(mv.section.value()), selStart, 0);
 
       // Decrementing value of the section upon "Down" key pressing
-      if(key == "ArrowDown" && this.settings.incrementDecrementValueByArrows)
+      if(key == "ArrowDown" && this.settings.incDecByArrows)
         return this.apply(mv, this.decValue(mv.section.value()), selStart, 0);
 
     return this.none(mv);
@@ -634,7 +633,7 @@ export class MaskSection {
       return value;
 
     // Get section value
-    let mv: MaskValue = this.extractSection(value, sectionPos, 0, 0);
+    let mv: MaskValue = this.extract(value, sectionPos, 0, 0);
 
     // Remove placeholderes
     let s = this.removePlaceholders(mv.section.value());
@@ -652,13 +651,13 @@ export class MaskSection {
   // Selcting first symbol of the section
   selectFirst(value: string, sectionPos: number): MaskResult {
 
-    let mv: MaskValue = this.extractSection(value, sectionPos, sectionPos, 0);
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
+    let mv: MaskValue = this.extract(value, sectionPos, sectionPos, 0);
+    let res: MaskResult = new MaskResult(mv.value(), Action.APPLY, mv.nextSectionPos());
 
-    res.newSelStart = sectionPos;
-    res.newSelLength = this.settings.replaceMode ? 1 : 0;
+    res.selStart = sectionPos;
+    res.selLength = this.settings.replaceMode ? 1 : 0;
     if(this.isEmptySection())
-      res.newSelLength = 0;
+      res.selLength = 0;
 
     return res;
   }
@@ -666,24 +665,24 @@ export class MaskSection {
   // Selecting last symbol of the section
   selectLast(value: string, sectionPos: number, forDelete: boolean = false): MaskResult {
 
-    let mv: MaskValue = this.extractSection(value, sectionPos, sectionPos, 0);
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
+    let mv: MaskValue = this.extract(value, sectionPos, sectionPos, 0);
+    let res: MaskResult = new MaskResult(mv.value(), Action.APPLY, mv.nextSectionPos());
 
     if(!this.settings.replaceMode) {
       // We need to be positioned before the last symbol
-      res.newSelStart = sectionPos + mv.section.length - 1;
-      res.newSelLength = 0;
+      res.selStart = sectionPos + mv.section.length - 1;
+      res.selLength = 0;
       return res;
     }
 
     if((!forDelete && mv.section.length >= this.length && mv.section.length < this.maxLength) || this.isEmptySection()) {
       // We haven't reached maximum length of the section
-      res.newSelStart = sectionPos + mv.section.length;
-      res.newSelLength = 0;
+      res.selStart = sectionPos + mv.section.length;
+      res.selLength = 0;
     } else {
       // We've reached maxLength - selecting last symbol
-      res.newSelStart = sectionPos + mv.section.length - 1;
-      res.newSelLength = 1;
+      res.selStart = sectionPos + mv.section.length - 1;
+      res.selLength = 1;
     }
 
     return res;
@@ -693,17 +692,17 @@ export class MaskSection {
   autoCorrect(value: string, sectionPos: number, selStart: number, selLength: number): MaskResult {
 
     // Parsing
-    let mv: MaskValue = this.extractSection(value, sectionPos, selStart, 0);
+    let mv: MaskValue = this.extract(value, sectionPos, selStart, 0);
     let v = mv.section.value();
 
     // Correcting the value
-    v = this.autoCorrectValue(v);
+    v = this.autoCorrectVal(v);
 
     // Updating the result
     mv.update(v, selStart);
-    let res: MaskResult = new MaskResult(mv.value(), MaskSectionAction.APPLY, mv.nextSectionPos());
-    res.newSelStart = res.newValue.length;
-    res.newSelLength = 0;
+    let res: MaskResult = new MaskResult(mv.value(), Action.APPLY, mv.nextSectionPos());
+    res.selStart = res.newValue.length;
+    res.selLength = 0;
 
     return res;
   }

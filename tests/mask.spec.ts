@@ -27,8 +27,8 @@ describe(`Последний символ маски - разделитель. �
   mask.pattern = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
-  it(`ReplaceMode=true. ArrowLeft. New selectionStart must be 9`, () => expect(res.newSelStart).toBe(9));
-  it(`ReplaceMode=true. ArrowLeft. Должен быть выделен последний символ последней секции`, () => expect(res.newSelLength).toBe(1));
+  it(`ReplaceMode=true. ArrowLeft. New selectionStart must be 9`, () => expect(res.selStart).toBe(9));
+  it(`ReplaceMode=true. ArrowLeft. Должен быть выделен последний символ последней секции`, () => expect(res.selLength).toBe(1));
 });
 
 describe(`Последний символ маски - разделитель. Маска [yyyy年mm月dd日], применяем Backspace: `, () => {
@@ -40,8 +40,8 @@ describe(`Последний символ маски - разделитель. �
 
   let res = mask.applyKeyAtPos("2019年01月18日", "Backspace", 11, 0);
   it(`ReplaceMode=true. New Value must be 2019年01月1_日`, () => expect(res.newValue).toBe("2019年01月1_日"));
-  it(`ReplaceMode=true. New SelectionStart must be 9`, () => expect(res.newSelStart).toBe(9));
-  it(`ReplaceMode=true. New SelectionLength must be 1`, () => expect(res.newSelLength).toBe(1));
+  it(`ReplaceMode=true. New SelectionStart must be 9`, () => expect(res.selStart).toBe(9));
+  it(`ReplaceMode=true. New SelectionLength must be 1`, () => expect(res.selLength).toBe(1));
 
 });
 
@@ -56,9 +56,20 @@ describe(`Последний символ маски - разделитель. �
   mask.pattern = "yyyy年mm月dd日";
 
   let res = mask.applyKeyAtPos("2019年01月18日", "ArrowLeft", 11, 0);
-  it(`ReplaceMode=false. New SelectionStart must be 10`, () => expect(res.newSelStart).toBe(10));
-  it(`ReplaceMode=false. New SelectionLength must be 0`, () => expect(res.newSelLength).toBe(0));
+  it(`ReplaceMode=false. New SelectionStart must be 10`, () => expect(res.selStart).toBe(10));
+  it(`ReplaceMode=false. New SelectionLength must be 0`, () => expect(res.selLength).toBe(0));
 
+});
+
+describe(`Applying mask to incomplete value. Pattern mm/dd/yyyy, value 12/12/19__: `, () => {
+  let intl = new InternationalizationService();
+  let s = new MaskSettings("_", true);
+  let mask = new Mask(intl);
+  mask.settings = s;
+  mask.pattern = "mm/dd/yyyy";
+
+  let res = mask.applyMask("12/12/19__");
+  it(`Result must be 12/12/2019`, () => expect(res).toBe("12/12/2019"));  
 });
 
 describe(`Нажатие [ArrowRight] с selLength=0 при значении [13.12.2018] перед [018]: `, () => {
@@ -71,8 +82,8 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
     res = mask.applyKeyAtPos("12/12/2018", "ArrowRight", 7, 7);
   }));
 
-  it(`Положение курсора должно остаться 7`, () => expect(res.newSelStart).toBe(7));
-  it(`SelLength должна стать 1`, () => expect(res.newSelLength).toBe(1));
+  it(`Положение курсора должно остаться 7`, () => expect(res.selStart).toBe(7));
+  it(`SelLength должна стать 1`, () => expect(res.selLength).toBe(1));
 });
 
 describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимаем [ArrowRight] с selStart=2 при значении [11]: `, () => {
@@ -87,8 +98,8 @@ describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимае
   res = mask.applyKeyAtPos("11", "ArrowRight", 2, 0);
 
   it(`Новое значение маски 11 jan`, () => expect(res.newValue).toBe("11 jan"));
-  it(`Положение курсора должно быть 3`, () => expect(res.newSelStart).toBe(3));
-  it(`SelLength должна быть 1`, () => expect(res.newSelLength).toBe(1));
+  it(`Положение курсора должно быть 3`, () => expect(res.selStart).toBe(3));
+  it(`SelLength должна быть 1`, () => expect(res.selLength).toBe(1));
 });
 
 describe(`Опция AppendPlaceholders=true: `, () => {
@@ -146,7 +157,7 @@ describe(`Символ разделителя в пустой секции до�
   }));
 
   it(`Впечатываем точку. Должно остаться 172. . . `, () => expect(res.newValue).toBe("172. . . "));
-  it(`Курсор должен остаться на месте`, () => expect(res.newSelStart).toBe(4));
+  it(`Курсор должен остаться на месте`, () => expect(res.selStart).toBe(4));
 });
 
 describe(`Символ разделителя не должен приниматься пустой секцией, если одна из секций уже отвергла его: `, () => {

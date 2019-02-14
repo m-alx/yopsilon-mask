@@ -7,7 +7,7 @@ import { Output, Directive, ElementRef, Renderer2, EventEmitter } from "@angular
 import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Mask } from "./mask.class";
 import { Keys } from "../keys/keys.class";
-import { MaskSectionAction, MaskResult } from "./mask-section.class";
+import { Action, MaskResult } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
 import { MaskState } from "./mask-state.class";
 
@@ -48,7 +48,7 @@ export abstract class MaskBaseDirective {
 
       // Possibly we have carriage position
       let key: string = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
-          this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
+          this.last_res.selStart, res.selStart, this.last_res.selLength);
 
       let r = this.processKey(
         {
@@ -56,7 +56,7 @@ export abstract class MaskBaseDirective {
           key: key,
           shiftKey: false,
           ctrlKey: false,
-          target: { selectionStart: this.last_res.newSelStart, selectionEnd: 0 },
+          target: { selectionStart: this.last_res.selStart, selectionEnd: 0 },
           preventDefault: (_: any) => {}
         });
 
@@ -177,7 +177,7 @@ export abstract class MaskBaseDirective {
       // Applying everything that's left
       let res: MaskResult = this._mask.applyKeyAtPos(s, key, selStart, selEnd);
 
-      if(res != null && res.action == MaskSectionAction.APPLY) {
+      if(res != null && res.action == Action.APPLY) {
 
         // If value has been changed we'll add it to UNDO stack
         if(res.newValue != s) {
@@ -199,25 +199,25 @@ export abstract class MaskBaseDirective {
     protected setRes(res: MaskResult) {
 
       if(this.android_behavior)
-        res.newSelLength = 0;
+        res.selLength = 0;
 
       this.setText(res.newValue);
-      this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', res.newSelStart);
-      this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.newSelStart + res.newSelLength);
+      this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', res.selStart);
+      this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.selStart + res.selLength);
     }
 
     protected currentRes() {
-      let res = new MaskResult(this._txtValue, MaskSectionAction.APPLY, 0);
-      res.newSelStart = this._elementRef.nativeElement.selectionStart;
-      res.newSelLength = this._elementRef.nativeElement.selectionEnd - res.newSelStart;
+      let res = new MaskResult(this._txtValue, Action.APPLY, 0);
+      res.selStart = this._elementRef.nativeElement.selectionStart;
+      res.selLength = this._elementRef.nativeElement.selectionEnd - res.selStart;
       return res;
     }
 
     // Retrieving current mask value and carriage position
     protected getRes(s: string, selStart: number, selEnd: number): MaskResult {
-      let res = new MaskResult(s, MaskSectionAction.APPLY, 0);
-      res.newSelStart = selStart;
-      res.newSelLength = selEnd - selStart;
+      let res = new MaskResult(s, Action.APPLY, 0);
+      res.selStart = selStart;
+      res.selLength = selEnd - selStart;
       return res;
     }
 

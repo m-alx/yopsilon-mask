@@ -13,7 +13,7 @@ import { Keys } from "../keys/keys.class";
 
 import { MaskState } from "./mask-state.class";
 import { MaskSettings } from "./mask-settings.class";
-import { MaskSectionAction, MaskResult } from "./mask-section.class";
+import { Action, MaskResult } from "./mask-section.class";
 
 import { NumberParserFormatter } from "../numbers/number-parser-formatter.class";
 
@@ -104,10 +104,10 @@ export class MaskNumberDirective {
 
     // Теоретически положение курсора у нас есть..
     let key: string = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
-        this.last_res.newSelStart, res.newSelStart, this.last_res.newSelLength);
+        this.last_res.selStart, res.selStart, this.last_res.selLength);
 
-    let selStart = this.last_res.newSelStart;
-    let selEnd = this.last_res.newSelStart;
+    let selStart = this.last_res.selStart;
+    let selEnd = this.last_res.selStart;
 
     // Если текст вдруг стёрся
     if(this.last_res.newValue != "" && txt.length <= 1) {
@@ -185,7 +185,7 @@ export class MaskNumberDirective {
       this._format = f;
 
       let state = NumberParserFormatter.reformat(this._txtValue, this.format, this._separators,
-        res.newSelStart, res.newSelStart + res.newSelLength, true);
+        res.selStart, res.selStart + res.selLength, true);
 
       this.setRes(this.getRes(state.value, state.selStart, state.selEnd));
 
@@ -371,25 +371,25 @@ export class MaskNumberDirective {
   protected setRes(res: MaskResult) {
 
     if(this.android_behavior)
-      res.newSelLength = 0;
+      res.selLength = 0;
 
     this.setText(res.newValue);
-    this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', res.newSelStart);
-    this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.newSelStart + res.newSelLength);
+    this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', res.selStart);
+    this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', res.selStart + res.selLength);
   }
 
   protected currentRes() {
-    let res = new MaskResult(this._txtValue, MaskSectionAction.APPLY, 0);
-    res.newSelStart = this._elementRef.nativeElement.selectionStart;
-    res.newSelLength = this._elementRef.nativeElement.selectionEnd - res.newSelStart;
+    let res = new MaskResult(this._txtValue, Action.APPLY, 0);
+    res.selStart = this._elementRef.nativeElement.selectionStart;
+    res.selLength = this._elementRef.nativeElement.selectionEnd - res.selStart;
     return res;
   }
 
   // Получить текущее значение маски и положение курсора
   protected getRes(s: string, selStart: number, selEnd: number): MaskResult {
-    let res = new MaskResult(s, MaskSectionAction.APPLY, 0);
-    res.newSelStart = selStart;
-    res.newSelLength = selEnd - selStart;
+    let res = new MaskResult(s, Action.APPLY, 0);
+    res.selStart = selStart;
+    res.selLength = selEnd - selStart;
     return res;
   }
 

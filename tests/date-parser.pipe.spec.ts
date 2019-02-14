@@ -33,7 +33,7 @@ describe(`Parse datetime by Mask (mask=dd mmm yyyy, value=12 dec 2018)`, () => {
   let intl = new InternationalizationService();
 
   let dateString = "12 dec 2018";
-  
+
   let parser = new DateParserPipe(intl);
   let pattern = "dd mmm yyyy";
   let res = parser.transform(dateString, pattern); // MaskDate.parseDate(mask.sections, dateString);
@@ -41,6 +41,22 @@ describe(`Parse datetime by Mask (mask=dd mmm yyyy, value=12 dec 2018)`, () => {
   it(`Month = 11`, () => expect(res.getMonth()).toBe(11));
   it(`Day = 12`, () => expect(res.getDate()).toBe(12));
   it(`Year = 2018`, () => expect(res.getFullYear()).toBe(2018));
+});
+
+
+describe(`Parse incomplete datetime (mask=mm/dd/yyyy, value=12/12/19__)`, () => {
+
+  let intl = new InternationalizationService();
+
+  let dateString = "12/12/19__";
+
+  let parser = new DateParserPipe(intl);
+  let pattern = "mm/dd/yyyy";
+  let res = parser.transform(dateString, pattern); // MaskDate.parseDate(mask.sections, dateString);
+
+  it(`Month = 12`, () => expect(res.getMonth()).toBe(11));
+  it(`Day = 12`, () => expect(res.getDate()).toBe(12));
+  it(`Year = 2019`, () => expect(res.getFullYear()).toBe(2019));
 });
 
 describe(`Parse not matched date (mask=MM/dd/yy h:mi tt, value=01/05/19 1:30)`, () => {

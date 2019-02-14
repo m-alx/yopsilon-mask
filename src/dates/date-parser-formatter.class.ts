@@ -42,13 +42,14 @@ export class DateParserFormatter {
 
     for(let i = 0; i < mask.sections.length; i++) {
 
+      let incomplete = false;
       let section: MaskSection = mask.sections[i];
       let datePart = section.sectionType.datePart;
 
       if(datePart == null) // Not datetime component
         continue;
 
-      let v = section.extractSection(res, sectionPos);
+      let v = section.extract(res, sectionPos);
       sectionPos = v.nextSectionPos();
 
       // Get section value
@@ -59,14 +60,16 @@ export class DateParserFormatter {
 
       if(section.isNumeric()) {
 
-        if(s.indexOf(mask.settings.placeholder) >= 0) // Contains placeholders
-          return DateParserFormatter.invalidDate();
-
-        n = section.numericValue(s);
+        n = section.numericValue(section.removePlaceholders(s));
 
         if(n < section.sectionType.min || n > section.sectionType.max)
           return DateParserFormatter.invalidDate();
 
+        if(s.indexOf(mask.settings.placeholder) >= 0) { // Contains placeholders
+          incomplete = true;
+          if(n >= 100)  // Разрешаем только даты корректировать
+            return DateParserFormatter.invalidDate();
+        }
       }
       else
         if(section.hasOptions()) {
@@ -76,7 +79,7 @@ export class DateParserFormatter {
           n++; // Index starts from 0
         }
 
-      if(n == NaN)
+      if(isNaN(n))
         return DateParserFormatter.invalidDate();
 
       // Time components...
@@ -111,8 +114,13 @@ export class DateParserFormatter {
       if(datePart == "yy")
         y = n < 30 ? 2000 + n : 1900 + n;
 
-      if(datePart == "yyyy")
-        y = n;
+      if(datePart == "yyyy") {
+        if(n < 100 && incomplete)
+          y = n < 30 ? 2000 + n : 1900 + n;
+        else
+          y = n;
+      }
+
     }
 
     if(tt.toLowerCase() == "pm")
@@ -186,7 +194,7 @@ export class DateParserFormatter {
       if(section.hasOptions())
         s = section.sectionType.options[n - 1];
       else
-        s = section.autoCorrectValue(n + "");
+        s = section.autoCorrectVal(n + "");
 
       res += s + section.delimiter;
     }

@@ -20,7 +20,7 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
 
     let section = new MaskSection(intl, settings, "mm", ".", sType);
 
-    maskValue = section.extractSection("13.12.2018", 3, 4, 0);
+    maskValue = section.extract("13.12.2018", 3, 4, 0);
   }));
 
   it(`beforeValue should be equal "13."`, () => expect(maskValue.before).toBe("13."));
@@ -47,7 +47,7 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
   }));
 
   it(`Новое значение маски должно быть 12/3`, () => expect(res.newValue).toBe("12/3"));
-  it(`Новая позиция курсора должна быть 4`, () => expect(res.newSelStart).toBe(4));
+  it(`Новая позиция курсора должна быть 4`, () => expect(res.selStart).toBe(4));
 });
 
 describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
@@ -66,7 +66,7 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
   }));
 
   it(`Новое значение маски должно быть 01/`, () => expect(res.newValue).toBe("01/"));
-  it(`Новая позиция курсора должна быть 3`, () => expect(res.newSelStart).toBe(3));
+  it(`Новая позиция курсора должна быть 3`, () => expect(res.selStart).toBe(3));
 });
 
 describe(`Автоматическое заполнение секции первым вариантом: `, () => {
@@ -100,7 +100,7 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3
   }));
 
   it(`Новое значение маски должно быть 13 dec`, () => expect(res.newValue).toBe("13 dec"));
-  it(`Новая позиция курсора должна быть 4`, () => expect(res.newSelStart).toBe(4));
+  it(`Новая позиция курсора должна быть 4`, () => expect(res.selStart).toBe(4));
 });
 
 describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selStart=10 : `, () => {
@@ -115,5 +115,5 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selS
   }));
 
   it(`Новое значение маски должно быть 13 dec 197`, () => expect(res.newValue).toBe("13 dec 197"));
-  it(`Новая позиция курсора должна быть 10`, () => expect(res.newSelStart).toBe(10));
+  it(`Новая позиция курсора должна быть 10`, () => expect(res.selStart).toBe(10));
 });

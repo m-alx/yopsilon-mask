@@ -10,7 +10,7 @@ import { Locale } from "../internationalization/locale.class";
 
 import { MaskSectionValue } from "./mask-section-value.class";
 import { MaskSectionType } from "./mask-section-type.class";
-import { MaskSection, MaskResult, MaskSectionAction } from "./mask-section.class";
+import { MaskSection, MaskResult, Action } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
 
 // @dynamic
@@ -157,7 +157,7 @@ export class Mask {
     let sectionPos = 0;
     let res = "";
     this.sections.forEach(section => {
-      let v = section.extractSection(value, sectionPos);
+      let v = section.extract(value, sectionPos);
       res += section.removePlaceholders(v.section.value());
       sectionPos = v.nextSectionPos();
     });
@@ -286,7 +286,7 @@ export class Mask {
     let i = 0;
     while(i < this.sections.length) {
       let section = this.sections[i];
-      let v = section.extractSection(value, sectionStart);
+      let v = section.extract(value, sectionStart);
 
       while(v.section.length < section.length)
         v.section.append(this.settings.placeholder);
@@ -316,14 +316,14 @@ export class Mask {
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
-      let v = section.extractSection(res, sectionPos);
+      let v = section.extract(res, sectionPos);
 
       if(v.delimiter != section.delimiter)
         return false;
 
       let s = v.section.value();
 
-      let s_autocorrected = section.autoCorrectValue(s);
+      let s_autocorrected = section.autoCorrectVal(s);
 
       if(s != s_autocorrected) {
         if(section.isNumeric())
@@ -359,37 +359,30 @@ export class Mask {
   public applyMask(value: string, autoCorrect: boolean = true): string  {
 
     // Содержит разделители. Не будем считать корректным значением
-    if(value.indexOf(this.settings.placeholder) >= 0)
-      return "";
+    //if(value.indexOf(this.settings.placeholder) >= 0)
+      //return "";
 
     let sectionPos = 0;
     let res = value;
     for(let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
-      let v = section.extractSection(res, sectionPos);
+      let v = section.extract(res, sectionPos);
       if(v.section.value() == "" && v.delimiter == "" && v.after == "")
         break;
+
+      if(section.sectionType.datePart == null && v.section.value().indexOf(this.settings.placeholder) >= 0)
+          return "";
 
       v.delimiter = section.delimiter;
       let sv = section.removePlaceholders(v.section.value());
       if(autoCorrect)
-        sv = section.autoCorrectValue(sv);
-
+        sv = section.autoCorrectVal(sv);
       res = v.update(sv, 0);
       sectionPos = v.nextSectionPos();
     }
 
     res = res.substring(0, sectionPos);
     return res;
-  }
-
-  // Применение клавиши к численному значению
-  public applyKeyForNumeric(value: string, key: string, selStart: number, selEnd: number = 0) {
-    // Перевод не нужен, просто пытаюсь сообразить...
-    // Для числового значения мы просто вставляем символ в нужное место..
-    // И форматируем по маске от десятичного разделителя, если он есть.
-
-    // Если превышено максимальное
   }
 
   // Применяем заданный символ к заданному значению в заданном месте
@@ -420,7 +413,7 @@ export class Mask {
                                                        i == this.sections.length - 1);
 
       // Нельзя ничего применить
-      if(res.action == MaskSectionAction.NONE)
+      if(res.action == Action.NONE)
        return null;
 
       // Добавляем еще раз плэйсхолдеры
@@ -428,43 +421,43 @@ export class Mask {
         res.newValue = this.appendPlaceholders(res.newValue);
 
       // Готово!
-      if(res.action == MaskSectionAction.APPLY)
+      if(res.action == Action.APPLY)
         return res;
 
       // Идем в конец предыдущей секции
       // И применяем Delete
-      if(res.action == MaskSectionAction.GO_BACK_AND_DELETE && prev_section != null) {
+      if(res.action == Action.GO_BACK_AND_DELETE && prev_section != null) {
         res = prev_section.selectLast(res.newValue, prev_sectionStart, true);
-        res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.newSelStart, res.newSelLength);
+        res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.selStart, res.selLength);
         return res;
       }
 
       // Идем в конец предыдущей секции
       // И тоже применяем Delete
-      if(res.action == MaskSectionAction.GO_BACK_AND_BACKSPACE && prev_section != null) {
+      if(res.action == Action.GO_BACK_AND_BACKSPACE && prev_section != null) {
         res = prev_section.selectLast(res.newValue, prev_sectionStart);
-        res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.newSelStart, res.newSelLength);
+        res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.selStart, res.selLength);
         return res;
       }
 
       // Идем в конец предыдущей секции
-      if(res.action == MaskSectionAction.GO_BACK && prev_section != null)
+      if(res.action == Action.GO_BACK && prev_section != null)
         return prev_section.selectLast(res.newValue, prev_sectionStart);
 
       // Идем в начало следующей секции
-      if(res.action == MaskSectionAction.GO_FWD) {
+      if(res.action == Action.GO_FWD) {
         if(i < this.sections.length - 1) {
           let next_section = this.sections[i + 1];
           let valueWithDefaultVariant = next_section.setDefaultVariant(res.newValue, res.nextSectionPos);
           return next_section.selectFirst(valueWithDefaultVariant, res.nextSectionPos);
         } else {
           // Секция последняя. Скорректируем значение.
-          return section.autoCorrect(res.newValue, sectionStart, res.newSelStart, res.newSelLength);
+          return section.autoCorrect(res.newValue, sectionStart, res.selStart, res.selLength);
         }
       }
 
       // К этой секции ничего не применилось. Переходим к следующей секции..
-      if(res.action == MaskSectionAction.SKIP) {
+      if(res.action == Action.SKIP) {
 
         // Запомним положение текущей секции и саму секцию для возврата по BACKSPACE
         // и стрелке влево
@@ -485,7 +478,7 @@ export class Mask {
         // Даже если мы передали управление следующей секции, значение может
         // измениться - могут быть добавлены разделители или скорректированы значения
         value = res.newValue;
-        selStart = res.newSelStart;
+        selStart = res.selStart;
         sectionStart = res.nextSectionPos;
 
         continue;

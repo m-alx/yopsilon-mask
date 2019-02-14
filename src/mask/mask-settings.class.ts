@@ -18,7 +18,7 @@ export class MaskSettings {
   public allowIncomplete: boolean = false;
 
   // ArrowUp and ArrowDown keys change values to previous and next
-  public incrementDecrementValueByArrows: boolean = true;
+  public incDecByArrows: boolean = true;
 
   // If set to true, moving to an icnomplete section with predefined set of values,
   // first value of the set will be entered automatically
