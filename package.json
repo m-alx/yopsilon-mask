@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular 2/5 input masking directive",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "scripts": {
     "test": "karma start",
     "clean": "rimraf dist",

@@ -8,7 +8,7 @@ import { NumberFormat } from "./number-format.class";
 
 export class NumberParserFormatter {
 
-  // Разделяем на префикс, число, постфикс
+  // Split string to prefix, number and postfix
   public static unclotheNumber(txt: string, fmt: NumberFormat): any {
 
     if(fmt == null)
@@ -38,7 +38,7 @@ export class NumberParserFormatter {
     }
   }
 
-  // Разделяем число на составляющие
+  // Split number to parts
   public static splitNumber(txt: string, separators: Array<string>): any {
 
     let sgn = "";
@@ -74,16 +74,21 @@ export class NumberParserFormatter {
     };
   }
 
+  // Round number to given number of decimals
   public static roundTo(v: number, decimals: number): number {
     return Math.round(v * Math.pow(10, decimals)) * Math.pow(10, -decimals);
   }
 
-  public static format(value: number, format: string, separators: Array<string>): string {
+  // Format number with given format and separators
+  public static format(value: number, format: string | NumberFormat, separators: Array<string>): string {
 
-    let fmt: NumberFormat = NumberFormat.parseFormat(format);
-
-    if(fmt == null)
-      throw new Error("Invalid format");
+    let fmt: NumberFormat;
+    if (format && typeof format == "string") {
+      fmt = NumberFormat.parseFormat(format);
+      if(fmt == null)
+        throw new Error("Invalid format");
+    } else
+      fmt = <NumberFormat>format;
 
     if(fmt.specifier.toLowerCase() == "e") {
       // Exponential

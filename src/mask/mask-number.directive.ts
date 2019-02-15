@@ -146,15 +146,13 @@ export class MaskNumberDirective {
         this.processAndroid(txt);
         return;
       }
-
       // Поэтому пытаемся применить формат к введенному значению.
       let value = NumberParserFormatter.parse(txt, this.format, this._separators);
       if(value == null)
         this.setText("");
       else
-        if(!isNaN(value)) {
+        if(!isNaN(value))
           this.setText(NumberParserFormatter.format(value, this.format, this._separators), true);
-      }
   }
 
   // Formatter: Ctrl --> View
@@ -194,10 +192,8 @@ export class MaskNumberDirective {
   }
 
   public get format(): string {
-
     if(this._format == "currency")
       return this.intl.locale.currency;
-
     return this._format;
   }
 
@@ -322,7 +318,7 @@ export class MaskNumberDirective {
         let fragmentToDelete = s.substring(selStart, selEnd);
 
         if(canAccept) {
-          if(fragmentToDelete.indexOf(this._separators[0])>=0)
+          if(fragmentToDelete.indexOf(this._separators[0]) >= 0)
             s = s.substring(0, selStart) + this._separators[0] + s.substring(selEnd);
           else
             s = s.substring(0, selStart) + s.substring(selEnd);
