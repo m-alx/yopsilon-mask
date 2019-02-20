@@ -154,17 +154,20 @@ export abstract class MaskBaseDirective {
 
         // If ArrowLeft key has been pressed, result should equal to pressing of Home
         if(key == "ArrowLeft") {
+          /*
           selStart = 0;
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', selStart);
-          return false;
+          return false; */
+          return true;
         }
 
-        if(key == "ArrowRight") {
+        if(key == "ArrowRight") { /*
           selStart = this._txtValue.length;
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
           this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', selStart);
-          return false;
+          return false; */
+          return true;
         }
       }
 

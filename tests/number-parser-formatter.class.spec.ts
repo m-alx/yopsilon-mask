@@ -51,7 +51,7 @@ describe(`Parse empty string`, () => {
 describe(`Format ` + testStr1, () => {
   let v = 123456789.1;
   let s: string = NumberParserFormatter.format(v, "{1.3-4}", ['.',',']);
-  it(v + ` with {1.2-4} = ` + testStr3, () => expect(s).toBe("123,456,789.100"));
+  it(v + ` with {1.3-4} = ` + testStr3, () => expect(s).toBe("123,456,789.100"));
 });
 
 describe(`Format ` + testStr1, () => {
@@ -64,6 +64,12 @@ describe(`Format ` + testStr1, () => {
   let v = -123456789.245;
   let s: string = NumberParserFormatter.format(v, "{1.2}", ['.',',']);
   it(v + ` with {1.2} = "-123,456,789.25"`, () => expect(s).toBe("-123,456,789.25"));
+});
+
+describe(`Format 0`, () => {
+  let v = 0;
+  let s: string = NumberParserFormatter.format(v, "{1.3-4}", ['.',',']);
+  it(v + ` with {1.3-4} = 0.000`, () => expect(s).toBe("0.000"));
 });
 
 describe(`Reformat ` + testStr1, () => {
