@@ -7,8 +7,8 @@ export class NumberFormat {
 
   signum: boolean;          // Обязательно нужен знак (даже +)
 
-  integerMin  : number = 1;
-  integerMax  : number = 16;
+  intMin  : number = 1;
+  intMax  : number = 16;
 
   fractionMin : number = 2;
   fractionMax : number = 2;
@@ -45,14 +45,14 @@ export class NumberFormat {
 
         let isDigit = NumberFormat.isDigit(char);
 
-        if(!isDigit && "EDFedf+-. ".indexOf(char) < 0)
+        if(!isDigit && "EDFNedfn+-. ".indexOf(char) < 0)
           return null;
 
         if(pos == 0 && "+-".indexOf(char) >= 0)
           res.signum = true;
 
         // Задается спецификатор
-        if(part == "spec"  && "EDFedf".indexOf(char) >= 0) {
+        if(part == "spec"  && "EDFNedfn".indexOf(char) >= 0) {
             res.specifier = char.toUpperCase();
             part = "int";
             continue;
@@ -84,10 +84,10 @@ export class NumberFormat {
       }
 
       if(digits.int != "")
-        res.integerMin = +digits.int;
+        res.intMin = +digits.int;
 
       if(digits.intMax != "")
-        res.integerMax = +digits.intMax;
+        res.intMax = +digits.intMax;
 
       if(digits.fMin != "")
         res.fractionMin = +digits.fMin;

@@ -171,7 +171,7 @@ export class MaskNumberDirective {
     this.updateState();
   }
 
-  private _separators: Array<string> = [",", " "];
+  private _separators: Array<string> = [".", ","];
   private _format: string = "{1.2}";
 
   @Input("yn-mask-number")
@@ -182,8 +182,11 @@ export class MaskNumberDirective {
       let res = this.currentRes();
       this._format = f;
 
-      let state = NumberParserFormatter.reformat(this._txtValue, this.format, this._separators,
-        res.selStart, res.selStart + res.selLength, true);
+      let state = NumberParserFormatter.reformat(this._txtValue,
+        this.format, this._separators,
+        res.selStart, res.selStart + res.selLength,
+        true // Convert to format
+      );
 
       this.setRes(this.getRes(state.value, state.selStart, state.selEnd));
 

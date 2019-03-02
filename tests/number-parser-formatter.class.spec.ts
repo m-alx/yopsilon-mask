@@ -50,19 +50,19 @@ describe(`Parse empty string`, () => {
 
 describe(`Format ` + testStr1, () => {
   let v = 123456789.1;
-  let s: string = NumberParserFormatter.format(v, "{1.3-4}", ['.',',']);
+  let s: string = NumberParserFormatter.format(v, "{N1.3-4}", ['.',',']);
   it(v + ` with {1.3-4} = ` + testStr3, () => expect(s).toBe("123,456,789.100"));
 });
 
 describe(`Format ` + testStr1, () => {
   let v = 123456789.245;
-  let s: string = NumberParserFormatter.format(v, "{+1.2}", ['.',',']);
+  let s: string = NumberParserFormatter.format(v, "{+N1.2}", ['.',',']);
   it(v + ` with {1.2} = "123,456,789.25"`, () => expect(s).toBe("+123,456,789.25"));
 });
 
 describe(`Format ` + testStr1, () => {
   let v = -123456789.245;
-  let s: string = NumberParserFormatter.format(v, "{1.2}", ['.',',']);
+  let s: string = NumberParserFormatter.format(v, "{N1.2}", ['.',',']);
   it(v + ` with {1.2} = "-123,456,789.25"`, () => expect(s).toBe("-123,456,789.25"));
 });
 
@@ -72,8 +72,33 @@ describe(`Format 0`, () => {
   it(v + ` with {1.3-4} = 0.000`, () => expect(s).toBe("0.000"));
 });
 
+describe(`Format int value`, () => {
+  let v = 123;
+  let s: string = NumberParserFormatter.format(v, "{1.0-4}", ['.',',']);
+  it(v + ` with {1.0-4} = 0`, () => expect(s).toBe("123"));
+});
+
 describe(`Reformat ` + testStr1, () => {
   let s = "-123456789.25";
-  let state: any = NumberParserFormatter.reformat(s, "{1.2}", ['.',','], 0, 0);
-  it(s + ` with {1.2} = "-123,456,789.25"`, () => expect(state.value).toBe("-123,456,789.25"));
+  let state: any = NumberParserFormatter.reformat(s, "{n1.2}", ['.',','], 0, 0);
+  it(s + ` with {n1.2} = "-123,456,789.25"`, () => expect(state.value).toBe("-123,456,789.25"));
+});
+
+describe(`Reformat ` + testStr1, () => {
+  let s = "-123456789.25";
+  let state: any = NumberParserFormatter.reformat(s, "{n1.2}", ['.',','], 0, 0);
+  it(s + ` with {n1.2} = "1,123,123,123,123.25"`, () => expect(state.value).toBe("-123,456,789.25"));
+});
+
+describe(`Reformat after backspace: ` + testStr1, () => {
+  let s = "1,312,312,311,231,23.00";
+  let state: any = NumberParserFormatter.reformat(s, "{n1.2}", ['.',','], 20, 0);
+  it(s + ` = "131,231,231,123,123.00"`, () => expect(state.value).toBe("131,231,231,123,123.00"));
+  it("Cursor position = ", () => expect(state.selStart).toBe(19));
+});
+
+describe(`Reformat after decimal point insert `, () => {
+  let s = "123,12.3,123";
+  let state: any = NumberParserFormatter.reformat(s, "{n1.2-4}", ['.',','], 0, 0);
+  it(s + ` with {n1.2-4} = "12,312.3123"`, () => expect(state.value).toBe("12,312.3123"));
 });
