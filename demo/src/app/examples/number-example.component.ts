@@ -23,7 +23,7 @@ import * as YN from "yopsilon-mask";
 })
 export class NumberExampleComponent {
 
-  format: string = "{1-6.2}";
+  format: string = "{N1-6.2}";
 
   numValue: number = null;
   state: string;

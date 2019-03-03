@@ -33,7 +33,7 @@ export class LocaleRu {
       dateTimeHMSFormat: "dd.mm.yyyy HH:mi:ss",
 
       separators: [",", " "],
-      currency: "{1-12.2} ₽",
+      currency: "{N1-12.2} ₽",
 
       translates: {}
     };
