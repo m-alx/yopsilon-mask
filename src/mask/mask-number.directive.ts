@@ -3,19 +3,19 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Directive, ElementRef, Input, Output, HostListener, EventEmitter, Renderer2, forwardRef } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Directive, ElementRef, Input, Output, HostListener, EventEmitter, Renderer2, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { InternationalizationService } from "../internationalization/internationalization.service";
-import { Locale } from "../internationalization/locale.class";
+import { InternationalizationService } from '../internationalization/internationalization.service';
+import { Locale } from '../internationalization/locale.class';
 
-import { Keys } from "../keys/keys.class";
+import { Keys, KeyInfo } from '../keys/keys.class';
 
-import { MaskState } from "./mask-state.class";
-import { MaskSettings } from "./mask-settings.class";
-import { Action, MaskResult } from "./mask-section.class";
+import { MaskState } from './mask-state.class';
+import { MaskSettings } from './mask-settings.class';
+import { Action, MaskResult } from './mask-section.class';
 
-import { NumberParserFormatter } from "../numbers/number-parser-formatter.class";
+import { NumberParserFormatter } from '../numbers/number-parser-formatter.class';
 
 @Directive({
     selector: '[yn-mask-number]',
@@ -38,7 +38,7 @@ export class MaskNumberDirective {
     // Очищаем, если формат неверен
     let value = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
     if(value == null || isNaN(value))
-      this.setText("");
+      this.setText('');
     else
       this.setText(NumberParserFormatter.format(value, this.format, this._separators));
 
@@ -52,10 +52,10 @@ export class MaskNumberDirective {
   private _numValue: number = null;
 
   // Текущее текстовое значение
-  protected _txtValue: string = "";
+  protected _txtValue: string = '';
 
   // Смена состояния
-  @Output("ynStateChange")
+  @Output('ynStateChange')
   stateChange = new EventEmitter<MaskState>();
 
   // Состояние директивы
@@ -87,7 +87,7 @@ export class MaskNumberDirective {
   // Sending a value to model
   protected toModel() {
     // Retrieving value
-    if(this._txtValue == "")
+    if(this._txtValue == '')
       this._numValue = null;
     else
       this._numValue = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
@@ -103,19 +103,19 @@ export class MaskNumberDirective {
     let res = this.currentRes();
 
     // Теоретически положение курсора у нас есть..
-    let key: string = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
+    let key: KeyInfo = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
         this.last_res.selStart, res.selStart, this.last_res.selLength);
 
     let selStart = this.last_res.selStart;
     let selEnd = this.last_res.selStart;
 
     // Если текст вдруг стёрся
-    if(this.last_res.newValue != "" && txt.length <= 1) {
+    if(this.last_res.newValue != '' && txt.length <= 1) {
 
-      if(txt == "")
-        key = "Delete";
+      if(txt == '')
+        key = new KeyInfo(Keys.DELETE);
       else
-        key = txt;
+        key = new KeyInfo(0, txt);
 
       selStart = 0;
       selEnd = this.last_res.newValue.length;
@@ -124,7 +124,8 @@ export class MaskNumberDirective {
     let r = this.processKey(
       {
         keyCode: -1,
-        key: key,
+        key: key.code,
+        char: key.char,
         shiftKey: false,
         ctrlKey: false,
         target: { selectionStart: selStart, selectionEnd: selEnd },
@@ -149,7 +150,7 @@ export class MaskNumberDirective {
       // Поэтому пытаемся применить формат к введенному значению.
       let value = NumberParserFormatter.parse(txt, this.format, this._separators);
       if(value == null)
-        this.setText("");
+        this.setText('');
       else
         if(!isNaN(value))
           this.setText(NumberParserFormatter.format(value, this.format, this._separators), true);
@@ -159,7 +160,7 @@ export class MaskNumberDirective {
   writeValue(value: any) {
 
     this._numValue = value;
-    let txt = "";
+    let txt = '';
     if(value != null)
       txt = NumberParserFormatter.format(value, this.format, this._separators);
 
@@ -171,13 +172,13 @@ export class MaskNumberDirective {
     this.updateState();
   }
 
-  private _separators: Array<string> = [".", ","];
-  private _format: string = "{1.2}";
+  private _separators: Array<string> = ['.', ','];
+  private _format: string = '{1.2}';
 
-  @Input("yn-mask-number")
+  @Input('yn-mask-number')
   public set format(f: string) {
 
-    if(this._txtValue != "" && this._format != f) {
+    if(this._txtValue != '' && this._format != f) {
       // По сложному пути
       let res = this.currentRes();
       this._format = f;
@@ -195,7 +196,7 @@ export class MaskNumberDirective {
   }
 
   public get format(): string {
-    if(this._format == "currency")
+    if(this._format == 'currency')
       return this.intl.locale.currency;
     return this._format;
   }
@@ -203,14 +204,13 @@ export class MaskNumberDirective {
   android_behavior: boolean = false;
   last_res: MaskResult;
 
-  @HostListener("keydown", ["$event"])
+  @HostListener('keydown', ['$event'])
   keyDown(e: any) {
     return this.processKey(e);
   }
 
-
   private isDigit(char: string): boolean {
-    if("0123456789".indexOf(char) >= 0)
+    if('0123456789'.indexOf(char) >= 0)
       return true;
 
     return false;
@@ -230,9 +230,6 @@ export class MaskNumberDirective {
     if(c == undefined)
       c = e.key;
 
-    let key: string = Keys.keyName(e.keyCode, c);
-    let keyCode: string = Keys.keyCode(e.keyCode);
-
     let selStart: number = e.target.selectionStart;
     let selEnd: number = e.target.selectionEnd;
     let s: string = this._txtValue;
@@ -240,26 +237,30 @@ export class MaskNumberDirective {
     let state0: any = this.getRes(s, selStart, selEnd);
 
 
-    if(Keys.isFunctional(e.keyCode))
-      return true;
-
-    if(key == "Tab")
-      return true;
-
-    if(key == "Alt")
-      return true;
-
-    if(key == "Home" || key == "End")
-      return true;
-
-    if(e.ctrlKey && (keyCode == "KeyA" || keyCode == "KeyX" || keyCode == "KeyC" || keyCode == "KeyV" || key == "Insert"))
-      return true;
-
-    if(e.shiftKey && (key == "Delete" || key == "Insert")) {
+    if (Keys.isFunctional(e.keyCode)) {
       return true;
     }
 
-    if(e.ctrlKey && keyCode == "KeyZ") {
+    if (e.keyCode == Keys.TAB) {
+      return true;
+    }
+
+    if (e.keyCode == Keys.HOME || e.keyCode == Keys.END) {
+      return true;
+    }
+
+    if (e.ctrlKey && (e.keyCode == Keys.A || e.keyCode == Keys.X ||
+                     e.keyCode == Keys.C || e.keyCode == Keys.V ||
+                     e.keyCode == Keys.INSERT)) {
+      return true;
+    }
+
+    if (e.shiftKey && (e.keyCode == Keys.DELETE || e.keyCode == Keys.INSERT)) {
+      return true;
+    }
+
+
+    if(e.ctrlKey && e.keyCode == Keys.Z) {
       // UNDO
       let undoRes = this._undo.pop();
       if(undoRes) {
@@ -270,7 +271,7 @@ export class MaskNumberDirective {
       return false;
     }
 
-    if(e.ctrlKey && keyCode == "KeyY") {
+    if(e.ctrlKey && e.keyCode == Keys.Y) {
       // REDO
       let redoRes = this._redo.pop();
       if(redoRes) {
@@ -282,21 +283,21 @@ export class MaskNumberDirective {
     }
 
     if(selStart == 0 && selEnd == this._txtValue.length) {
-      s = "";
+      s = '';
       selStart = 0;
       selEnd = 0;
     }
 
-    let leadToFormat = false; //true;
+    let leadToFormat = false;
     let applied = false;
 
-    if(key == "Backspace" || key == "Delete") {
+    if(e.keyCode === Keys.BACKSPACE || e.keyCode === Keys.DELETE) {
 
-      let canAccept = NumberParserFormatter.canAcceptKey(s, key, this.format, this._separators, selStart, selEnd);
+      let canAccept = NumberParserFormatter.canAcceptKey(s, e.keyCode, c, this.format, this._separators, selStart, selEnd);
 
       if(selStart == selEnd) {
         // Ничего не выделено
-        if(key == "Backspace" && selStart > 0) {
+        if(e.keyCode === Keys.BACKSPACE && selStart > 0) {
           if(canAccept)
             s = s.substring(0, selStart - 1) + s.substring(selEnd);
 
@@ -304,7 +305,7 @@ export class MaskNumberDirective {
           selEnd--;
         }
 
-        if(key == "Delete") {
+        if(e.keyCode == Keys.DELETE) {
           if(canAccept)
             s = s.substring(0, selStart) + s.substring(selEnd + 1);
           else {
@@ -332,13 +333,13 @@ export class MaskNumberDirective {
       }
     }
 
-    if(key.length == 1) {
+    if(c.length == 1) {
 
       s = s.substring(0, selStart) + s.substring(selEnd);
 
-      if(NumberParserFormatter.canAcceptKey(s, key, this.format, this._separators, selStart)) {
+      if(NumberParserFormatter.canAcceptKey(s, e.keyCode, c, this.format, this._separators, selStart)) {
 
-        s = s.substring(0, selStart) + key + s.substring(selStart);
+        s = s.substring(0, selStart) + c + s.substring(selStart);
         selStart++;
         selEnd = selStart;
         applied = true;

@@ -7,6 +7,7 @@ import { MaskSection } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
 import { MaskSettings } from "../src/mask/mask-settings.class";
 import { Mask } from "../src/mask/mask.class";
+import { Keys } from '../src/keys/keys.class';
 import { async } from '@angular/core/testing';
 
 describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () => {
@@ -43,7 +44,7 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
 
     mask.pattern = "mm/dd/yyyy";
     let section = mask.sections[1];
-    res = section.applyKey('12/', '3', 3, 3, 0);
+    res = section.applyKey('12/', 0, '3', 3, 3, 0);
   }));
 
   it(`Новое значение маски должно быть 12/3`, () => expect(res.newValue).toBe("12/3"));
@@ -62,7 +63,7 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
     let mask = new Mask(intl);
     mask.pattern = "mm/dd/yyyy";
     let section = mask.sections[1];
-    res = section.applyKey('1', '/', 0, 1, 0, true);
+    res = section.applyKey('1', 0, '/', 0, 1, 0, true);
   }));
 
   it(`Новое значение маски должно быть 01/`, () => expect(res.newValue).toBe("01/"));
@@ -96,7 +97,7 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3
     let mask = new Mask(intl);
     mask.pattern = "dd mmm yyyy";
     let section = mask.sections[1];
-    res = section.applyKey('13 ', 'd', 3, 3, 0);
+    res = section.applyKey('13 ', 0, 'd', 3, 3, 0);
   }));
 
   it(`Новое значение маски должно быть 13 dec`, () => expect(res.newValue).toBe("13 dec"));
@@ -111,7 +112,7 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selS
     let mask = new Mask(intl);
     mask.pattern = "dd mmm yyyy";
     let section = mask.sections[2];
-    res = section.applyKey('13 dec 1979', 'Delete', 7, 10, 0);
+    res = section.applyKey('13 dec 1979', Keys.DELETE, '', 7, 10, 0);
   }));
 
   it(`Новое значение маски должно быть 13 dec 197`, () => expect(res.newValue).toBe("13 dec 197"));

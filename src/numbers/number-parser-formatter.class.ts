@@ -5,6 +5,7 @@
 
 import { InternationalizationService } from "../internationalization/internationalization.service";
 import { NumberFormat } from "./number-format.class";
+import { Keys } from "../keys/keys.class";
 
 export class NumberParserFormatter {
 
@@ -149,7 +150,7 @@ export class NumberParserFormatter {
     return resValue;
   }
 
-  public static canAcceptKey(txt: string, char: string, format: string, separators: Array<string>,
+  public static canAcceptKey(txt: string, keyCode: number, char: string, format: string, separators: Array<string>,
     selStart: number, selEnd: number = -1,
     convertToFormat: boolean = false): boolean {
 
@@ -168,7 +169,7 @@ export class NumberParserFormatter {
 
     let eStart = fractionStart + number.fraction.length;
 
-    if(char == "Delete") {
+    if(keyCode === Keys.DELETE) {
       // Нельзя удалить десятичный разделитель
       if(convertToFormat && selStart == selEnd && selStart == fractionStart - 1)
         return false;
@@ -176,7 +177,7 @@ export class NumberParserFormatter {
       return true;
     }
 
-    if(char == "Backspace") {
+    if(keyCode === Keys.BACKSPACE) {
 
       // Запрет применения, если последний ноль забирается...
       if(convertToFormat && number.int == "0"

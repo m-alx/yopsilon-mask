@@ -2,110 +2,80 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-// Different browsers have different key names,
-// But it's more convenient to use an alias. So we're mapping codes to
-// Names similar to those in Google Chrome
+export class KeyInfo {
+  constructor(public code: number, public char: string = '') { }
+}
 
 export class Keys {
 
-  private static keys: Array<string> = new Array(255);
-  private static keyCodes: Array<string> = new Array(255);
+  public static BACKSPACE = 8;
+  public static TAB = 9;
+  public static ENTER = 13;
 
-  public static keyName(keyCode: number, keyName: string): string {
-    //
-    if(keyCode>255 || keyCode < 0)
-      return keyName;
+  public static ESCAPE = 27;
 
-    var res: string = this.keys[keyCode];
-    if(res == null)
-      res = keyName;
+  public static SPACE = 32;
 
-    return res;
-  }
+  public static PAGE_UP = 33;
+  public static PAGE_DOWN = 34;
 
-  public static keyCode(keyCode: number) {
-    //
-    if(keyCode>255 || keyCode < 0)
-      return "";
+  public static END = 35;
+  public static HOME = 36;
 
-    var res: string = this.keyCodes[keyCode];
-    if(res == null)
-      res = "";
+  public static LEFT = 37;
+  public static UP = 38;
+  public static RIGHT = 39;
+  public static DOWN = 40;
 
-    return res;
-  }
+  public static INSERT = 45;
+  public static DELETE = 46;
+
+  public static A = 65;
+  public static C = 67;
+  public static V = 86;
+  public static X = 88;
+  public static Y = 89;
+  public static Z = 90;
 
   public static isFunctional(keyCode: number): boolean {
     return keyCode >= 112 && keyCode <= 123;
   }
 
-  public static ar: string = "ArrowRight";
-  public static al: string = "ArrowLeft";
-  public static bs: string = "Backspace";
-  public static del: string = "Delete";
-
-  public static initialize(): void {
-    // Not every key is required as of this moment
-    this.keys[8] = Keys.bs;
-    this.keys[9] = "Tab";
-
-    this.keys[13] = "Enter";
-
-    this.keys[35] = "End";
-    this.keys[36] = "Home";
-
-    this.keys[37] = Keys.al;
-    this.keys[39] = Keys.ar;
-    this.keys[38] = "ArrowUp";
-    this.keys[40] = "ArrowDown";
-
-    this.keys[45] = "Insert";
-    this.keys[46] = Keys.del;
-
-    this.keyCodes[65] = "KeyA";
-    this.keyCodes[67] = "KeyC";
-    this.keyCodes[86] = "KeyV";
-    this.keyCodes[88] = "KeyX";
-    this.keyCodes[89] = "KeyY";
-    this.keyCodes[90] = "KeyZ";
-  }
-
+  // For Android
   public static whichKeyHasBeenPressed(txt1: string, txt2: string,
     selStart1: number, selStart2: number,
-    selLength: number): string {
+    selLength: number): KeyInfo {
 
     if(txt1 == txt2 && selStart1 == selStart2 - 1)
-      return Keys.ar;
+      return new KeyInfo(Keys.RIGHT);
 
     if(txt1 == txt2 && selStart1 == selStart2 + 1)
-      return Keys.al;
+      return new KeyInfo(Keys.LEFT);
 
     if(selLength == 1) {
       //
       if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
         if(txt1.substring(selStart2 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
-          return Keys.bs;
+          return new KeyInfo(Keys.BACKSPACE);
 
       if(txt1.substring(0, selStart2) == txt2.substring(0, selStart2) )
         if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart2, txt2.length))
           if(selStart1 == selStart2 + 1)
-            return Keys.bs;
+            return new KeyInfo(Keys.BACKSPACE);
 
-      return txt2.substring(selStart1, selStart1 + 1);
+      return new KeyInfo(0, txt2.substring(selStart1, selStart1 + 1));
     }
 
     // Tes|t -> Te|t
     if(txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1) )
       if(txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length))
-        return Keys.bs;
+        return new KeyInfo(Keys.BACKSPACE);
 
     // Te|st -> Te|t
     if(txt1.substring(0, selStart1) == txt2.substring(0, selStart1) )
       if(txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length))
-        return Keys.del;
+        return new KeyInfo(Keys.DELETE);
 
-    return txt2.substring(selStart1, selStart1 + 1);
+    return new KeyInfo(0, txt2.substring(selStart1, selStart1 + 1));
   }
 }
-
-Keys.initialize();

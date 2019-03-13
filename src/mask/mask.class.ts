@@ -5,13 +5,14 @@
 
 import { Injectable } from '@angular/core';
 
-import { InternationalizationService } from "../internationalization/internationalization.service";
-import { Locale } from "../internationalization/locale.class";
+import { InternationalizationService } from '../internationalization/internationalization.service';
+import { Locale } from '../internationalization/locale.class';
 
-import { MaskSectionValue } from "./mask-section-value.class";
-import { MaskSectionType } from "./mask-section-type.class";
-import { MaskSection, MaskResult, Action } from "./mask-section.class";
-import { MaskSettings } from "./mask-settings.class";
+import { MaskSectionValue } from './mask-section-value.class';
+import { MaskSectionType } from './mask-section-type.class';
+import { MaskSection, MaskResult, Action } from './mask-section.class';
+import { MaskSettings } from './mask-settings.class';
+import { Keys } from '../keys/keys.class';
 
 // @dynamic
 export class Mask {
@@ -26,53 +27,53 @@ export class Mask {
   }
 
   // Settings by default
-  public static readonly defaultSettings: MaskSettings = new MaskSettings("_");
+  public static readonly defaultSettings: MaskSettings = new MaskSettings('_');
 
   public get settings() {
     return this._settings == null ? Mask.defaultSettings : this._settings;
   }
 
   // Sections with section chars
-  private readonly singles: string = "*aAnN#0";
+  private readonly singles: string = '*aAnN#0';
 
   // Delimiters
-  public static readonly delimiterChars: string[] = [" ", ".", ",", "(", ")", "/", "|", "-", ":", "+", "'"];
+  public static readonly delimiterChars: string = ` .,()/|-:+ '`;
 
   // Predefined section types
   public static readonly sectionTypes: MaskSectionType[] = [
 
     // Time components
-    { selectors: ["HH"], numeric: true, min: 0, max: 23, datePart: "H" },
-    { selectors: ["h"], numeric: true, min: 1, max: 12, datePart: "h" },
-    { selectors: ["hh"], numeric: true, min: 1, max: 12, datePart: "h" },
-    { selectors: ["mi", "MI"], numeric: true, min: 0, max: 59, datePart: "mi" },
-    { selectors: ["ss", "SS"], numeric: true, min: 0, max: 59, datePart: "ss" },
-    { selectors: ["TT", "AM", "PM"], numeric: false, options: ["AM", "PM"], datePart: "tt" },
-    { selectors: ["tt", "am", "pm"], numeric: false, options: ["am", "pm"], datePart: "tt" },
-    { selectors: ["fff"], numeric: true, datePart: "ms" }, // Milliseconds
+    { selectors: ['HH'], numeric: true, min: 0, max: 23, datePart: 'H' },
+    { selectors: ['h'], numeric: true, min: 1, max: 12, datePart: 'h' },
+    { selectors: ['hh'], numeric: true, min: 1, max: 12, datePart: 'h' },
+    { selectors: ['mi', 'MI'], numeric: true, min: 0, max: 59, datePart: 'mi' },
+    { selectors: ['ss', 'SS'], numeric: true, min: 0, max: 59, datePart: 'ss' },
+    { selectors: ['TT', 'AM', 'PM'], numeric: false, options: ['AM', 'PM'], datePart: 'tt' },
+    { selectors: ['tt', 'am', 'pm'], numeric: false, options: ['am', 'pm'], datePart: 'tt' },
+    { selectors: ['fff'], numeric: true, datePart: 'ms' }, // Milliseconds
 
     // Date components
-    { selectors: ["dd", "DD"], numeric: true, min: 1, max: 31, datePart: "d" },
-    { selectors: ["mm", "MM"], numeric: true, min: 1, max: 12, datePart: "m" },
-    { selectors: ["mmm"], numeric: false, datePart: "m" },
-    { selectors: ["MMM"], numeric: false, datePart: "m" },
-    { selectors: ["yy", "YY"], numeric: true, min: 0, max: 99, datePart: "yy" },
-    { selectors: ["yyyy", "YYYY"], numeric: true, min: 0, max: 9999, datePart: "yyyy" },
+    { selectors: ['dd', 'DD'], numeric: true, min: 1, max: 31, datePart: 'd' },
+    { selectors: ['mm', 'MM'], numeric: true, min: 1, max: 12, datePart: 'm' },
+    { selectors: ['mmm'], numeric: false, datePart: 'm' },
+    { selectors: ['MMM'], numeric: false, datePart: 'm' },
+    { selectors: ['yy', 'YY'], numeric: true, min: 0, max: 99, datePart: 'yy' },
+    { selectors: ['yyyy', 'YYYY'], numeric: true, min: 0, max: 9999, datePart: 'yyyy' },
 
     // Byte (from 0 to 255) - for ip-address or network mask
-    { selectors: ["b"], numeric: true, min: 0, max: 255 },
+    { selectors: ['b'], numeric: true, min: 0, max: 255 },
 
     // Plus/minus
-    { selectors: ["~"], numeric: false, regExp: /[-+]/ },
+    { selectors: ['~'], numeric: false, regExp: /[-+]/ },
 
     // Letter or digit
-    { selectors: ["*"], numeric: false, regExp: /[\d\w]/ },
+    { selectors: ['*'], numeric: false, regExp: /[\d\w]/ },
 
     // Letters
-    { selectors: ["l", "L"], numeric: false, regExp: /\w/ },
+    { selectors: ['l', 'L'], numeric: false, regExp: /\w/ },
 
     // Digits
-    { selectors: ["n", "N"], numeric: false, regExp: /\d/ },
+    { selectors: ['n', 'N'], numeric: false, regExp: /\d/ },
   ];
 
   // The list of sections
@@ -94,7 +95,7 @@ export class Mask {
 
     //  First, look in the settings // Сначала в настройках
     let res: MaskSectionType = this.settings.sectionTypes.find(i => (i.selectors.find(sel => sel == s) != null));
-    if(res != null)
+    if (res != null)
       return res;
 
     // Then, in predefined section types // Затем среди предустановленных
@@ -106,7 +107,7 @@ export class Mask {
 
     // Сначала поищем в опциях
     let res: MaskSectionType = this.settings.sectionTypes.find(i => (i.selectors.find(sel => sel[0] == char) != null));
-    if(res != null)
+    if (res != null)
       return res;
 
     // Затем, среди стандартных
@@ -115,23 +116,23 @@ export class Mask {
 
   // Добавляет в список секций пустую секцию, имеющую разделитель
   private addEmptySection(delimiter: string) {
-    this.sections.push(new MaskSection(this.intl, this.settings, "", delimiter));
+    this.sections.push(new MaskSection(this.intl, this.settings, '', delimiter));
   }
 
   // Добавление секции в список
   private addSection(section: string, delimiter: string) {
     let sType = this.selectSectionType(section);
 
-    if(!sType) {
+    if (!sType) {
       // Если секция не распознана - считаем это фиксированным текстом
       // и для каждого символа создаем пустую секцию с разделителем - этим
       // символом. Тогда маска будет принимать только их и переходить к
       // следующей секции
-      for(let i = 0; i < section.length; i++)
+      for (let i = 0; i < section.length; i++)
         this.addEmptySection(section[i]);
 
       // Про разделители тоже нужно не забыть
-      for(let i = 0; i < delimiter.length; i++)
+      for (let i = 0; i < delimiter.length; i++)
         this.addEmptySection(delimiter[i]);
 
       return;
@@ -151,11 +152,11 @@ export class Mask {
   // Годится только для шаблонов, в котором все секции имеют фиксированную длину
   pureValue(value: string): string {
 
-    if(value == null)
+    if (value == null)
       return value;
 
     let sectionPos = 0;
-    let res = "";
+    let res = '';
     this.sections.forEach(section => {
       let v = section.extract(value, sectionPos);
       res += section.removePlaceholders(v.section.value());
@@ -168,22 +169,22 @@ export class Mask {
   // Применяем чистое значение к шаблону и возвращаем форматированное значение
   applyPureValue(value: string): string {
     //
-    if(value == null)
+    if (value == null)
       return value;
 
     let sectionPos = 0;
-    let res = "";
+    let res = '';
     let i = 0;
     this.sections.forEach(section => {
       let l = section.section.length;
       let s = value.substring(i, i + l);
       res += s;
       i += l;
-      if(value.length >= i)
+      if (value.length >= i)
         res += section.delimiter;
     });
 
-    if(this.settings.appendPlaceholders)
+    if (this.settings.appendPlaceholders)
       res = this.appendPlaceholders(res);
 
     return res;
@@ -199,29 +200,29 @@ export class Mask {
     // Выбор формата на по локализации
     switch(this._pattern) {
 
-      case "date": {
+      case 'date': {
         s = this.intl.locale.dateFormat;
         break;
       }
 
-      case "time":
-      case "timeHM": {
+      case 'time':
+      case 'timeHM': {
         s = this.intl.locale.timeHMFormat;
         break;
       }
 
-      case "timeHMS": {
+      case 'timeHMS': {
         s = this.intl.locale.timeHMSFormat;
         break;
       }
 
-      case "dateTime":
-      case "dateTimeHM": {
+      case 'dateTime':
+      case 'dateTimeHM': {
         s = this.intl.locale.dateTimeHMFormat;
         break;
       }
 
-      case "dateTimeHMS": {
+      case 'dateTimeHMS': {
         s = this.intl.locale.dateTimeHMSFormat;
         break;
       }
@@ -229,42 +230,42 @@ export class Mask {
       default: s = this._pattern;
     }
 
-    if(!s || s.length==0)
+    if (!s || s.length==0)
       return;
 
-    let delimiter: string = "";
+    let delimiter: string = '';
 
     let i = 0;
     while( i < s.length) {
 
       let c = s[i];
       let sType = null;
-      let part = "";
+      let part = '';
 
-      if(this.singles.indexOf(c) >= 0) {
+      if (this.singles.indexOf(c) >= 0) {
         part = c;
         sType = this.selectSectionType(c);
       }
       else
-        for(let j = s.length; j >= i; j--) {
+        for (let j = s.length; j >= i; j--) {
           part = s.substring(i, j);
           sType = this.selectSectionType(part);
-          if(sType)
+          if (sType)
             break;
         }
 
-      if(sType) {
+      if (sType) {
         // Нужно добить разделителем
         i += part.length;
-        let del = "";
-        while(Mask.delimiterChars.find(del => del == s[i])) {
+        let del = '';
+        while(Mask.delimiterChars.indexOf(s[i]) >= 0) {
           del += s[i];
           i++;
         }
 
-        if(del == "") // Не найден разделитель
+        if (del == '') // Не найден разделитель
         {
-          if(i < s.length && this.selectSectionTypeByFirstChar(s[i]) == null) { // Если на текущий символ не найдется секции..
+          if (i < s.length && this.selectSectionTypeByFirstChar(s[i]) == null) { // Если на текущий символ не найдется секции..
             del = s[i];                               // ..то это тоже разделитель
             i++;
           }
@@ -274,7 +275,7 @@ export class Mask {
         continue;
       }
 
-      this.addSection("", c);
+      this.addSection('', c);
       i++;
     }
   }
@@ -305,47 +306,47 @@ export class Mask {
   // Пустая строка будет означать инвалидность
   public checkMask(value: string): boolean  {
 
-    if(value == null)
+    if (value == null)
       return false;
 
     // Содержит разделители. Не будем считать корректным значением
-    if(value.indexOf(this.settings.placeholder) >= 0)
+    if (value.indexOf(this.settings.placeholder) >= 0)
       return false;
 
     let sectionPos = 0;
     let res = value;
-    for(let i = 0; i < this.sections.length; i++) {
+    for (let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
       let v = section.extract(res, sectionPos);
 
-      if(v.delimiter != section.delimiter)
+      if (v.delimiter != section.delimiter)
         return false;
 
       let s = v.section.value();
 
       let s_autocorrected = section.autoCorrectVal(s);
 
-      if(s != s_autocorrected) {
-        if(section.isNumeric())
+      if (s != s_autocorrected) {
+        if (section.isNumeric())
         {
           let n = section.numericValue(s_autocorrected);
-          if(isNaN(n))
+          if (isNaN(n))
             return false;
 
-          if((n + "").trim().length < section.length)
+          if ((n + '').trim().length < section.length)
             return false;
 
         } else
           return false;
       }
 
-      if(s.length > section.maxLength)
+      if (s.length > section.maxLength)
         return false;
 
-      if(s.length < section.length)
+      if (s.length < section.length)
         return false;
 
-      if(i == this.sections.length - 1 && v.after != "")
+      if (i == this.sections.length - 1 && v.after != '')
         return false;
 
       sectionPos = v.nextSectionPos();
@@ -358,24 +359,25 @@ export class Mask {
   // Пустая строка будет означать инвалидность
   public applyMask(value: string, autoCorrect: boolean = true): string  {
 
-    // Содержит разделители. Не будем считать корректным значением
-    //if(value.indexOf(this.settings.placeholder) >= 0)
-      //return "";
-
     let sectionPos = 0;
     let res = value;
-    for(let i = 0; i < this.sections.length; i++) {
+    for (let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
       let v = section.extract(res, sectionPos);
-      if(v.section.value() == "" && v.delimiter == "" && v.after == "")
+      if (v.section.value() == '' && v.delimiter == '' && v.after == '') {
         break;
+      }
 
-      if(section.sectionType.datePart == null && v.section.value().indexOf(this.settings.placeholder) >= 0)
-          return "";
+      //if(section.sectionType == null)
+        //continue;
+
+      //if (section.sectionType != null && section.sectionType.datePart == null && v.section.value().indexOf(this.settings.placeholder) >= 0) {
+        //return '';
+      //}
 
       v.delimiter = section.delimiter;
       let sv = section.removePlaceholders(v.section.value());
-      if(autoCorrect)
+      if (autoCorrect)
         sv = section.autoCorrectVal(sv);
       res = v.update(sv, 0);
       sectionPos = v.nextSectionPos();
@@ -386,7 +388,7 @@ export class Mask {
   }
 
   // Применяем заданный символ к заданному значению в заданном месте
-  public applyKeyAtPos(value: string, key: string, selStart: number, selEnd: number = 0): any {
+  public applyKeyAtPos(value: string, key: number, char: string, selStart: number, selEnd: number = 0): any {
 
     let selLength = selEnd - selStart;
 
@@ -398,55 +400,56 @@ export class Mask {
 
     // Добавляем плэйсхолдеры перед обработкой. Чтобы обработчик мог их учитывать
     // при расчете следующей позиции курсора
-    if(this.settings.appendPlaceholders)
+    if (this.settings.appendPlaceholders)
       value = this.appendPlaceholders(value);
 
-    for(let i = 0; i < this.sections.length; i++) {
+    for (let i = 0; i < this.sections.length; i++) {
 
       section = this.sections[i];
 
       // Обработка пользовательского действия
-      let res: MaskResult = section.applyKey(value, key, sectionStart,
+      let res: MaskResult = section.applyKey(value, key, char,
+                                                       sectionStart,
                                                        selStart,
                                                        selLength,
                                                        acceptDelimiterChars,
                                                        i == this.sections.length - 1);
 
       // Нельзя ничего применить
-      if(res.action == Action.NONE)
+      if (res.action == Action.NONE)
        return null;
 
       // Добавляем еще раз плэйсхолдеры
-      if(this.settings.appendPlaceholders)
+      if (this.settings.appendPlaceholders)
         res.newValue = this.appendPlaceholders(res.newValue);
 
       // Готово!
-      if(res.action == Action.APPLY)
+      if (res.action == Action.APPLY)
         return res;
 
       // Идем в конец предыдущей секции
       // И применяем Delete
-      if(res.action == Action.GO_BACK_AND_DELETE && prev_section != null) {
+      if (res.action == Action.GO_BACK_AND_DELETE && prev_section != null) {
         res = prev_section.selectLast(res.newValue, prev_sectionStart, true);
-        res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.selStart, res.selLength);
+        res = prev_section.applyKey(res.newValue, Keys.DELETE, '', prev_sectionStart, res.selStart, res.selLength);
         return res;
       }
 
       // Идем в конец предыдущей секции
       // И тоже применяем Delete
-      if(res.action == Action.GO_BACK_AND_BACKSPACE && prev_section != null) {
+      if (res.action == Action.GO_BACK_AND_BACKSPACE && prev_section != null) {
         res = prev_section.selectLast(res.newValue, prev_sectionStart);
-        res = prev_section.applyKey(res.newValue, "Delete", prev_sectionStart, res.selStart, res.selLength);
+        res = prev_section.applyKey(res.newValue, Keys.DELETE, '', prev_sectionStart, res.selStart, res.selLength);
         return res;
       }
 
       // Идем в конец предыдущей секции
-      if(res.action == Action.GO_BACK && prev_section != null)
+      if (res.action == Action.GO_BACK && prev_section != null)
         return prev_section.selectLast(res.newValue, prev_sectionStart);
 
       // Идем в начало следующей секции
-      if(res.action == Action.GO_FWD) {
-        if(i < this.sections.length - 1) {
+      if (res.action == Action.GO_FWD) {
+        if (i < this.sections.length - 1) {
           let next_section = this.sections[i + 1];
           let valueWithDefaultVariant = next_section.setDefaultVariant(res.newValue, res.nextSectionPos);
           return next_section.selectFirst(valueWithDefaultVariant, res.nextSectionPos);
@@ -457,11 +460,11 @@ export class Mask {
       }
 
       // К этой секции ничего не применилось. Переходим к следующей секции..
-      if(res.action == Action.SKIP) {
+      if (res.action == Action.SKIP) {
 
         // Запомним положение текущей секции и саму секцию для возврата по BACKSPACE
         // и стрелке влево
-        if(section != null && section.section != "") {
+        if (section != null && section.section != '') {
           // Это условие для того, чтобы нельзя было вернуться на секции
           // без значащих символов
           prev_section = section;
@@ -472,7 +475,7 @@ export class Mask {
         // мы его отвергли в одной из предыдущей секций
         // Пример - +7 921 911 11 11 - в начале строки жмем 7, но + его не принял
         // Тогда это будет значащий символ уже
-        if(section.section == "" && /*value != res.newValue &&*/ selStart < res.nextSectionPos)
+        if (section.section == '' && /*value != res.newValue &&*/ selStart < res.nextSectionPos)
           acceptDelimiterChars = false;
 
         // Даже если мы передали управление следующей секции, значение может
@@ -485,7 +488,7 @@ export class Mask {
       }
 
       // Значение кончилось...
-      if(sectionStart > value.length)
+      if (sectionStart > value.length)
         return null;
     }
 
@@ -494,8 +497,8 @@ export class Mask {
 
   private setLocale(locale: Locale) {
     // Устанавливаем короткие названия месяцев
-    this.selectSectionType("mmm").options = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
-    this.selectSectionType("MMM").options = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
+    this.selectSectionType('mmm').options = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
+    this.selectSectionType('MMM').options = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
   }
 
   constructor(protected intl: InternationalizationService) {

@@ -6,7 +6,7 @@
 import { Output, Directive, ElementRef, Renderer2, EventEmitter } from "@angular/core";
 import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Mask } from "./mask.class";
-import { Keys } from "../keys/keys.class";
+import { Keys, KeyInfo } from "../keys/keys.class";
 import { Action, MaskResult } from "./mask-section.class";
 import { MaskSettings } from "./mask-settings.class";
 import { MaskState } from "./mask-state.class";
@@ -47,13 +47,14 @@ export abstract class MaskBaseDirective {
       let res = this.currentRes();
 
       // Possibly we have carriage position
-      let key: string = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
+      let key: KeyInfo = Keys.whichKeyHasBeenPressed(this.last_res.newValue, txt,
           this.last_res.selStart, res.selStart, this.last_res.selLength);
 
       let r = this.processKey(
         {
           keyCode: -1,
-          key: key,
+          key: key.code,
+          char: key.char,
           shiftKey: false,
           ctrlKey: false,
           target: { selectionStart: this.last_res.selStart, selectionEnd: 0 },
@@ -63,7 +64,6 @@ export abstract class MaskBaseDirective {
       if(!r)
         this.setRes(this.last_res); // Reversing, value has not been accepted
 
-      // Just to be safe
       this.android_behavior = false;
       return;
     }
@@ -96,9 +96,6 @@ export abstract class MaskBaseDirective {
       if(c == undefined)
         c = e.key;
 
-      let key: string = Keys.keyName(e.keyCode, c);
-      let keyCode: string = Keys.keyCode(e.keyCode);
-
       let selStart: number = e.target.selectionStart;
       let selEnd: number = e.target.selectionEnd;
       let s = this._txtValue;
@@ -106,25 +103,29 @@ export abstract class MaskBaseDirective {
       if(Keys.isFunctional(e.keyCode))
         return true;
 
-      if(key == "Tab")
+      if (e.keyCode == Keys.TAB) {
         return true;
+      }
 
-      if(key == "Alt")
+      if (e.keyCode == Keys.HOME || e.keyCode == Keys.END) {
         return true;
+      }
 
-      if(key == "Home" || key == "End")
+      if (e.ctrlKey && (e.keyCode == Keys.A || e.keyCode == Keys.X ||
+                       e.keyCode == Keys.C || e.keyCode == Keys.V ||
+                       e.keyCode == Keys.INSERT)) {
         return true;
+      }
 
-      if(e.ctrlKey && (keyCode == "KeyA" || keyCode == "KeyX" || keyCode == "KeyC" || keyCode == "KeyV" || key == "Insert"))
+      if (e.shiftKey && (e.keyCode == Keys.DELETE || e.keyCode == Keys.INSERT)) {
         return true;
+      }
 
-      if(e.shiftKey && (key == "Delete" || key == "Insert"))
+      if(e.altKey && (e.keyCode == Keys.DOWN || e.keyCode == Keys.UP)) {
         return true;
+      }
 
-      if(e.altKey && (key == "ArrowDown" || key == "ArrowUp"))
-        return true;
-
-      if(e.ctrlKey && keyCode == "KeyZ") {
+      if(e.ctrlKey && e.keyCode == Keys.Z) {
         // UNDO
         let undoRes = this._undo.pop();
         if(undoRes) {
@@ -135,7 +136,7 @@ export abstract class MaskBaseDirective {
         return false;
       }
 
-      if(e.ctrlKey && keyCode == "KeyY") {
+      if(e.ctrlKey && e.keyCode == Keys.Y) {
         // REDO
         let redoRes = this._redo.pop();
         if(redoRes) {
@@ -147,40 +148,31 @@ export abstract class MaskBaseDirective {
       }
 
       // If everything is selected
-      if(selStart == 0 && selEnd == this._txtValue.length)
+      if(selStart === 0 && selEnd === this._txtValue.length)
       {
-        if(key == "Delete" || key == "Backspace")
+        if(e.keyCode === Keys.DELETE || e.keyCode === Keys.BACKSPACE)
           return true;
 
         // If ArrowLeft key has been pressed, result should equal to pressing of Home
-        if(key == "ArrowLeft") {
-          /*
-          selStart = 0;
-          this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
-          this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', selStart);
-          return false; */
+        if(e.keyCode === Keys.LEFT) {
           return true;
         }
 
-        if(key == "ArrowRight") { /*
-          selStart = this._txtValue.length;
-          this._renderer.setProperty(this._elementRef.nativeElement, 'selectionStart', selStart);
-          this._renderer.setProperty(this._elementRef.nativeElement, 'selectionEnd', selStart);
-          return false; */
+        if(e.keyCode === Keys.RIGHT) {
           return true;
         }
       }
 
-      if(selStart == 0 && selEnd == this._txtValue.length) {
+      if(selStart === 0 && selEnd === this._txtValue.length) {
         s = "";
         selStart = 0;
         selEnd = 0;
       }
 
       // Applying everything that's left
-      let res: MaskResult = this._mask.applyKeyAtPos(s, key, selStart, selEnd);
+      let res: MaskResult = this._mask.applyKeyAtPos(s, e.keyCode, c, selStart, selEnd);
 
-      if(res != null && res.action == Action.APPLY) {
+      if(res != null && res.action === Action.APPLY) {
 
         // If value has been changed we'll add it to UNDO stack
         if(res.newValue != s) {
