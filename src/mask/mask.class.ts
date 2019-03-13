@@ -368,12 +368,11 @@ export class Mask {
         break;
       }
 
-      //if(section.sectionType == null)
-        //continue;
-
-      //if (section.sectionType != null && section.sectionType.datePart == null && v.section.value().indexOf(this.settings.placeholder) >= 0) {
-        //return '';
-      //}
+      if (section.sectionType != null && section.sectionType.datePart == null &&
+          v.section.value().indexOf(this.settings.placeholder) >= 0) {
+        // Остатки плейсхолдеров допустимы только в частях даты
+        return '';
+      }
 
       v.delimiter = section.delimiter;
       let sv = section.removePlaceholders(v.section.value());

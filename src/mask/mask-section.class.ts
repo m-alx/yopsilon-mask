@@ -201,7 +201,7 @@ export class MaskSection {
         n = this.sectionType.min == undefined ? 0 : this.sectionType.min;
       }
 
-      if (this.sectionType.datePart == 'yyyy' && sv.length === 2) {
+      if (this.sectionType.datePart == 'yyyy' && s.length === 2) {
         // Исправляем только если два знака есть..
         if (n < 30)
           n += 2000;
