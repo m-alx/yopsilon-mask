@@ -24,11 +24,11 @@ npm install yopsilon-mask --save
 Import `YopsilonMaskModule` in the NgModule of your application.
 
 ```ts
-import {BrowserModule} from "@angular/platform-browser";
-import {NgModule} from "@angular/core";
-import {FormsModule} from "@angular/forms";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import {YopsilonMaskModule} from "yopsilon-mask";
+import { YopsilonMaskModule } from 'yopsilon-mask';
 
 @NgModule({
     imports: [
@@ -47,11 +47,11 @@ export class AppModule {
 For binding to Text values use [yn-mask] directive:
 
 ```ts
-import {Component} from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-    selector: "app-root",
-    template: `<input yn-mask="+7 NNNN NNNN-NN-NN" placeholder="+7 ХХХ ХХХ-ХХ-ХХ" type="text" [(ngModel)]="txtValue" />`
+    selector: 'app-root',
+    template: `<input yn-mask="+1 NNNN NNNN-NN-NN" placeholder="+1 ХХХ ХХХ-ХХ-ХХ" type="text" [(ngModel)]="txtValue" />`
 })
 export class AppComponent {
     txtValue: string = '';
@@ -61,10 +61,10 @@ export class AppComponent {
 For binding to Date values use [yn-mask-date] directive:
 
 ```ts
-import {Component} from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-    selector: "app-root",
+    selector: 'app-root',
     template: `<input yn-mask-date="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" [(ngModel)]="dateValue" />`
 })
 export class AppComponent {
@@ -75,10 +75,10 @@ export class AppComponent {
 For binding to Number values use [yn-mask-number] directive:
 
 ```ts
-import {Component} from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-    selector: "app-root",
+    selector: 'app-root',
     template: `<input yn-mask-number="{1.2}" type="text" [(ngModel)]="numValue" />`
 })
 export class AppComponent {
@@ -114,40 +114,40 @@ Mask class includes predefined section types set:
 
 ```ts
 // Predefined section types.
-public static readonly sectionTypes: Array<MaskSectionType> = [
+public static readonly sectionTypes: MaskSectionType[] = [
 
 // Time components
-{ selectors: ["HH"], numeric: true, min: 0, max: 23, datePart: "H" },
-{ selectors: ["h"], numeric: true, min: 1, max: 12, datePart: "h" },
-{ selectors: ["hh"], numeric: true, min: 1, max: 12, datePart: "h" },
-{ selectors: ["mi", "MI"], numeric: true, min: 0, max: 59, datePart: "mi" },
-{ selectors: ["ss", "SS"], numeric: true, min: 0, max: 59, datePart: "ss" },
-{ selectors: ["TT", "AM", "PM"], numeric: false, options: ["AM", "PM"], datePart: "tt" },
-{ selectors: ["tt", "am", "pm"], numeric: false, options: ["am", "pm"], datePart: "tt" },
-{ selectors: ["fff"], numeric: true, datePart: "ms" }, // Milliseconds
+{ selectors: ['HH'], numeric: true, min: 0, max: 23, datePart: 'H' },
+{ selectors: ['h'], numeric: true, min: 1, max: 12, datePart: 'h' },
+{ selectors: ['hh'], numeric: true, min: 1, max: 12, datePart: 'h' },
+{ selectors: ['mi', 'MI'], numeric: true, min: 0, max: 59, datePart: 'mi' },
+{ selectors: ['ss', 'SS'], numeric: true, min: 0, max: 59, datePart: 'ss' },
+{ selectors: ['TT', 'AM', 'PM'], numeric: false, options: ['AM', 'PM'], datePart: 'tt' },
+{ selectors: ['tt', 'am', 'pm'], numeric: false, options: ['am', 'pm'], datePart: 'tt' },
+{ selectors: ['fff'], numeric: true, datePart: 'ms' }, // Milliseconds
 
 // Date components
-{ selectors: ["dd", "DD"], numeric: true, min: 1, max: 31, datePart: "d" },
-{ selectors: ["mm", "MM"], numeric: true, min: 1, max: 12, datePart: "m" },
-{ selectors: ["mmm"], numeric: false, datePart: "m" },
-{ selectors: ["MMM"], numeric: false, datePart: "m" },
-{ selectors: ["yy", "YY"], numeric: true, min: 0, max: 99, datePart: "yy" },
-{ selectors: ["yyyy", "YYYY"], numeric: true, min: 0, max: 9999, datePart: "yyyy" },
+{ selectors: ['dd', 'DD'], numeric: true, min: 1, max: 31, datePart: 'd' },
+{ selectors: ['mm', 'MM'], numeric: true, min: 1, max: 12, datePart: 'm' },
+{ selectors: ['mmm'], numeric: false, datePart: 'm' },
+{ selectors: ['MMM'], numeric: false, datePart: 'm' },
+{ selectors: ['yy', 'YY'], numeric: true, min: 0, max: 99, datePart: 'yy' },
+{ selectors: ['yyyy', 'YYYY'], numeric: true, min: 0, max: 9999, datePart: 'yyyy' },
 
 // Byte (from 0 to 255) - for ip-address or network mask
-{ selectors: ["b"], numeric: true, min: 0, max: 255 },
+{ selectors: ['b'], numeric: true, min: 0, max: 255 },
 
 // Plus/minus
-{ selectors: ["~"], numeric: false, regExp: /[-+]/ },
+{ selectors: ['~'], numeric: false, regExp: /[-+]/ },
 
 // Letter or digit
-{ selectors: ["*"], numeric: false, regExp: /[\d\w]/ },
+{ selectors: ['*'], numeric: false, regExp: /[\d\w]/ },
 
 // Letters
-{ selectors: ["l", "L"], numeric: false, regExp: /\w/ },
+{ selectors: ['l', 'L'], numeric: false, regExp: /\w/ },
 
 // Digits
-{ selectors: ["n", "N"], numeric: false, regExp: /\d/ }
+{ selectors: ['n', 'N'], numeric: false, regExp: /\d/ }
 
 ];
 ```
@@ -163,7 +163,7 @@ MaskSettings class contains attributes which determine directive's behaviour upo
   - sectionTypes: Array<MaskSectionType> - list of your own custom section types.
 
 *placeholder* property value should not be set to a symbol which is a member of delimiters list (e.g. space) due to unability to tell delimiter from empty section.
-*whiteSpace* ("\u2000") could be used instead of space. Moreover, static property `Mask.delimiterChar` can be overridden, if there is no necessity to use that char as a delimiter.
+*whiteSpace* ('\u2000') could be used instead of space. Moreover, static property `Mask.delimiterChar` can be overridden, if there is no necessity to use that char as a delimiter.
 
 #### 4. Custom section types
 
@@ -174,11 +174,11 @@ More suitable option is to add section type to `MaskSettings` class instance whi
 As an example, let's define a section type, accepting only case-insensitive charset ABCEGHJKLMNPRSTVXY:
 
 ```ts
-settings: YN.MaskSettings = new YN.MaskSettings("_");
+settings: YN.MaskSettings = new YN.MaskSettings('_');
 
 constructor() {    
   this.settings.sectionTypes.push(
-    { selectors: ["A"], regExp: /[ABCEGHJKLMNPRSTVXY]/i },
+    { selectors: ['A'], regExp: /[ABCEGHJKLMNPRSTVXY]/i },
   );
 }
 ```
@@ -186,7 +186,7 @@ constructor() {
 And use it for canadian postal code with settings:
 
 ```html
-<input yn-mask="ANA NAN" [yn-mask-settings]="settings" />
+<input yn-mask='ANA NAN' [yn-mask-settings]='settings' />
 ```
 
 #### 5. Sections with variable length
@@ -206,14 +206,14 @@ Section length can vary from minumum to maximum length of elements list contains
 Example:
 
 ```ts
-settings: YN.MaskSettings = new YN.MaskSettings("_");
+settings: YN.MaskSettings = new YN.MaskSettings('_');
 
 constructor() {    
   this.settings.sectionTypes.push(
-    { selectors: ["mmmm"],
-      options: ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November",
-                "December"] },
+    { selectors: ['mmmm'],
+      options: ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November',
+                'December'] },
   );
 }
 ```
@@ -221,7 +221,7 @@ constructor() {
 Using it to choose month:
 
 ```html
-<input yn-mask="mmmm" [yn-mask-settings]="settings" />
+<input yn-mask='mmmm' [yn-mask-settings]='settings' />
 ```
 
 #### 7. Events
@@ -235,11 +235,11 @@ Possible values:
 Example:
 
 ```ts
-import { Component, Input } from "@angular/core";
-import * as YN from "yopsilon-mask";
+import { Component, Input } from '@angular/core';
+import * as YN from 'yopsilon-mask';
 
 @Component({
-  selector: "date-example",
+  selector: 'date-example',
   template:
     `<input yn-mask-date="date" (ynStateChange)="stateChange($event)" [(ngModel)]="dateValue" />
     <div class="state-indicator">{{state}}</div>
@@ -264,11 +264,11 @@ Service `InternationalizationService` contains available locales in `locales` ar
 
 `MaskDateDirective` subscribes to a `InternationalizationService.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
 
-  - Locale.dateFormat in case of "date";
-  - Locale.timeHMFormat in case of "time" and "timeHM";
-  - Locale.timeHMSFormat in case of "timeHMS";
-  - Locale.dateTimeHMFormat in case of "dateTime" and "dateTimeHM";
-  - Locale.dateTimeHMSFormat in case of "dateTimeHMS";
+  - Locale.dateFormat in case of 'date';
+  - Locale.timeHMFormat in case of 'time' and 'timeHM';
+  - Locale.timeHMSFormat in case of 'timeHMS';
+  - Locale.dateTimeHMFormat in case of 'dateTime' and 'dateTimeHM';
+  - Locale.dateTimeHMSFormat in case of 'dateTimeHMS';
 
 Instances of class `Mask` subscribe to `InternationalizationService.onLocaleChange` event to fetch localized months names for sections of *mmm* type.
 
@@ -277,8 +277,8 @@ You can add a custom locale via creating an instance of *Locale* class and setti
 Example:
 
 ```ts
-import { Component } from "@angular/core";
-import * as YN from "yopsilon-mask";
+import { Component } from '@angular/core';
+import * as YN from 'yopsilon-mask';
 
 @Component({
   selector: 'app-root',
@@ -291,30 +291,30 @@ export class AppComponent {
   ) {
 
     let locale: YN.Locale = {
-      name: "Portuguese",
-      shortName: "pt-PT",
-      shortMonthNames: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul",
-                        "Ago", "Set", "Out", "Nov", "Dez"],
+      name: 'Portuguese',
+      shortName: 'pt-PT',
+      shortMonthNames: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul',
+                        'Ago', 'Set', 'Out', 'Nov', 'Dez'],
 
-      longMonthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                       "Julho", "Agosto", "Setembro", "Outubro", "Novembro",
-                       "Dezembro"],
+      longMonthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro',
+                       'Dezembro'],
 
-      shortDayNames:  ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+      shortDayNames:  ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
 
-      longDayNames:   ["Domingo", "Segunda", "Terça", "Quarta",
-                       "Quinta", "Sexta", "Sábado"],
+      longDayNames:   ['Domingo', 'Segunda', 'Terça', 'Quarta',
+                       'Quinta', 'Sexta', 'Sábado'],
 
       firstDayOfWeek: 1,
 
-      dateFormat: "dd-mm-yyyy",
-      timeHMFormat: "HH:mi",
-      timeHMSFormat: "HH:mi:ss",
-      dateTimeHMFormat: "dd-mm-yyyy HH:mi",
-      dateTimeHMSFormat: "dd-mm-yyyy HH:mi:ss",
+      dateFormat: 'dd-mm-yyyy',
+      timeHMFormat: 'HH:mi',
+      timeHMSFormat: 'HH:mi:ss',
+      dateTimeHMFormat: 'dd-mm-yyyy HH:mi',
+      dateTimeHMSFormat: 'dd-mm-yyyy HH:mi:ss',
 
-      separators: [",", "."],
-      currency: "{1-12.2} €"
+      separators: [',', '.'],
+      currency: '{1-12.2} €'
     };
 
     this.intl.setCurrentLocale(locale);
