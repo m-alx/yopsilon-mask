@@ -102,6 +102,8 @@ export class MaskSection {
   }
 
   public checkMinMax(n: number): number {
+    if (n === null)
+      return null;
 
     if (!this.sectionType)
       return n;
@@ -190,23 +192,24 @@ export class MaskSection {
     }
 
     let res = s;
-    let n: number = this.numericValue(res);
 
     if (this.isNumeric()) {
 
       let n = this.numericValue(res);
-
       // Numeric value is expected
-      if (isNaN(n)) {
-        n = this.sectionType.min == undefined ? 0 : this.sectionType.min;
+      if (isNaN(n) || s === '') {
+        return s; // Bad or empty value
       }
 
-      if (this.sectionType.datePart == 'yyyy' && s.length === 2) {
-        // Исправляем только если два знака есть..
-        if (n < 30)
-          n += 2000;
-        else
-          n += 1900;
+      // Year
+      if (this.sectionType.datePart === 'yyyy') {
+        if (s.length === 2) {
+          n += n < 50 ? 2000 : 1900;
+        } else {
+          if (s.length != 4) {
+            return s;
+          }
+        }
       }
 
       // Numeric value recognized. Identifying min and max values.
@@ -215,9 +218,12 @@ export class MaskSection {
       if (this.settings.autoCorrect)
         n = this.checkMinMax(n);
 
-      res = '' + n;
-      while(res.length < this.length)
-          res = '0' + res;
+      if (n !== null) {
+        res = '' + n;
+        while (res.length < this.length) {
+            res = '0' + res;
+        }
+      }
     }
 
     while (res.length < this.length) {
@@ -276,8 +282,7 @@ export class MaskSection {
     let section = maskValue.substring(sectionPos, i2);
 
     if (section.length > this.maxLength) {
-      console.log('Invalid value length: ' + section);
-      section = section.substring(0, this.maxLength - 1);
+      throw new Error("Invalid value length: " + section);
     }
 
     let selStart_local = selStart - sectionPos;

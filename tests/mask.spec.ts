@@ -73,6 +73,51 @@ describe(`Applying mask to incomplete value. Pattern mm/dd/yyyy, value 12/12/19_
   it(`Result must be 12/12/2019`, () => expect(res).toBe('12/12/2019'));
 });
 
+describe(`Applying mask to incomplete value. Pattern mm/dd/yyyy, value 12/12/19__: `, () => {
+  let intl = new InternationalizationService();
+  let s = new MaskSettings('_', true);
+  let mask = new Mask(intl);
+  mask.settings = s;
+  mask.pattern = 'mm/dd/yyyy';
+
+  let res = mask.applyMask('12/12/19__');
+  it(`Result must be 12/12/2019`, () => expect(res).toBe('12/12/2019'));
+});
+
+describe(`Applying mask to value with placeholders. Pattern b.b.b.b, value 127.0.0.  1 `, () => {
+  let intl = new InternationalizationService();
+  let s = new MaskSettings(' ', true);
+  let mask = new Mask(intl);
+  mask.settings = s;
+  mask.pattern = 'b.b.b.b';
+
+  let res = mask.applyMask('127.0.0.  1');
+  it(`Result must be 127.0.0.1`, () => expect(res).toBe('127.0.0.1'));
+});
+
+describe(`Applying mask to value with placeholders. Pattern +1 NNN NNN-NN-NN, value +1 ___ ___-__-__ `, () => {
+  let intl = new InternationalizationService();
+  let s = new MaskSettings('_', true);
+  let mask = new Mask(intl);
+  mask.settings = s;
+  mask.pattern = '+1 NNN NNN-NN-NN';
+
+  let res = mask.applyMask('+1 ___ ___-__-__');
+  it(`Result must be empty`, () => expect(res).toBe(''));
+});
+
+
+describe(`Applying mask to incomplete value. Pattern b.b.b.b, value 127.`, () => {
+  let intl = new InternationalizationService();
+  let s = new MaskSettings(' ', true);
+  let mask = new Mask(intl);
+  mask.settings = s;
+  mask.pattern = 'b.b.b.b';
+
+  let res = mask.applyMask('127.');
+  it(`Result must be 127.0.0.1`, () => expect(res).toBe(''));
+});
+
 describe(`Нажатие [ArrowRight] с selLength=0 при значении [13.12.2018] перед [018]: `, () => {
   let res: MaskResult;
 
@@ -206,7 +251,6 @@ describe(`Соответствие строки маске:`, () => {
   it(`Значение 13.12.1979 соответствует маске`, () => expect(mask.checkMask('13.12.1979')).toBeTruthy());
   it(`Значение 13.12.197 НЕ соответствует маске`, () => expect(mask.checkMask('13.12.197')).toBeFalsy());
 
-  it(`Значение 13._2.1979 НЕ соответствует маске`, () => expect(mask.checkMask('13._2.1979')).toBeFalsy());
   it(`Значение 13.AA.1979 НЕ соответствует маске`, () => expect(mask.checkMask('13.AA.1979')).toBeFalsy());
 });
 

@@ -23,7 +23,7 @@
     "@angular/router": "^5.2.11",
     "angular-prism": "^0.1.20",
     "core-js": "^2.4.1",
-    "rxjs": "^5.1.0",
+    "rxjs": "^5.1.0", 
     "yopsilon-mask": "../dist.tgz",
     "zone.js": "^0.8.4"
   },

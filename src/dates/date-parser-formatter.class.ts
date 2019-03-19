@@ -60,16 +60,15 @@ export class DateParserFormatter {
 
       if(section.isNumeric()) {
 
+        if(s.indexOf(mask.settings.placeholder) >= 0) { // Contains placeholders
+          return DateParserFormatter.invalidDate();
+        }
+
         n = section.numericValue(section.removePlaceholders(s));
 
         if(n < section.sectionType.min || n > section.sectionType.max)
           return DateParserFormatter.invalidDate();
 
-        if(s.indexOf(mask.settings.placeholder) >= 0) { // Contains placeholders
-          incomplete = true;
-          if(n >= 100)  // Разрешаем только даты корректировать
-            return DateParserFormatter.invalidDate();
-        }
       }
       else
         if(section.hasOptions()) {
@@ -112,11 +111,11 @@ export class DateParserFormatter {
         m = n;
 
       if(datePart == "yy")
-        y = n < 30 ? 2000 + n : 1900 + n;
+        y = n < 50 ? 2000 + n : 1900 + n;
 
       if(datePart == "yyyy") {
         if(n < 100 && incomplete)
-          y = n < 30 ? 2000 + n : 1900 + n;
+          y = n < 50 ? 2000 + n : 1900 + n;
         else
           y = n;
       }

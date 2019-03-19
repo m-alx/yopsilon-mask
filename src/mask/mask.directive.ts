@@ -31,13 +31,13 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     blur() {
 
       // Очищаем, если маска неверна
-      if(!this._mask.checkMask(this._txtValue) && !this._mask.settings.allowIncomplete)
-        this.setText("");
+      let autocorrected = this._mask.applyMask(this._txtValue);
+      if(autocorrected === '' && !this._mask.settings.allowIncomplete)
+        this.setText('');
       else {
-        // Маска верна, но нужно автокоррекцию провернуть
-        let autoCorrected = this._mask.applyMask(this._txtValue);
-        if(autoCorrected != this._txtValue)
-          this.setText(autoCorrected);
+        // Маска верна, но нужно автокоррекцию провернуть        
+        if(autocorrected != this._txtValue)
+          this.setText(autocorrected);
       }
 
       this.onTouched();
@@ -105,7 +105,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     }
 
     constructor(
-      protected _renderer: Renderer2, 
+      protected _renderer: Renderer2,
       protected _elementRef: ElementRef,
       protected intl: InternationalizationService) {
       super(_renderer, _elementRef, intl);

@@ -5,3 +5,6 @@
 [1231/211912.469:ERROR:process_info.cc(359)] UncheckedAllocate
 [0125/191759.373:ERROR:file_io_win.cc(170)] CreateFile C:\Users\ALX\AppData\Local\Temp\karma-37371268\Crashpad\reports\ed3e92c0-be5d-4fbd-8b1e-f6d49540ac35.dmp: Системе не удается найти указанный путь. (0x3)
 [0125/191759.375:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0319/181237.739:ERROR:file_io_win.cc(170)] CreateFile C:\Users\ALX\AppData\Local\Temp\karma-84265598\Crashpad\reports\d5e46657-0794-4a5c-bd7a-621a59cf6c59.dmp: Системе не удается найти указанный путь. (0x3)
+[0319/181237.744:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0319/181237.900:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\ALX\AppData\Local\Temp\karma-84265598\Crashpad\reports\1d36fb2e-2a63-4ef3-9145-9a4e3b8e71b2.dmp: Процесс не может получить доступ к файлу, так как этот файл занят другим процессом. (0x20)

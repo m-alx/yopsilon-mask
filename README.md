@@ -51,7 +51,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-root',
-    template: `<input yn-mask="+1 NNNN NNNN-NN-NN" placeholder="+1 ХХХ ХХХ-ХХ-ХХ" type="text" [(ngModel)]="txtValue" />`
+    template: `<input yn-mask="+1 NNNN NNNN-NN-NN" type="text" [(ngModel)]="txtValue" />`
 })
 export class AppComponent {
     txtValue: string = '';
@@ -65,7 +65,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-root',
-    template: `<input yn-mask-date="mm/dd/yyyy" placeholder="mm/dd/yyyy" type="text" [(ngModel)]="dateValue" />`
+    template: `<input yn-mask-date="mm/dd/yyyy" type="text" [(ngModel)]="dateValue" />`
 })
 export class AppComponent {
   dateValue: any = new Date();

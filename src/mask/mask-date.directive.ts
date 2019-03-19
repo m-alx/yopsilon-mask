@@ -42,8 +42,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     // Focus lost
     blur() {
 
-      // No need to parse once more if result is as expected
-      // this._dateValue = this._parser.transform(this._mask, this._txtValue);
+      // No need to parse once more if result is as expected       
       let autoCorrected = this._mask.applyMask(this._txtValue);
       if(autoCorrected != this._txtValue)
         this.setText(autoCorrected);

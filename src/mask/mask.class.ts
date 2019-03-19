@@ -302,57 +302,14 @@ export class Mask {
     return value;
   }
 
-  // Форматирование строки по маске
-  // Пустая строка будет означать инвалидность
-  public checkMask(value: string): boolean  {
-
-    if (value == null)
+  public checkMask(value: string): boolean {
+    if(value === null) {
       return false;
-
-    // Содержит разделители. Не будем считать корректным значением
-    if (value.indexOf(this.settings.placeholder) >= 0)
-      return false;
-
-    let sectionPos = 0;
-    let res = value;
-    for (let i = 0; i < this.sections.length; i++) {
-      let section = this.sections[i];
-      let v = section.extract(res, sectionPos);
-
-      if (v.delimiter != section.delimiter)
-        return false;
-
-      let s = v.section.value();
-
-      let s_autocorrected = section.autoCorrectVal(s);
-
-      if (s != s_autocorrected) {
-        if (section.isNumeric())
-        {
-          let n = section.numericValue(s_autocorrected);
-          if (isNaN(n))
-            return false;
-
-          if ((n + '').trim().length < section.length)
-            return false;
-
-        } else
-          return false;
-      }
-
-      if (s.length > section.maxLength)
-        return false;
-
-      if (s.length < section.length)
-        return false;
-
-      if (i == this.sections.length - 1 && v.after != '')
-        return false;
-
-      sectionPos = v.nextSectionPos();
     }
-
-    return true;
+    if(value === '' && this.pattern !== '') {
+      return false;
+    }
+    return this.applyMask(value) !== '';
   }
 
   // Форматирование строки по маске
@@ -361,23 +318,42 @@ export class Mask {
 
     let sectionPos = 0;
     let res = value;
+
     for (let i = 0; i < this.sections.length; i++) {
       let section = this.sections[i];
       let v = section.extract(res, sectionPos);
-      if (v.section.value() == '' && v.delimiter == '' && v.after == '') {
-        break;
-      }
-
-      if (section.sectionType != null && section.sectionType.datePart == null &&
-          v.section.value().indexOf(this.settings.placeholder) >= 0) {
-        // Остатки плейсхолдеров допустимы только в частях даты
-        return '';
-      }
 
       v.delimiter = section.delimiter;
-      let sv = section.removePlaceholders(v.section.value());
+
+      let sv = v.section.value();
+
+      sv = section.removePlaceholders(sv);
+
+      if (section.isNumeric())
+      {
+        // Invalid number value
+        let n = section.numericValue(sv);
+        if (isNaN(n) || sv === '')
+          return '';
+      }
+
+      if(sv.length < section.length) {
+        if(section.sectionType && section.sectionType.datePart) {
+          let dp = section.sectionType.datePart;
+          if (dp === 'yyyy' && sv.length != 2) {  // For year we can accept value with 2 digits
+            return '';
+          }
+          if (sv.length < 1) { // For others dateparts we can accept any not empty value
+            return '';
+          }
+        } else {
+          return '';
+        }
+      }
+
       if (autoCorrect)
         sv = section.autoCorrectVal(sv);
+
       res = v.update(sv, 0);
       sectionPos = v.nextSectionPos();
     }

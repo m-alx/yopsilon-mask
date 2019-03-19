@@ -241,26 +241,26 @@ export class MaskNumberDirective {
       return true;
     }
 
-    if (e.keyCode == Keys.TAB) {
+    if (e.keyCode === Keys.TAB || e.keyCode === Keys.ESCAPE) {
       return true;
     }
 
-    if (e.keyCode == Keys.HOME || e.keyCode == Keys.END) {
+    if (e.keyCode === Keys.HOME || e.keyCode === Keys.END) {
       return true;
     }
 
-    if (e.ctrlKey && (e.keyCode == Keys.A || e.keyCode == Keys.X ||
-                     e.keyCode == Keys.C || e.keyCode == Keys.V ||
-                     e.keyCode == Keys.INSERT)) {
+    if (e.ctrlKey && (e.keyCode === Keys.A || e.keyCode === Keys.X ||
+                     e.keyCode === Keys.C || e.keyCode === Keys.V ||
+                     e.keyCode === Keys.INSERT)) {
       return true;
     }
 
-    if (e.shiftKey && (e.keyCode == Keys.DELETE || e.keyCode == Keys.INSERT)) {
+    if (e.shiftKey && (e.keyCode === Keys.DELETE || e.keyCode === Keys.INSERT)) {
       return true;
     }
 
 
-    if(e.ctrlKey && e.keyCode == Keys.Z) {
+    if(e.ctrlKey && e.keyCode === Keys.Z) {
       // UNDO
       let undoRes = this._undo.pop();
       if(undoRes) {
