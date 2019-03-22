@@ -5,7 +5,6 @@
 
 import { NgModule, ModuleWithProviders } from "@angular/core";
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from "@angular/platform-browser";
 
 import { InternationalizationService } from "./internationalization/internationalization.service";
 import { Mask } from "./mask/mask.class";
@@ -18,7 +17,7 @@ import { DateParserPipe } from "./dates/date-parser.pipe";
 import { DateFormatterPipe } from "./dates/date-formatter.pipe";
 
 @NgModule({
-  imports: [BrowserModule, FormsModule],
+  imports: [FormsModule],
   declarations: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
   providers: [
