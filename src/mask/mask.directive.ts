@@ -32,11 +32,11 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
       // Очищаем, если маска неверна
       let autocorrected = this._mask.applyMask(this._txtValue);
-      if(autocorrected === '' && !this._mask.settings.allowIncomplete)
+      if (autocorrected === '' && !this._mask.settings.allowIncomplete)
         this.setText('');
       else {
         // Маска верна, но нужно автокоррекцию провернуть        
-        if(autocorrected != this._txtValue)
+        if (autocorrected != this._txtValue)
           this.setText(autocorrected);
       }
 
@@ -51,10 +51,10 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
     // Обновляем состояние
     protected updateState() {
-      if(this._txtValue == "")
+      if (this._txtValue == "")
         this.state = MaskState.EMPTY;           // Пустое значение
       else
-        if(!this._mask.checkMask(this._txtValue))
+        if (!this._mask.checkMask(this._txtValue))
           this.state = MaskState.TYPING;       // Считаем, что пользователь не завершил ввод
         else
           this.state = MaskState.OK;
@@ -69,7 +69,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
     // Отображаем значение в компоненте. Formatter: Ctrl --> View
     writeValue(txt: any): void {
-      if(this._txtValue != txt)
+      if (this._txtValue != txt)
         this.setText(txt, false); // Не отправляем значение в модель, т.к. этот метод вызывается как раз после изменения модели
 
       // Но обновить состояние нужно...
@@ -79,7 +79,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
     @Input("yn-mask")
     public set pattern(m: string) {
 
-      if(this._txtValue != "" && this._mask.pattern != "" && this._mask.pattern != m) {
+      if (this._txtValue != "" && this._mask.pattern != "" && this._mask.pattern != m) {
         // По сложному пути
         let res = this.currentRes();
         let s = this._mask.pureValue(res.newValue);

@@ -23,7 +23,7 @@ export class DateParserFormatter {
 
   public static parse(value: string, mask: Mask): any {
 
-    if(value == "")
+    if (value == "")
       return null;
 
     let sectionPos = 0;
@@ -46,7 +46,7 @@ export class DateParserFormatter {
       let section: MaskSection = mask.sections[i];
       let datePart = section.sectionType.datePart;
 
-      if(datePart == null) // Not datetime component
+      if (datePart == null) // Not datetime component
         continue;
 
       let v = section.extract(res, sectionPos);
@@ -58,63 +58,63 @@ export class DateParserFormatter {
       let n: number;
       n = NaN;
 
-      if(section.isNumeric()) {
+      if (section.isNumeric()) {
 
-        if(s.indexOf(mask.settings.placeholder) >= 0) { // Contains placeholders
+        if (s.indexOf(mask.settings.placeholder) >= 0) { // Contains placeholders
           return DateParserFormatter.invalidDate();
         }
 
         n = section.numericValue(section.removePlaceholders(s));
 
-        if(n < section.sectionType.min || n > section.sectionType.max)
+        if (n < section.sectionType.min || n > section.sectionType.max)
           return DateParserFormatter.invalidDate();
 
       }
       else
-        if(section.hasOptions()) {
+        if (section.hasOptions()) {
           n = section.sectionType.options.indexOf(s);
-          if(n < 0)
+          if (n < 0)
             return DateParserFormatter.invalidDate();
           n++; // Index starts from 0
         }
 
-      if(isNaN(n))
+      if (isNaN(n))
         return DateParserFormatter.invalidDate();
 
       // Time components...
-      if(datePart == "H")
+      if (datePart == "H")
         hh = n;
 
-      if(datePart == "h") {
+      if (datePart == "h") {
         hh = n;
-        if(hh == 12)
+        if (hh == 12)
           hh = 0;
       }
 
-      if(datePart == "tt")
+      if (datePart == "tt")
         tt = s;
 
-      if(datePart == "mi")
+      if (datePart == "mi")
         mi = n;
 
-      if(datePart == "ss")
+      if (datePart == "ss")
         ss = n;
 
-      if(datePart == "ms")
+      if (datePart == "ms")
         ms = n;
 
       // Date components...
-      if(datePart == "d")
+      if (datePart == "d")
         d = n;
 
-      if(datePart == "m")
+      if (datePart == "m")
         m = n;
 
-      if(datePart == "yy")
+      if (datePart == "yy")
         y = n < 50 ? 2000 + n : 1900 + n;
 
-      if(datePart == "yyyy") {
-        if(n < 100 && incomplete)
+      if (datePart == "yyyy") {
+        if (n < 100 && incomplete)
           y = n < 50 ? 2000 + n : 1900 + n;
         else
           y = n;
@@ -122,12 +122,12 @@ export class DateParserFormatter {
 
     }
 
-    if(tt.toLowerCase() == "pm")
+    if (tt.toLowerCase() == "pm")
       hh += 12;
 
     // We should check number of days in month
     let maxDays: number = DateParserFormatter.daysInMonth(y, m);
-    if(d > maxDays)
+    if (d > maxDays)
       return DateParserFormatter.invalidDate();
 
     return new Date(y, m - 1, d, hh, mi, ss, ms);
@@ -135,7 +135,7 @@ export class DateParserFormatter {
 
   public static format(date: any, mask: Mask): string {
 
-    if(date == null || date == undefined || date.getTime() == NaN)
+    if (date == null || date == undefined || date.getTime() == NaN)
       return "";
 
     let res: string = "";
@@ -146,51 +146,51 @@ export class DateParserFormatter {
 
       let n: number = NaN;
 
-      if(datePart == "yyyy")
+      if (datePart == "yyyy")
         n = date.getFullYear();
 
-      if(datePart == "yy") {
+      if (datePart == "yy") {
         n = date.getFullYear();
-        if( n >= 2000)
+        if ( n >= 2000)
           n-=2000;
         else
           n-=1900;
       }
 
-      if(datePart == "m")
+      if (datePart == "m")
         n = date.getMonth() + 1;
 
-      if(datePart == "d")
+      if (datePart == "d")
         n = date.getDate();
 
-      if(datePart == "H")
+      if (datePart == "H")
         n = date.getHours();
 
-      if(datePart == "h") {
+      if (datePart == "h") {
         n = date.getHours();
 
-        if(n == 0)
+        if (n == 0)
           n = 12;
         else
-          if(n > 12)
+          if (n > 12)
             n -= 12;
       }
 
-      if(datePart == "mi")
+      if (datePart == "mi")
         n = date.getMinutes();
 
-      if(datePart == "ss")
+      if (datePart == "ss")
         n = date.getSeconds();
 
-      if(datePart == "ms")
+      if (datePart == "ms")
         n = date.getMilliseconds();
 
-      if(datePart == "tt")
+      if (datePart == "tt")
         n = date.getHours() >= 12 ? 2 : 1;
 
       let s: string = "";
 
-      if(section.hasOptions())
+      if (section.hasOptions())
         s = section.sectionType.options[n - 1];
       else
         s = section.autoCorrectVal(n + "");

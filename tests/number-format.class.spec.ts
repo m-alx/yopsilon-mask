@@ -32,3 +32,15 @@ describe(`Parse format "$ {+1-3.2}"`, () => {
   it(`No postfix`, () => expect(fmt.postfix).toBe(""));
 
 });
+
+describe(`Parse interger number format "{1-4}"`, () => {
+
+  let fmt: NumberFormat = NumberFormat.parseFormat("{1-4}");
+
+  it(`Decimal specifier`, () => expect(fmt.specifier).toBe("D"));
+  it(`Minimum integer digits`, () => expect(fmt.intMin).toBe(1));
+  it(`Maximum integer digits`, () => expect(fmt.intMax).toBe(4));
+  it(`Minimum fraction digits`, () => expect(fmt.fractionMin).toBe(0));
+  it(`Maximum fraction digits`, () => expect(fmt.fractionMax).toBe(0));
+
+});

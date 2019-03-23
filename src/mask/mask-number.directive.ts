@@ -37,7 +37,7 @@ export class MaskNumberDirective {
   blur() {
     // Очищаем, если формат неверен
     let value = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
-    if(value == null || isNaN(value))
+    if (value == null || isNaN(value))
       this.setText('');
     else
       this.setText(NumberParserFormatter.format(value, this.format, this._separators));
@@ -66,7 +66,7 @@ export class MaskNumberDirective {
   }
 
   public set state(v: MaskState) {
-    if(this._state != v) {
+    if (this._state != v) {
       this._state = v;
       this.stateChange.emit(this._state); // Излучаем событие
     }
@@ -74,10 +74,10 @@ export class MaskNumberDirective {
 
   // Обновляем состояние
   protected updateState() {
-    if(this._numValue == null)
+    if (this._numValue == null)
       this.state = MaskState.EMPTY;           // Пустое значение
     else {
-      if(isNaN(this._numValue))
+      if (isNaN(this._numValue))
         this.state = MaskState.TYPING;       // Считаем, что пользователь не завершил ввод
       else
         this.state = MaskState.OK;
@@ -87,7 +87,7 @@ export class MaskNumberDirective {
   // Sending a value to model
   protected toModel() {
     // Retrieving value
-    if(this._txtValue == '')
+    if (this._txtValue == '')
       this._numValue = null;
     else
       this._numValue = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
@@ -110,9 +110,9 @@ export class MaskNumberDirective {
     let selEnd = this.last_res.selStart;
 
     // Если текст вдруг стёрся
-    if(this.last_res.newValue != '' && txt.length <= 1) {
+    if (this.last_res.newValue != '' && txt.length <= 1) {
 
-      if(txt == '')
+      if (txt == '')
         key = new KeyInfo(Keys.DELETE);
       else
         key = new KeyInfo(0, txt);
@@ -132,7 +132,7 @@ export class MaskNumberDirective {
         preventDefault: (_: any) => {}
       });
 
-    if(!r)
+    if (!r)
       this.setRes(this.last_res); // Не приняли, вернули всё назад
 
     // Зачем это здесь?.. А вдруг..
@@ -143,16 +143,16 @@ export class MaskNumberDirective {
   // Пользователь вносит значение. Parser: View --> Ctrl
   input(txt: any) {
 
-      if(this.android_behavior) {
+      if (this.android_behavior) {
         this.processAndroid(txt);
         return;
       }
       // Поэтому пытаемся применить формат к введенному значению.
       let value = NumberParserFormatter.parse(txt, this.format, this._separators);
-      if(value == null)
+      if (value == null)
         this.setText('');
       else
-        if(!isNaN(value))
+        if (!isNaN(value))
           this.setText(NumberParserFormatter.format(value, this.format, this._separators), true);
   }
 
@@ -161,10 +161,10 @@ export class MaskNumberDirective {
 
     this._numValue = value;
     let txt = '';
-    if(value != null)
+    if (value != null)
       txt = NumberParserFormatter.format(value, this.format, this._separators);
 
-    if(txt != this._txtValue)
+    if (txt != this._txtValue)
       this.setText(txt, false);
 
     // No need to send to model, because this processor is called on model change
@@ -178,7 +178,7 @@ export class MaskNumberDirective {
   @Input('yn-mask-number')
   public set format(f: string) {
 
-    if(this._txtValue != '' && this._format != f) {
+    if (this._txtValue != '' && this._format != f) {
       // По сложному пути
       let res = this.currentRes();
       this._format = f;
@@ -196,7 +196,7 @@ export class MaskNumberDirective {
   }
 
   public get format(): string {
-    if(this._format == 'currency')
+    if (this._format == 'currency')
       return this.intl.locale.currency;
     return this._format;
   }
@@ -210,7 +210,7 @@ export class MaskNumberDirective {
   }
 
   private isDigit(char: string): boolean {
-    if('0123456789'.indexOf(char) >= 0)
+    if ('0123456789'.indexOf(char) >= 0)
       return true;
 
     return false;
@@ -218,7 +218,7 @@ export class MaskNumberDirective {
 
   protected processKey(e: any): boolean {
 
-    if(e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) { // test: if(e.keyCode >= 0) ...
+    if (e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) { // test: if (e.keyCode >= 0) ...
       // Android detected
       this.android_behavior = true;
       this.last_res = this.currentRes();
@@ -227,7 +227,7 @@ export class MaskNumberDirective {
 
     // Редактируем числовое значение
     let c: string = e.char;
-    if(c == undefined)
+    if (c == undefined)
       c = e.key;
 
     let selStart: number = e.target.selectionStart;
@@ -260,10 +260,10 @@ export class MaskNumberDirective {
     }
 
 
-    if(e.ctrlKey && e.keyCode === Keys.Z) {
+    if (e.ctrlKey && e.keyCode === Keys.Z) {
       // UNDO
       let undoRes = this._undo.pop();
-      if(undoRes) {
+      if (undoRes) {
         this._redo.push(this.getRes(s, selStart, selEnd));
         this.setRes(undoRes);
       }
@@ -271,10 +271,10 @@ export class MaskNumberDirective {
       return false;
     }
 
-    if(e.ctrlKey && e.keyCode == Keys.Y) {
+    if (e.ctrlKey && e.keyCode == Keys.Y) {
       // REDO
       let redoRes = this._redo.pop();
-      if(redoRes) {
+      if (redoRes) {
         this._undo.push(this.getRes(s, selStart, selEnd));
         this.setRes(redoRes);
       }
@@ -282,7 +282,7 @@ export class MaskNumberDirective {
       return false;
     }
 
-    if(selStart == 0 && selEnd == this._txtValue.length) {
+    if (selStart == 0 && selEnd == this._txtValue.length) {
       s = '';
       selStart = 0;
       selEnd = 0;
@@ -291,22 +291,22 @@ export class MaskNumberDirective {
     let leadToFormat = false;
     let applied = false;
 
-    if(e.keyCode === Keys.BACKSPACE || e.keyCode === Keys.DELETE) {
+    if (e.keyCode === Keys.BACKSPACE || e.keyCode === Keys.DELETE) {
 
       let canAccept = NumberParserFormatter.canAcceptKey(s, e.keyCode, c, this.format, this._separators, selStart, selEnd);
 
-      if(selStart == selEnd) {
+      if (selStart == selEnd) {
         // Ничего не выделено
-        if(e.keyCode === Keys.BACKSPACE && selStart > 0) {
-          if(canAccept)
+        if (e.keyCode === Keys.BACKSPACE && selStart > 0) {
+          if (canAccept)
             s = s.substring(0, selStart - 1) + s.substring(selEnd);
 
           selStart--;
           selEnd--;
         }
 
-        if(e.keyCode == Keys.DELETE) {
-          if(canAccept)
+        if (e.keyCode == Keys.DELETE) {
+          if (canAccept)
             s = s.substring(0, selStart) + s.substring(selEnd + 1);
           else {
             selStart++;
@@ -317,12 +317,12 @@ export class MaskNumberDirective {
         applied = true;
       }
 
-      if(selStart < selEnd) {
+      if (selStart < selEnd) {
         // Выделено один или более символов
         let fragmentToDelete = s.substring(selStart, selEnd);
 
-        if(canAccept) {
-          if(fragmentToDelete.indexOf(this._separators[0]) >= 0)
+        if (canAccept) {
+          if (fragmentToDelete.indexOf(this._separators[0]) >= 0)
             s = s.substring(0, selStart) + this._separators[0] + s.substring(selEnd);
           else
             s = s.substring(0, selStart) + s.substring(selEnd);
@@ -333,11 +333,11 @@ export class MaskNumberDirective {
       }
     }
 
-    if(c.length == 1) {
+    if (c.length == 1) {
 
       s = s.substring(0, selStart) + s.substring(selEnd);
 
-      if(NumberParserFormatter.canAcceptKey(s, e.keyCode, c, this.format, this._separators, selStart)) {
+      if (NumberParserFormatter.canAcceptKey(s, e.keyCode, c, this.format, this._separators, selStart)) {
 
         s = s.substring(0, selStart) + c + s.substring(selStart);
         selStart++;
@@ -349,9 +349,9 @@ export class MaskNumberDirective {
       }
     }
 
-    if(applied) {
+    if (applied) {
       // При изменении значения внесем в стэк undo
-      if(s != state0.newValue) {
+      if (s != state0.newValue) {
         this._undo.push(state0);
         this._redo = [];
       }
@@ -359,7 +359,7 @@ export class MaskNumberDirective {
       let state3 = NumberParserFormatter.reformat(s, this.format, this._separators, selStart, selEnd, leadToFormat);
       this.setRes(this.getRes(state3.value, state3.selStart, state3.selEnd));
 
-      if(this.android_behavior)
+      if (this.android_behavior)
         return true;
 
       e.preventDefault();
@@ -370,7 +370,7 @@ export class MaskNumberDirective {
   // Установить значение и положение курсора
   protected setRes(res: MaskResult) {
 
-    if(this.android_behavior)
+    if (this.android_behavior)
       res.selLength = 0;
 
     this.setText(res.newValue);
@@ -401,7 +401,7 @@ export class MaskNumberDirective {
     this._renderer.setProperty(this._elementRef.nativeElement, 'value', this._txtValue);
 
     // Отправляем в модель
-    if(toModel)
+    if (toModel)
       this.toModel();
   }
 

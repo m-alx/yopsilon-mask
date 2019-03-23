@@ -3,31 +3,31 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { InternationalizationService } from "../internationalization/internationalization.service";
-import { NumberFormat } from "./number-format.class";
-import { Keys } from "../keys/keys.class";
+import { InternationalizationService } from '../internationalization/internationalization.service';
+import { NumberFormat } from './number-format.class';
+import { Keys } from '../keys/keys.class';
 
 export class NumberParserFormatter {
 
   // Split string to prefix, number and postfix
   public static unclotheNumber(txt: string, fmt: NumberFormat): any {
 
-    if(fmt == null)
-        return { prefix: "", number: txt, postfix: ""};
+    if (fmt == null)
+        return { prefix: '', number: txt, postfix: ''};
 
     let number: string = txt;
 
-    let prefix: string = "";
-    let postfix: string = "";
+    let prefix: string = '';
+    let postfix: string = '';
 
     let postfixL = fmt.postfix.length;
-    if(number.substring(number.length - postfixL, number.length) == fmt.postfix) {
+    if (number.substring(number.length - postfixL, number.length) == fmt.postfix) {
       postfix = fmt.postfix;
       number = number.substring(0, number.length - postfixL);
     }
 
     let prefixL = fmt.prefix.length;
-    if(number.substring(0, prefixL) == fmt.prefix) {
+    if (number.substring(0, prefixL) == fmt.prefix) {
       prefix = fmt.prefix;
       number = number.substring(prefixL, number.length);
     }
@@ -42,31 +42,31 @@ export class NumberParserFormatter {
   // Split number to parts
   public static splitNumber(txt: string, separators: Array<string>): any {
 
-    let sgn = "";
-    let e = "";
+    let sgn = '';
+    let e = '';
     let ei = txt.search(/e/i);
-    if(ei >= 0)
+    if (ei >= 0)
       e = txt[ei];
 
     let exponentialParts = txt.split(/e/i);
     let significand: string = exponentialParts[0];
-    let orderOfMagnitude: string = exponentialParts.length > 1 ? exponentialParts[1] : "";
+    let orderOfMagnitude: string = exponentialParts.length > 1 ? exponentialParts[1] : '';
 
-    if(significand.length > 0 && "-+".indexOf(significand[0]) >= 0) {
+    if (significand.length > 0 && '-+'.indexOf(significand[0]) >= 0) {
       sgn = significand[0];
       significand = significand.substring(1, txt.length);
     }
 
     let parts = significand.split(separators[0]);
-    let decimalSeparator = ""; // Есть ли он?
-    if(parts.length > 1)
+    let decimalSeparator = ''; // Есть ли он?
+    if (parts.length > 1)
       decimalSeparator = significand[parts[0].length];
 
     return {
       signum: sgn,
       int: parts[0],
       decimalSeparator: decimalSeparator,
-      fraction: parts.length > 1 ? parts[1] : "",
+      fraction: parts.length > 1 ? parts[1] : '',
       e: e,
       orderOfMagnitude: orderOfMagnitude
     };
@@ -81,45 +81,49 @@ export class NumberParserFormatter {
   public static format(value: number, format: string | NumberFormat, separators: Array<string>): string {
 
     let fmt: NumberFormat;
-    if (format && typeof format == "string") {
+    if (format && typeof format == 'string') {
       fmt = NumberFormat.parseFormat(format);
-      if(fmt == null)
-        throw new Error("Invalid format");
+      if (fmt == null)
+        throw new Error('Invalid format');
     } else
       fmt = <NumberFormat>format;
 
-    if(fmt.specifier.toLowerCase() == "e") {
+    if (fmt.specifier.toLowerCase() == 'e') {
       // Exponential
     }
 
-    let sgn = Math.sign(value) < 0 ? "-" : "";
+    let sgn = Math.sign(value) < 0 ? '-' : '';
 
-    if(fmt.signum && sgn == "")
-      sgn = "+";
+    if (fmt.signum && sgn == '')
+      sgn = '+';
 
     let num = NumberParserFormatter.roundTo(Math.abs(value), fmt.fractionMax).toFixed(fmt.fractionMax);
-    let parts = num.split(".");
+    let parts = num.split('.');
 
     let sInt = parts[0];
-    let sFraction = parts.length > 0 ? parts[1] : "";
+    let sFraction = parts.length > 1 ? parts[1] : '';
 
     // Remove trailing zeros
-    while(sFraction.length > fmt.fractionMin && sFraction.substring(sFraction.length - 1) == "0")
+    while (sFraction.length > fmt.fractionMin && sFraction.substring(sFraction.length - 1) == '0') {
       sFraction = sFraction.substring(0, sFraction.length - 1);
+    }
 
     // Add leading zeros
-    while(sInt.length < fmt.intMin)
-      sInt = "0" + sInt;
+    while (sInt.length < fmt.intMin) {
+      sInt = '0' + sInt;
+    }
 
     // Thousand separators
-    if(fmt.specifier.toLowerCase() == "n" && separators.length > 1)
-      for(let i = 3; i < sInt.length; i += 4)
+    if (fmt.specifier.toLowerCase() == 'n' && separators.length > 1) {
+      for (let i = 3; i < sInt.length; i += 4) {
         sInt = sInt.substring(0, sInt.length - i) + separators[1] + sInt.substring(sInt.length - i);
+      }
+    }
 
-    //
     let res = fmt.prefix + sgn + sInt;
-    if(sFraction != "")
+    if (sFraction != '') {
       res += separators[0] + sFraction;
+    }
     res += fmt.postfix;
 
     return res;
@@ -131,20 +135,20 @@ export class NumberParserFormatter {
     let fmt: NumberFormat = NumberFormat.parseFormat(format);
     let parts = NumberParserFormatter.unclotheNumber(txt, fmt);
 
-    if(parts.number == "")
+    if (parts.number == '')
       return null;
 
     let number = NumberParserFormatter.splitNumber(parts.number, separators);
 
-    let thousandSeparator = separators.length > 1 ? separators[1] : "";
-    let groups = thousandSeparator != "" ? number.int.split(thousandSeparator) : number.int;
+    let thousandSeparator = separators.length > 1 ? separators[1] : '';
+    let groups = thousandSeparator != '' ? number.int.split(thousandSeparator) : number.int;
 
     let sgn = 1;
-    if(number.signum == "-")
+    if (number.signum == '-')
       sgn = -1;
 
-    let int: number = +groups.join("");
-    let fraction: number = number.fraction.length != "" ? (+number.fraction) * Math.pow(10, -number.fraction.length) : 0;
+    let int: number = +groups.join('');
+    let fraction: number = number.fraction.length != '' ? (+number.fraction) * Math.pow(10, -number.fraction.length) : 0;
     let resValue: number = sgn * (int + fraction) * Math.pow(10, number.orderOfMagnitude);
 
     return resValue;
@@ -158,6 +162,7 @@ export class NumberParserFormatter {
     let fmt: NumberFormat = NumberFormat.parseFormat(format);
 
     let parts = NumberParserFormatter.unclotheNumber(txt, fmt);
+
     let number = NumberParserFormatter.splitNumber(parts.number, separators);
 
     let numStart = parts.prefix.length;
@@ -169,91 +174,94 @@ export class NumberParserFormatter {
 
     let eStart = fractionStart + number.fraction.length;
 
-    if(keyCode === Keys.DELETE) {
+    if (keyCode === Keys.DELETE) {
       // Нельзя удалить десятичный разделитель
-      if(convertToFormat && selStart == selEnd && selStart == fractionStart - 1)
+      if (convertToFormat && selStart == selEnd && selStart == fractionStart - 1)
         return false;
 
       return true;
     }
 
-    if(keyCode === Keys.BACKSPACE) {
+    if (keyCode === Keys.BACKSPACE) {
 
       // Запрет применения, если последний ноль забирается...
-      if(convertToFormat && number.int == "0"
+      if (convertToFormat && number.int == '0'
           && selStart == (numStart + number.signum.length)
           && selEnd == (numStart + number.signum.length + 1)
         )
         return false;
 
-      if(convertToFormat && number.int == "0" && selStart == selEnd && selStart == (numStart + number.signum.length + 1))
+      if (convertToFormat && number.int == '0' && selStart == selEnd && selStart == (numStart + number.signum.length + 1))
         return false;
 
       // Запрет применения, если удаляется десятичный разделитель
-      if(convertToFormat && selStart == selEnd && selStart == fractionStart)
+      if (convertToFormat && selStart == selEnd && selStart == fractionStart)
         return false;
 
       return true;
     }
 
     // Знак
-    if("+-".indexOf(char) >= 0) {
+    if ('+-'.indexOf(char) >= 0) {
       // Можно применить только в двух случаях
 
       // 1. Знака не было и мы в начале строки
-      if(number.signum == "" && selStart == numStart)
+      if (number.signum == '' && selStart == numStart)
         return true;
 
       // 2. После E
-      if(number.e != "") {
+      if (number.e != '') {
         let omStart = eStart + number.e.length;
-        if(selStart == omStart)
+        if (selStart == omStart)
           return true;
       }
     }
 
     // Формат подразумевает экспоненциальную форму
-    if(char.toLowerCase() == "e" && fmt.specifier.toLowerCase() == "e") {
-      if(selStart == eStart)
+    if (char.toLowerCase() == 'e' && fmt.specifier.toLowerCase() == 'e') {
+      if (selStart == eStart)
         return true;
     }
 
     // Десятичный разделитель
-    if(separators.length > 0 && char == separators[0]) {
+    if (separators.length > 0 && char == separators[0] && fmt.fractionMax > 0) {
 
       // Только если заменяем разделитель
       let dmStart = numStart + number.signum.length + number.int.length;
-      if(selStart == dmStart)
+      if (selStart == dmStart)
         return true;
 
       // Нету еще разделителя
-      if(number.decimalSeparator == "")
+      if (number.decimalSeparator == '')
         return true;
     }
 
     // Цифра
-    if("0123456789".indexOf(char) >= 0) {
+    if ('0123456789'.indexOf(char) >= 0) {
 
       // Нельзя  до минуса
-      if(number.signum != "" && selStart <= numStart)
+      if (number.signum != '' && selStart <= numStart) {
         return false;
+      }
 
       // И до префикса
-      if(selStart < numStart)
+      if (selStart < numStart) {
         return false;
+      }
 
       // Исчерпано количество знаков целой части
-      if(selStart >= intStart && selStart <= intEnd
-          && number.int.split(separators[1]).join("").length >= fmt.intMax)
+      if (selStart >= intStart && selStart <= intEnd
+          && number.int.split(separators[1]).join('').length >= fmt.intMax) {
         return false;
+      }
 
       // Исчерпано количество знаков после запятой
-      if(selStart == eStart && number.fraction.length >= fmt.fractionMax)
+      // Десятичный сепаратор есть
+      if (selStart == eStart && number.fraction.length >= fmt.fractionMax && number.decimalSeparator !== '') {
         return false;
-
+      }
       return true;
     }
-
     return false;
   }
 
@@ -262,8 +270,8 @@ export class NumberParserFormatter {
     selStart: number, selEnd: number,
     convertToFormat: boolean = false): any {
 
-    if(txt == "")
-      return { value: "", selStart: 0, selEnd: 0, canInput: true };
+    if (txt == '')
+      return { value: '', selStart: 0, selEnd: 0, canInput: true };
 
     let fmt: NumberFormat = NumberFormat.parseFormat(format);
 
@@ -278,11 +286,11 @@ export class NumberParserFormatter {
 
     // ЦЕЛАЯ ЧАСТЬ
     // Убираем лидирующие нули
-    while(number.int.length > 1 && number.int[0] == "0") {
+    while (number.int.length > 1 && number.int[0] == '0') {
       number.int = number.int.substring(1);
-      if(newSelStart > 0)
+      if (newSelStart > 0)
         newSelStart--;
-      if(newSelEnd > 0)
+      if (newSelEnd > 0)
         newSelEnd--;
     }
 
@@ -297,9 +305,9 @@ export class NumberParserFormatter {
     let se = newSelEnd;
     for(let i = 1; i < groups.length; i++) {
 
-      if(newSelStart > pos)
+      if (newSelStart > pos)
         ss -= thousandSeparator.length;
-      if(newSelEnd > pos)
+      if (newSelEnd > pos)
         se -= thousandSeparator.length;
 
       pos += groups[i].length + thousandSeparator.length;
@@ -309,16 +317,16 @@ export class NumberParserFormatter {
     newSelEnd = se;
 
     // Составляем целую часть из групп
-    number.int = groups.join("");
+    number.int = groups.join('');
 
-    if(fmt.specifier.toLowerCase() == "n")
+    if (fmt.specifier.toLowerCase() == 'n')
       for(let i = 3; i < number.int.length; i += 4) {
 
         // Необходимо добавить курсору немного позиции, если он стоит дальше этого разделителя...
-        if(newSelStart > (number.int.length - i))
+        if (newSelStart > (number.int.length - i))
           newSelStart += thousandSeparator.length;
 
-        if(newSelEnd > (number.int.length - i))
+        if (newSelEnd > (number.int.length - i))
           newSelEnd += thousandSeparator.length;
 
         number.int = number.int.substring(0, number.int.length - i) +
@@ -327,15 +335,15 @@ export class NumberParserFormatter {
       }
 
     // Добавляем лидирующие нули
-    if(!convertToFormat && number.int == "" && number.fraction != "") {
-      number.int = "0";
+    if (!convertToFormat && number.int == '' && number.fraction != '') {
+      number.int = '0';
       newSelStart++;
       newSelEnd++;
     }
 
-    if(convertToFormat && fmt != null && (number.signum !="" || number.int != "" || number.fraction != ""))
-      while(number.int.length < fmt.intMin) {
-        number.int = "0" + number.in5;
+    if (convertToFormat && fmt != null && (number.signum !='' || number.int != '' || number.fraction != ''))
+      while (number.int.length < fmt.intMin) {
+        number.int = '0' + number.in5;
         newSelEnd++;
       }
 
@@ -344,9 +352,9 @@ export class NumberParserFormatter {
     number.fraction = number.fraction.replace(thousandSeparator, '');
 
     // Добавляем до минимума
-    if(convertToFormat && fmt != null && (number.int != "" || number.signum != ""))
-      while(number.fraction.length < fmt.fractionMin)
-        number.fraction += "0";
+    if (convertToFormat && fmt != null && (number.int != '' || number.signum != ''))
+      while (number.fraction.length < fmt.fractionMin)
+        number.fraction += '0';
 
     // Убираем лишние знаки
     number.fraction = number.fraction.substring(0, fmt.fractionMax);
@@ -356,7 +364,7 @@ export class NumberParserFormatter {
     newSelStart += resValue.length;
     newSelEnd += resValue.length;
 
-    if(number.signum != "") {
+    if (number.signum != '') {
       resValue += number.signum;
       newSelStart += number.signum.length;
       newSelEnd += number.signum.length;
@@ -364,17 +372,17 @@ export class NumberParserFormatter {
 
     resValue += number.int;
 
-    if(convertToFormat) {
-      if(number.fraction != "")
+    if (convertToFormat) {
+      if (number.fraction != '')
         resValue += separators[0] + number.fraction;
     }
     else {
       // Не нужно приводить к формату... Добавляем разделитель только если он был в исходном значении
-      if(txt.indexOf(separators[0]) >= 0)
+      if (txt.indexOf(separators[0]) >= 0)
         resValue += separators[0] + number.fraction;
     }
 
-    if(fmt.specifier.toLowerCase() == "e") {
+    if (fmt.specifier.toLowerCase() == 'e') {
       resValue += number.e;
       resValue += number.orderOfMagnitude;
     }

@@ -140,7 +140,7 @@ export class MaskSection {
         n++;
 
       let res = '' + this.checkMinMax(n);
-      while(res.length < this.length)
+      while (res.length < this.length)
           res = '0' + res;
 
       return res;
@@ -168,7 +168,7 @@ export class MaskSection {
         n--;
 
       let res = '' + this.checkMinMax(n);
-      while(res.length < this.length)
+      while (res.length < this.length)
           res = '0' + res;
 
       return res;
@@ -251,7 +251,7 @@ export class MaskSection {
       // ...so here a small block should be placed to identify relative position compared to delimiter or end of line,
       // but less than MaxLength
       let i = sectionPos;
-      while(i < maskValue.length && i < (sectionPos + this.maxLength)) {
+      while (i < maskValue.length && i < (sectionPos + this.maxLength)) {
         if (this.delimiter != '' && maskValue[i] == this.delimiter[0])
           break;
         i++;
@@ -265,7 +265,7 @@ export class MaskSection {
     let delimiterEnd = delimiterStart;
 
     if (this.delimiter != '') {
-      while(delimiterEnd < maskValue.length) {
+      while (delimiterEnd < maskValue.length) {
         let c = maskValue[delimiterEnd];
         if (c == this.delimiter[delimiterEnd - delimiterStart])
           delimiterEnd++;

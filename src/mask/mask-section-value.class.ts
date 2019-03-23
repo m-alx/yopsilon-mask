@@ -14,7 +14,7 @@ export class MaskSectionValue {
   }
 
   public value(newChar: string = null) {
-    if(newChar != null)
+    if (newChar != null)
       return this.beforeChars + newChar + this.afterChars;
     else
       return this.beforeChars + this.currentChar + this.afterChars;
@@ -28,7 +28,7 @@ export class MaskSectionValue {
 
     let selStart_local = selStart - sectionPos;
 
-    if(selStart_local < 0 || selStart_local > sectionValue.length)
+    if (selStart_local < 0 || selStart_local > sectionValue.length)
     {
       this.beforeChars = sectionValue;
       this.currentChar = "";

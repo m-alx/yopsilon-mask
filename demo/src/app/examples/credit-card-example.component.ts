@@ -37,14 +37,14 @@ export class CreditCardExampleComponent {
   ];
 
   change(s) {
-    if(s.length < 2)
+    if (s.length < 2)
       return;
 
     let s2 = s.substring(0, 2);
 
     this.card = "";
     this.cardTypes.some(ct => {
-      if(s2.match(ct.regExp)) {
+      if (s2.match(ct.regExp)) {
         this.mask = ct.mask;
         this.card = ct.cardType;
         return true;

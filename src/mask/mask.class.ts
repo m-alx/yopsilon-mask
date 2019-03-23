@@ -236,7 +236,7 @@ export class Mask {
     let delimiter: string = '';
 
     let i = 0;
-    while( i < s.length) {
+    while ( i < s.length) {
 
       let c = s[i];
       let sType = null;
@@ -258,7 +258,7 @@ export class Mask {
         // Нужно добить разделителем
         i += part.length;
         let del = '';
-        while(Mask.delimiterChars.indexOf(s[i]) >= 0) {
+        while (Mask.delimiterChars.indexOf(s[i]) >= 0) {
           del += s[i];
           i++;
         }
@@ -285,11 +285,11 @@ export class Mask {
 
     let sectionStart = 0;
     let i = 0;
-    while(i < this.sections.length) {
+    while (i < this.sections.length) {
       let section = this.sections[i];
       let v = section.extract(value, sectionStart);
 
-      while(v.section.length < section.length)
+      while (v.section.length < section.length)
         v.section.append(this.settings.placeholder);
 
       v.delimiter = section.delimiter;
@@ -303,10 +303,10 @@ export class Mask {
   }
 
   public checkMask(value: string): boolean {
-    if(value === null) {
+    if (value === null) {
       return false;
     }
-    if(value === '' && this.pattern !== '') {
+    if (value === '' && this.pattern !== '') {
       return false;
     }
     return this.applyMask(value) !== '';
@@ -337,8 +337,8 @@ export class Mask {
           return '';
       }
 
-      if(sv.length < section.length) {
-        if(section.sectionType && section.sectionType.datePart) {
+      if (sv.length < section.length) {
+        if (section.sectionType && section.sectionType.datePart) {
           let dp = section.sectionType.datePart;
           if (dp === 'yyyy' && sv.length != 2) {  // For year we can accept value with 2 digits
             return '';

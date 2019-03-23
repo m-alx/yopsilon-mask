@@ -15,7 +15,6 @@ import * as YN from "yopsilon-mask";
         width: 100%;
         box-sizing: border-box;
       }
-
       input {
         text-align: right;
       }
@@ -23,7 +22,7 @@ import * as YN from "yopsilon-mask";
 })
 export class NumberExampleComponent {
 
-  format: string = "{N1-6.2}";
+  format: string = "{N1-6}";
 
   numValue: number = null;
   state: string;

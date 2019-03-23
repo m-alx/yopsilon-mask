@@ -44,12 +44,12 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
       // No need to parse once more if result is as expected       
       let autoCorrected = this._mask.applyMask(this._txtValue);
-      if(autoCorrected != this._txtValue)
+      if (autoCorrected != this._txtValue)
         this.setText(autoCorrected);
 
       // Clearing if Date is incorrect
-      if(this._dateValue == null || isNaN(this._dateValue.getTime())) {
-        if(!this._mask.settings.allowIncomplete)
+      if (this._dateValue == null || isNaN(this._dateValue.getTime())) {
+        if (!this._mask.settings.allowIncomplete)
           this.setText("");
       }
 
@@ -58,10 +58,10 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
 
     // Updating the state
     protected updateState() {
-      if(this._dateValue == null)
+      if (this._dateValue == null)
         this.state = MaskState.EMPTY; // empty value
       else
-        if(isNaN(this._dateValue.getTime()))
+        if (isNaN(this._dateValue.getTime()))
           this.state = MaskState.TYPING; // User input is in progress
         else
           this.state = MaskState.OK;
@@ -86,7 +86,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     writeValue(value: any) {
       this._dateValue = value;
       let txt = DateParserFormatter.format(value, this._mask);
-      if(txt != this._txtValue)
+      if (txt != this._txtValue)
         this.setText(txt, false);
 
       // No need to send to model, because this processor is called on model change

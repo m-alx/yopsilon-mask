@@ -4,6 +4,9 @@
 
 import { NumberParserFormatter } from "../src/numbers/number-parser-formatter.class";
 
+let intStr = "2019";
+let intFmt = "{0-4}";
+
 let testStr1 = "$123,456,789.01";
 let testStr2 = "-1.2345e+6";
 let testStr3 = "123 456,78 РУБ";
@@ -15,20 +18,27 @@ let testFmt3 = "{1.2} РУБ";
 let testFmt4 = "{1.2}";
 
 
+describe(`Parse integer value ` + intStr, () => {
+  let v = NumberParserFormatter.parse(intStr, intFmt, ['.',',']);
+  it(`Value = 2019"`, () => expect(v).toBe(2019));
+});
+
+describe(`Format integer value ` + intStr, () => {
+  let v = NumberParserFormatter.format(2019, intFmt, ['.',',']);
+  it(`Value = 2019"`, () => expect(v).toBe('2019'));
+});
+
+
 describe(`Parse ` + testStr1, () => {
 
   let v = NumberParserFormatter.parse(testStr1, testFmt1, ['.',',']);
   it(`Value = 123,456,789.01"`, () => expect(v).toBe(123456789.01));
-  //it(`SelStart = 5`, () => expect(v.selStart).toBe(5));
-  //it(`SelEnd = 6`, () => expect(v.selEnd).toBe(6));
 });
 
 describe(`Parse ` + testStr4, () => {
 
   let v = NumberParserFormatter.parse(testStr4, testFmt4, ['.',',']);
   it(`Value = 12345.00"`, () => expect(v).toBe(12345.00));
-  //it(`SelStart = 2`, () => expect(v.selStart).toBe(2));
-  //it(`SelEnd = 2`, () => expect(v.selEnd).toBe(2));
 });
 
 describe(`Parse ` + testStr2, () => {
@@ -76,6 +86,14 @@ describe(`Format int value`, () => {
   let v = 123;
   let s: string = NumberParserFormatter.format(v, "{1.0-4}", ['.',',']);
   it(v + ` with {1.0-4} = 0`, () => expect(s).toBe("123"));
+});
+
+describe(`Reformat int value`, () => {
+  let s = "1";
+  let state: any;
+  if (NumberParserFormatter.canAcceptKey('', null, '1', '{1-4}', ['.',','], 0, 0))
+    state = NumberParserFormatter.reformat(s, "{1-4}", ['.',','], 0, 0);
+  it(s + ` with {n1-4} = "1"`, () => expect(state.value).toBe("1"));
 });
 
 describe(`Reformat ` + testStr1, () => {

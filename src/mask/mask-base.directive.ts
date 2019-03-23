@@ -32,7 +32,7 @@ export abstract class MaskBaseDirective {
     }
 
     public set state(v: MaskState) {
-      if(this._state != v) {
+      if (this._state != v) {
         this._state = v;
         this.stateChange.emit(this._state); // Emitting event
       }
@@ -61,7 +61,7 @@ export abstract class MaskBaseDirective {
           preventDefault: (_: any) => {}
         });
 
-      if(!r)
+      if (!r)
         this.setRes(this.last_res); // Reversing, value has not been accepted
 
       this.android_behavior = false;
@@ -72,20 +72,20 @@ export abstract class MaskBaseDirective {
     protected last_res: MaskResult;
 
     protected doInput(txt: any) {
-      if(this.android_behavior) {
+      if (this.android_behavior) {
         this.processAndroid(txt);
         return;
       }
 
       // Thus we're trying to apply a mask to value entered
       let masked = this._mask.applyMask(txt);
-      if(masked != this._txtValue)
+      if (masked != this._txtValue)
         this.setText(masked, true);
     }
 
     protected processKey(e: any): boolean {
 
-      if(e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) {
+      if (e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) {
         // Android detected
         this.android_behavior = true;
         this.last_res = this.currentRes();
@@ -93,14 +93,14 @@ export abstract class MaskBaseDirective {
       }
 
       let c: string = e.char;
-      if(c == undefined)
+      if (c == undefined)
         c = e.key;
  
       let selStart: number = e.target.selectionStart;
       let selEnd: number = e.target.selectionEnd;
       let s = this._txtValue;
 
-      if(Keys.isFunctional(e.keyCode))
+      if (Keys.isFunctional(e.keyCode))
         return true;
 
       if (e.keyCode === Keys.TAB || e.keyCode === Keys.ESCAPE) {
@@ -121,14 +121,14 @@ export abstract class MaskBaseDirective {
         return true;
       }
 
-      if(e.altKey && (e.keyCode === Keys.DOWN || e.keyCode === Keys.UP)) {
+      if (e.altKey && (e.keyCode === Keys.DOWN || e.keyCode === Keys.UP)) {
         return true;
       }
 
-      if(e.ctrlKey && e.keyCode === Keys.Z) {
+      if (e.ctrlKey && e.keyCode === Keys.Z) {
         // UNDO
         let undoRes = this._undo.pop();
-        if(undoRes) {
+        if (undoRes) {
           this._redo.push(this.getRes(s, selStart, selEnd));
           this.setRes(undoRes);
         }
@@ -136,10 +136,10 @@ export abstract class MaskBaseDirective {
         return false;
       }
 
-      if(e.ctrlKey && e.keyCode == Keys.Y) {
+      if (e.ctrlKey && e.keyCode == Keys.Y) {
         // REDO
         let redoRes = this._redo.pop();
-        if(redoRes) {
+        if (redoRes) {
           this._undo.push(this.getRes(s, selStart, selEnd));
           this.setRes(redoRes);
         }
@@ -148,22 +148,22 @@ export abstract class MaskBaseDirective {
       }
 
       // If everything is selected
-      if(selStart === 0 && selEnd === this._txtValue.length)
+      if (selStart === 0 && selEnd === this._txtValue.length)
       {
-        if(e.keyCode === Keys.DELETE || e.keyCode === Keys.BACKSPACE)
+        if (e.keyCode === Keys.DELETE || e.keyCode === Keys.BACKSPACE)
           return true;
 
         // If ArrowLeft key has been pressed, result should equal to pressing of Home
-        if(e.keyCode === Keys.LEFT) {
+        if (e.keyCode === Keys.LEFT) {
           return true;
         }
 
-        if(e.keyCode === Keys.RIGHT) {
+        if (e.keyCode === Keys.RIGHT) {
           return true;
         }
       }
 
-      if(selStart === 0 && selEnd === this._txtValue.length) {
+      if (selStart === 0 && selEnd === this._txtValue.length) {
         s = "";
         selStart = 0;
         selEnd = 0;
@@ -172,17 +172,17 @@ export abstract class MaskBaseDirective {
       // Applying everything that's left
       let res: MaskResult = this._mask.applyKeyAtPos(s, e.keyCode, c, selStart, selEnd);
 
-      if(res != null && res.action === Action.APPLY) {
+      if (res != null && res.action === Action.APPLY) {
 
         // If value has been changed we'll add it to UNDO stack
-        if(res.newValue != s) {
+        if (res.newValue != s) {
           this._undo.push(this.getRes(s, selStart, selEnd));
           this._redo = [];
         }
 
         this.setRes(res);
 
-        if(this.android_behavior)
+        if (this.android_behavior)
           return true;
       }
 
@@ -193,7 +193,7 @@ export abstract class MaskBaseDirective {
     // Setting value and carriage position
     protected setRes(res: MaskResult) {
 
-      if(this.android_behavior)
+      if (this.android_behavior)
         res.selLength = 0;
 
       this.setText(res.newValue);
@@ -227,7 +227,7 @@ export abstract class MaskBaseDirective {
       this._renderer.setProperty(this._elementRef.nativeElement, 'value', this._txtValue);
 
       // Sending to model
-      if(toModel)
+      if (toModel)
         this.toModel();
     }
 

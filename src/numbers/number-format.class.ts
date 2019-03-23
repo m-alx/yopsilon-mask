@@ -10,11 +10,11 @@ export class NumberFormat {
   intMin  : number = 1;
   intMax  : number = 16;
 
-  fractionMin : number = 2;
-  fractionMax : number = 2;
+  fractionMin : number = 0;
+  fractionMax : number = 0;
 
   public static isDigit(char: string): boolean {
-    if("0123456789".indexOf(char) >= 0)
+    if ("0123456789".indexOf(char) >= 0)
       return true;
 
     return false;
@@ -28,7 +28,7 @@ export class NumberFormat {
 
       let splitted = formatTxt.split(/[\{\}]/);
 
-      if(splitted.length < 3)
+      if (splitted.length < 3)
         return null;
 
       let res = new NumberFormat();
@@ -45,54 +45,54 @@ export class NumberFormat {
 
         let isDigit = NumberFormat.isDigit(char);
 
-        if(!isDigit && "EDFNedfn+-. ".indexOf(char) < 0)
+        if (!isDigit && "EDFNedfn+-. ".indexOf(char) < 0)
           return null;
 
-        if(pos == 0 && "+-".indexOf(char) >= 0)
+        if (pos == 0 && "+-".indexOf(char) >= 0)
           res.signum = true;
 
         // Задается спецификатор
-        if(part == "spec"  && "EDFNedfn".indexOf(char) >= 0) {
+        if (part == "spec"  && "EDFNedfn".indexOf(char) >= 0) {
             res.specifier = char.toUpperCase();
             part = "int";
             continue;
         }
 
-        if((part == "spec" || part == "int") && isDigit) {
+        if ((part == "spec" || part == "int") && isDigit) {
           digits.int += char;
           part = "int";
           continue;
         }
 
-        if(part == "int" && char == "-")
+        if (part == "int" && char == "-")
           part = "intmax";
 
-        if(part == "intmax" && isDigit)
+        if (part == "intmax" && isDigit)
           digits.intMax += char;
 
-        if(char == ".")
+        if (char == ".")
           part = "fmin";
 
-        if(part == "fmin" && char == "-")
+        if (part == "fmin" && char == "-")
           part = "fmax";
 
-        if(part == "fmin" && isDigit)
+        if (part == "fmin" && isDigit)
             digits.fMin += char;
 
-        if(part == "fmax" && isDigit)
+        if (part == "fmax" && isDigit)
             digits.fMax += char;
       }
 
-      if(digits.int != "")
+      if (digits.int != "")
         res.intMin = +digits.int;
 
-      if(digits.intMax != "")
+      if (digits.intMax != "")
         res.intMax = +digits.intMax;
 
-      if(digits.fMin != "")
+      if (digits.fMin != "")
         res.fractionMin = +digits.fMin;
 
-      if(digits.fMax != "")
+      if (digits.fMax != "")
         res.fractionMax = +digits.fMax;
       else
         res.fractionMax = res.fractionMin;

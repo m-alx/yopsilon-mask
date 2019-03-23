@@ -32,7 +32,7 @@ export class InternationalizationService {
 
   public setCurrentLocale(l: Locale) {
     let res = this.locales.find(l => l.shortName == this._currentLocale);
-    if(!res)
+    if (!res)
       this.locales.push(l);
 
     this.currentLocale = l.shortName;
@@ -40,14 +40,14 @@ export class InternationalizationService {
 
   // Adding a locale
   public addLocale(locale: Locale) {
-    if(!this.locales.find(l => l.shortName == locale.shortName))
+    if (!this.locales.find(l => l.shortName == locale.shortName))
       this.locales.push(locale);
   }
 
   //
   public get locale(): Locale {
     let res = this.locales.find(l => l.shortName == this._currentLocale);
-    if(!res)
+    if (!res)
       return this.locales[0];
     else
       return res;
