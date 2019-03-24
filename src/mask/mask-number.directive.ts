@@ -216,7 +216,7 @@ export class MaskNumberDirective {
     return false;
   }
 
-  protected processKey(e: any): boolean {
+  public processKey(e: any): boolean {
 
     if (e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) { // test: if (e.keyCode >= 0) ...
       // Android detected

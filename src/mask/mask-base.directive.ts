@@ -83,7 +83,7 @@ export abstract class MaskBaseDirective {
         this.setText(masked, true);
     }
 
-    protected processKey(e: any): boolean {
+    public processKey(e: any): boolean {
 
       if (e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) {
         // Android detected
@@ -95,7 +95,7 @@ export abstract class MaskBaseDirective {
       let c: string = e.char;
       if (c == undefined)
         c = e.key;
- 
+
       let selStart: number = e.target.selectionStart;
       let selEnd: number = e.target.selectionEnd;
       let s = this._txtValue;
@@ -173,7 +173,6 @@ export abstract class MaskBaseDirective {
       let res: MaskResult = this._mask.applyKeyAtPos(s, e.keyCode, c, selStart, selEnd);
 
       if (res != null && res.action === Action.APPLY) {
-
         // If value has been changed we'll add it to UNDO stack
         if (res.newValue != s) {
           this._undo.push(this.getRes(s, selStart, selEnd));
