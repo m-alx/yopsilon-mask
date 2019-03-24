@@ -42,7 +42,7 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     // Focus lost
     blur() {
 
-      // No need to parse once more if result is as expected       
+      // No need to parse once more if result is as expected
       let autoCorrected = this._mask.applyMask(this._txtValue);
       if (autoCorrected != this._txtValue)
         this.setText(autoCorrected);
@@ -75,6 +75,11 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       this.onChange(this._dateValue);
       // Updating the state
       this.updateState();
+    }
+
+    //
+    public processKey(e: any): boolean {
+      return super.processKey(e);
     }
 
     // Parser: View --> Ctrl
