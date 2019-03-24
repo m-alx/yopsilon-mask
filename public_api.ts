@@ -1,5 +1,9 @@
 export * from './src/yopsilon-mask.module';
 
+export { MaskDirective } from './src/mask/mask.directive';
+export { MaskDateDirective } from './src/mask/mask-date.directive';
+export { MaskNumberDirective } from './src/mask/mask-number.directive';
+
 export { Keys } from './src/keys/keys.class';
 
 export { Mask } from './src/mask/mask.class';
