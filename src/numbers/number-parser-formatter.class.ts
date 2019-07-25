@@ -288,10 +288,14 @@ export class NumberParserFormatter {
     // Убираем лидирующие нули
     while (number.int.length > 1 && number.int[0] == '0') {
       number.int = number.int.substring(1);
-      if (newSelStart > 0)
+
+      if (newSelStart > 0) {
         newSelStart--;
-      if (newSelEnd > 0)
+      }
+
+      if (newSelEnd > 0) {
         newSelEnd--;
+      }
     }
 
     // Список групп
@@ -305,10 +309,13 @@ export class NumberParserFormatter {
     let se = newSelEnd;
     for(let i = 1; i < groups.length; i++) {
 
-      if (newSelStart > pos)
+      if (newSelStart > pos) {
         ss -= thousandSeparator.length;
-      if (newSelEnd > pos)
+      }
+
+      if (newSelEnd > pos) {
         se -= thousandSeparator.length;
+      }
 
       pos += groups[i].length + thousandSeparator.length;
     }
@@ -323,11 +330,13 @@ export class NumberParserFormatter {
       for(let i = 3; i < number.int.length; i += 4) {
 
         // Необходимо добавить курсору немного позиции, если он стоит дальше этого разделителя...
-        if (newSelStart > (number.int.length - i))
+        if (newSelStart > (number.int.length - i)) {
           newSelStart += thousandSeparator.length;
+        }
 
-        if (newSelEnd > (number.int.length - i))
+        if (newSelEnd > (number.int.length - i)) {
           newSelEnd += thousandSeparator.length;
+        }
 
         number.int = number.int.substring(0, number.int.length - i) +
                          thousandSeparator +

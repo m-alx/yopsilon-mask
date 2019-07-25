@@ -338,7 +338,6 @@ export class MaskNumberDirective {
       s = s.substring(0, selStart) + s.substring(selEnd);
 
       if (NumberParserFormatter.canAcceptKey(s, e.keyCode, c, this.format, this._separators, selStart)) {
-
         s = s.substring(0, selStart) + c + s.substring(selStart);
         selStart++;
         selEnd = selStart;
@@ -355,12 +354,12 @@ export class MaskNumberDirective {
         this._undo.push(state0);
         this._redo = [];
       }
-
       let state3 = NumberParserFormatter.reformat(s, this.format, this._separators, selStart, selEnd, leadToFormat);
       this.setRes(this.getRes(state3.value, state3.selStart, state3.selEnd));
 
-      if (this.android_behavior)
+      if (this.android_behavior) {
         return true;
+      }
 
       e.preventDefault();
       return false;

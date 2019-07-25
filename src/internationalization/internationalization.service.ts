@@ -75,7 +75,7 @@ export class InternationalizationService {
 
         longDayNames:    ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
                           "Friday", "Saturday"],
-
+                          
         firstDayOfWeek: 0,
         dateFormat: "mm/dd/yyyy",
         timeHMFormat: "hh:mi am",

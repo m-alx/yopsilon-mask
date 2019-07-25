@@ -242,9 +242,12 @@ export class MaskSection {
   ): MaskValue
   {
     let res = new MaskValue();
-
     let len = this.length;
     let i2 = sectionPos + len;
+
+    if (maskValue === null || maskValue === undefined) {
+      maskValue = '';
+    }
 
     // Variable length brings trouble...
     if (this.length < this.maxLength) {
@@ -252,8 +255,9 @@ export class MaskSection {
       // but less than MaxLength
       let i = sectionPos;
       while (i < maskValue.length && i < (sectionPos + this.maxLength)) {
-        if (this.delimiter != '' && maskValue[i] == this.delimiter[0])
+        if (this.delimiter !== '' && maskValue[i] === this.delimiter[0]) {
           break;
+        }
         i++;
       }
       i2 = i;
@@ -267,17 +271,20 @@ export class MaskSection {
     if (this.delimiter != '') {
       while (delimiterEnd < maskValue.length) {
         let c = maskValue[delimiterEnd];
-        if (c == this.delimiter[delimiterEnd - delimiterStart])
+        if (c === this.delimiter[delimiterEnd - delimiterStart]) {
           delimiterEnd++;
-        else
+        } else {
           break;
+        }
       }
     }
 
-    if (i2 > maskValue.length)
+    if (i2 > maskValue.length) {
       i2 = maskValue.length;
-    if (delimiterEnd > maskValue.length)
+    }
+    if (delimiterEnd > maskValue.length) {
       delimiterEnd = maskValue.length;
+    }
 
     let section = maskValue.substring(sectionPos, i2);
 

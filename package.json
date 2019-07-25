@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
-  "description": "Angular 5+ input masking directive",
-  "version": "0.4.5",
+  "description": "Angular input masking directive",
+  "version": "0.5.3",
   "scripts": {
     "test": "karma start",
     "clean": "rimraf dist",
@@ -13,11 +13,11 @@
   },
   "keywords": [
     "angular",
-    "angular2",
-    "angular 2",
-    "angular 5",
     "mask",
+    "input masking",
     "input mask",
+    "number format",
+    "formatted input",
     "masking"
   ],
   "author": "Aleksey Melnikov <z9115011@gmail.com>",

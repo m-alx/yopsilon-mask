@@ -1,13 +1,13 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import * as YN from "yopsilon-mask";
 
 @Component({
   selector: "date-example",
   template:
     `<div class="input-wrapper">
-        <input yn-mask-date="date" [placeholder]="intl.locale.dateFormat" (ynStateChange)="stateChange($event)" [(ngModel)]="dateValue" autofocus="1" />
+        <input #input yn-mask-date="date" autofocus [placeholder]="intl.locale.dateFormat" (ynStateChange)="stateChange($event)" [(ngModel)]="dateValue" autofocus="1" />
         <div class="state-indicator" [ngClass]="stateClass">{{state}}</div>
-     </div>
+     </div>     
      <span class="model-value">{{dateValue}}</span>
     `,
   styles:[
@@ -22,6 +22,12 @@ export class DateExampleComponent {
   dateValue: any = null;
   state: string;
   stateClass: string;
+
+  @ViewChild('input', {read: YN.MaskDateDirective})
+  maskDateDirective: YN.MaskDateDirective;
+
+  @ViewChild('input')
+  input: any;
 
   stateChange(state: YN.MaskState) {
     this.state = state.name;

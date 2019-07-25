@@ -79,7 +79,7 @@ export abstract class MaskBaseDirective {
 
       // Thus we're trying to apply a mask to value entered
       let masked = this._mask.applyMask(txt);
-      if (masked != this._txtValue)
+      if (masked !== this._txtValue)
         this.setText(masked, true);
     }
 
@@ -147,8 +147,10 @@ export abstract class MaskBaseDirective {
         return false;
       }
 
+      const hasTxtValue: boolean = this._txtValue !== undefined && this._txtValue !== null;
+
       // If everything is selected
-      if (selStart === 0 && selEnd === this._txtValue.length)
+      if (hasTxtValue && selStart === 0 && selEnd === this._txtValue.length)
       {
         if (e.keyCode === Keys.DELETE || e.keyCode === Keys.BACKSPACE)
           return true;
@@ -163,7 +165,7 @@ export abstract class MaskBaseDirective {
         }
       }
 
-      if (selStart === 0 && selEnd === this._txtValue.length) {
+      if (!hasTxtValue || (selStart === 0 && selEnd === this._txtValue.length)) {
         s = "";
         selStart = 0;
         selEnd = 0;
@@ -183,9 +185,10 @@ export abstract class MaskBaseDirective {
 
         if (this.android_behavior)
           return true;
+
+        e.preventDefault();
       }
 
-      e.preventDefault();
       return false;
     }
 
