@@ -100,7 +100,7 @@ $selection-color: #b6e2fc;
   transform: rotate(45deg);
 }
 
-/deep/ input, select {
+::ng-deep input, select {
   font-family: "Open Sans", sans-serif;
   font-size: 1em;
   padding: $axInputPadding;
@@ -108,22 +108,22 @@ $selection-color: #b6e2fc;
   outline: 0;
 }
 
-/deep/ input:focus, select:focus {
+::ng-deep input:focus, select:focus {
   border-color: $accent-color;
   outline: none;
 }
 
-/deep/ input.yn-btn {
+::ng-deep input.yn-btn {
   padding: $axInputPadding $axInputBtnWidth $axInputPadding $axInputPadding;
   margin-right: 0;
 }
 
-/deep/ ::selection {
+::ng-deep ::selection {
   background: $selection-color;
   text-shadow: none;
 }
 
-/deep/ ::placeholder {
+::ng-deep ::placeholder {
   color: #aaa;
 }
 

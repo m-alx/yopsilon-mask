@@ -18,7 +18,7 @@
   padding: 2px 0px;
 }
 
-/deep/ .state-indicator {
+::ng-deep .state-indicator {
   width:56px;
   flex-grow: 0;
   flex-shrink: 0;
@@ -28,13 +28,13 @@
   color: #aaa;
 }
 
-/deep/ .model-value {
+::ng-deep .model-value {
   padding-left: 0.25em;
   font-size: 0.8em;
   color: #aaa;
 }
 
-/deep/ .input-wrapper {
+::ng-deep .input-wrapper {
   display: inline-flex;
   width: 100%;
   flex-wrap: nowrap;
@@ -42,12 +42,12 @@
   align-content: stretch;
 }
 
-/deep/ .input-wrapper input {
+::ng-deep .input-wrapper input {
   width:100%;
   flex-grow: 1;
   box-sizing: border-box;
 }
 
-/deep/ .state-indicator.green {
+::ng-deep .state-indicator.green {
   color: #00b404;
 }

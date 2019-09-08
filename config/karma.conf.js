@@ -1,62 +1,167 @@
-module.exports = function(config) {
-    var testWebpackConfig = require('./webpack.test.js');
+module.exports = function (config) {
+  // const testWebpackConfig = require('./webpack.test.config')({ env: 'test' });
 
-    var configuration = {
-        basePath: '',
+  const configuration = {
 
-        frameworks: ['jasmine'],
+    /**
+     * Base path that will be used to resolve all patterns (e.g. files, exclude).
+    */
+    basePath: '',
 
-        // list of files to exclude
-        exclude: [ ],
+    /**
+     * Frameworks to use
+     *
+     * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+     */
+    frameworks: ['jasmine'],
 
-        /*
-         * list of files / patterns to load in the browser
-         *
-         * we are building the test environment in ./spec-bundle.js
+    /**
+     * List of files to exclude.
+    */
+    exclude: [],
+
+    client: {
+      captureConsole: false
+    },
+
+    /**
+     * List of files / patterns to load in the browser
+     *
+     * we are building the test environment in ./spec-bundle.js
+     */
+    files: [
+      { pattern: './config/spec-bundle.js', watched: false },
+    ],
+    plugins: [
+      require('karma-jasmine'),
+      require("karma-coverage"),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-webpack'),
+      require('karma-sourcemap-loader'),      
+      require('karma-mocha-reporter'),
+      require('karma-remap-coverage')
+    ],
+
+    /**
+     * Preprocess matching files before serving them to the browser
+     * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+     */
+    preprocessors: { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] },
+
+    /**
+     * Webpack Config at ./webpack.test.js
+     */
+    webpack: require('./webpack.test.js'),
+
+    coverageReporter: {
+      type: 'in-memory'
+    },
+
+    remapCoverageReporter: {
+      'text': null,
+      json: './coverage/coverage.json',
+      html: './coverage/html'
+    },
+
+    /**
+     * Webpack please don't spam the console when running in karma!
+     */
+    webpackMiddleware: {
+      /**
+       * webpack-dev-middleware configuration
+       * i.e.
+       */
+      logLevel: 'warn',
+      /**
+       * and use stats to turn off verbose output
+       */
+      stats: {
+        /**
+         * options i.e.
          */
-        files: [ { pattern: './config/spec-bundle.js', watched: false } ],
+        chunks: false
+      }
+    },
 
-        preprocessors: { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] },
+    /**
+     * Test results reporter to use
+     *
+     * possible values: 'dots', 'progress'
+     * available reporters: https://npmjs.org/browse/keyword/karma-reporter
+     */
+    reporters: ['mocha', 'progress', 'coverage', 'kjhtml', 'remap-coverage'],
 
-        // Webpack Config at ./webpack.test.js
-        webpack: testWebpackConfig,
+    /**
+     * Web server port.
+     */
+    port: 9876,
 
-        coverageReporter: {
-            type: 'in-memory'
-        },
+    /**
+     * enable / disable colors in the output (reporters and logs)
+     */
+    colors: true,
 
-        remapCoverageReporter: {
-            'text-summary': null,
-            json: './coverage/coverage.json',
-            html: './coverage/html'
-        },
+    /**
+     * Level of logging
+     * possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+     */
+    logLevel: config.LOG_WARN,
 
-        client:{
-          clearContext: false // leave Jasmine Spec Runner output visible in browser
-        },
-        // Webpack please don't spam the console when running in karma!
-        webpackMiddleware: { stats: 'errors-only'},
+    /**
+     * enable / disable watching file and executing tests whenever any file changes
+     */
+    autoWatch: true,
 
-        reporters: ['progress', 'kjhtml', 'coverage', 'remap-coverage' ],
-        //reporters: [ 'mocha', 'coverage', 'remap-coverage' ],
+    /**
+     * start these browsers
+     * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+     */
+    browsers: [
+      'Chrome'
+    ],
 
-        // web server port
-        port: 9876,
+    /**
+     * Continuous Integration mode
+     * if true, Karma captures browsers, runs the tests and exits
+     */
+    singleRun: false,
 
-        colors: true,
+    client: {
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
 
-        /*
-         * level of logging
-         * possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-         */
-        logLevel: config.LOG_INFO,
+    /**
+     * For slower machines you may need to have a longer browser
+     * wait time . Uncomment the line below if required.
+     */
+    // browserNoActivityTimeout: 30000
 
-        autoWatch: true,
+    // Concurrency level
+    // how many browser should be started simultaneous
+    concurrency: Infinity
 
-        browsers: [process.env.TRAVIS ? 'Firefox' : 'Chrome'],
+  };
 
-        singleRun: false
+  // Optional Sonar Qube Reporter
+  if (process.env.SONAR_QUBE) {
+
+    // SonarQube reporter plugin configuration
+    configuration.sonarQubeUnitReporter = {
+      sonarQubeVersion: '5.x',
+      outputFile: 'reports/ut_report.xml',
+      overrideTestDescription: true,
+      testPath: 'src/components',
+      testFilePattern: '.spec.ts',
+      useBrowserName: false
     };
 
-    config.set(configuration);
+    // Additional lcov format required for
+    // sonarqube
+    configuration.remapCoverageReporter.lcovonly = './coverage/coverage.lcov';
+
+    configuration.reporters.push('sonarqubeUnit');
+  }
+
+  config.set(configuration);
 };

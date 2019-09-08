@@ -4,7 +4,7 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from "rxjs/Rx";
+import { Observable, BehaviorSubject } from "rxjs";
 
 import { Locale } from "./locale.class";
 
@@ -75,7 +75,7 @@ export class InternationalizationService {
 
         longDayNames:    ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
                           "Friday", "Saturday"],
-                          
+
         firstDayOfWeek: 0,
         dateFormat: "mm/dd/yyyy",
         timeHMFormat: "hh:mi am",
