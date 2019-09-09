@@ -195,8 +195,9 @@ export class NumberParserFormatter {
         return false;
 
       // Запрет применения, если удаляется десятичный разделитель
-      if (convertToFormat && selStart == selEnd && selStart == fractionStart)
+      if (convertToFormat && selStart == selEnd && selStart == fractionStart) {
         return false;
+      }
 
       return true;
     }
@@ -228,8 +229,9 @@ export class NumberParserFormatter {
 
       // Только если заменяем разделитель
       let dmStart = numStart + number.signum.length + number.int.length;
-      if (selStart == dmStart)
+      if (selStart == dmStart) {
         return true;
+      }
 
       // Нету еще разделителя
       if (number.decimalSeparator == '')
@@ -246,6 +248,10 @@ export class NumberParserFormatter {
 
       // И до префикса
       if (selStart < numStart) {
+        return false;
+      }
+
+      if (selStart > (numEnd + 1)) {
         return false;
       }
 
@@ -270,8 +276,9 @@ export class NumberParserFormatter {
     selStart: number, selEnd: number,
     convertToFormat: boolean = false): any {
 
-    if (txt == '')
+    if (txt == '') {
       return { value: '', selStart: 0, selEnd: 0, canInput: true };
+    }
 
     let fmt: NumberFormat = NumberFormat.parseFormat(format);
 
@@ -352,7 +359,7 @@ export class NumberParserFormatter {
 
     if (convertToFormat && fmt != null && (number.signum !='' || number.int != '' || number.fraction != ''))
       while (number.int.length < fmt.intMin) {
-        number.int = '0' + number.in5;
+        number.int = '0' + number.int;
         newSelEnd++;
       }
 
@@ -382,18 +389,14 @@ export class NumberParserFormatter {
     resValue += number.int;
 
     if (convertToFormat) {
-      if (number.fraction != '')
+      if (number.fraction !== '') {
         resValue += separators[0] + number.fraction;
-    }
-    else {
+      }
+    } else {
       // Не нужно приводить к формату... Добавляем разделитель только если он был в исходном значении
-      if (txt.indexOf(separators[0]) >= 0)
+      if (txt.indexOf(separators[0]) >= 0) {
         resValue += separators[0] + number.fraction;
-    }
-
-    if (fmt.specifier.toLowerCase() == 'e') {
-      resValue += number.e;
-      resValue += number.orderOfMagnitude;
+      }
     }
 
     resValue += fmt.postfix;
