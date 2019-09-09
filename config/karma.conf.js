@@ -38,7 +38,7 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-webpack'),
-      require('karma-sourcemap-loader'),      
+      require('karma-sourcemap-loader'),
       require('karma-mocha-reporter'),
       require('karma-remap-coverage')
     ],
@@ -118,7 +118,7 @@ module.exports = function (config) {
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
     browsers: [
-      'Chrome'
+      'ChromeHeadless'
     ],
 
     /**
