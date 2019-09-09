@@ -4,6 +4,7 @@
   "version": "1.0.2",
   "scripts": {
     "test": "karma start",
+    "test-ci": "karma start --singleRun --browsers ChromeHeadless",
     "clean": "rimraf dist",
     "build": "npm run clean && ngc && ng-packagr -p ng-package.json",
     "build-ci": "npm run clean && ngc && ng-packagr -p ng-package.json"
