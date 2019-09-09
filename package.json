@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular input masking directive",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scripts": {
     "test": "karma start",
     "test-ci": "karma start --singleRun --browsers ChromeHeadless",
