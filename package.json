@@ -5,7 +5,8 @@
   "scripts": {
     "test": "karma start",
     "clean": "rimraf dist",
-    "build": "npm run clean && ngc && ng-packagr -p ng-package.json"
+    "build": "npm run clean && ngc && ng-packagr -p ng-package.json",
+    "build-ci": "npm run clean && ngc && ng-packagr -p ng-package.json"
   },
   "repository": {
     "type": "git",
