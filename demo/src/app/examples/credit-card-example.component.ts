@@ -7,7 +7,7 @@ import * as YN from "yopsilon-mask";
     `<div class="input-wrapper">
         <input [yn-mask]="mask" [placeholder]="mask" [yn-mask-settings]="settings" (ynStateChange)="stateChange($event)" [(ngModel)]="txtValue" (ngModelChange)="change($event)" />
         <div class="state-indicator" [ngClass]="stateClass">{{state}}</div>
-     </div>
+     </div><br />
      <span class="model-value">{{card}}&nbsp;{{txtValue}}</span>
     `,
   styles:[
