@@ -11,15 +11,15 @@ import { Locale } from "./locale.class";
 @Injectable()
 export class InternationalizationService {
 
+  // Current locale
+  public _currentLocale: string = '';
+
   // Locales list
-  public locales: Array<Locale> = [];
+  public readonly locales: Array<Locale> = [];
 
   // On locale change event
   private _onLocaleChange: BehaviorSubject<Locale> = new BehaviorSubject<Locale>(this.locale);
   public readonly onLocaleChange: Observable<Locale> = this._onLocaleChange.asObservable();
-
-  // Current locale
-  public _currentLocale: string;
 
   public get currentLocale(): string {
     return this._currentLocale;
@@ -30,18 +30,19 @@ export class InternationalizationService {
     this._onLocaleChange.next(this.locale);
   }
 
-  public setCurrentLocale(l: Locale) {
-    let res = this.locales.find(l => l.shortName == this._currentLocale);
-    if (!res)
-      this.locales.push(l);
-
-    this.currentLocale = l.shortName;
+  public setCurrentLocale(locale: Locale) {
+    const res = this.locales.find(l => locale.shortName === l.shortName);
+    if (!res) {
+      this.locales.push(locale);
+    }
+    this.currentLocale = locale.shortName;
   }
 
   // Adding a locale
   public addLocale(locale: Locale) {
-    if (!this.locales.find(l => l.shortName == locale.shortName))
+    if (!this.locales.find(l => l.shortName == locale.shortName)) {
       this.locales.push(locale);
+    }
   }
 
   //

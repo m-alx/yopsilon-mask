@@ -9,7 +9,7 @@ import * as YN from 'yopsilon-mask';
 export class LocaleRu {
   constructor(private intl: YN.InternationalizationService) {
 
-    let locale: YN.Locale = {
+    const locale: YN.Locale = {
       name: "Russian",
       shortName: "ru-RU",
       shortMonthNames: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл",
