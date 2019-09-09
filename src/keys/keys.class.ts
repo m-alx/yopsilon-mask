@@ -46,17 +46,17 @@ export class Keys {
     selStart1: number, selStart2: number,
     selLength: number): KeyInfo {
 
-    if (txt1 == txt2 && selStart1 == selStart2 - 1) {
+    if (txt1 === txt2 && selStart1 === selStart2 - 1) {
       return new KeyInfo(Keys.RIGHT);
-    }    
+    }
 
-    if (txt1 == txt2 && selStart1 == selStart2 + 1) {
+    if (txt1 === txt2 && selStart1 === selStart2 + 1) {
       return new KeyInfo(Keys.LEFT);
     }
 
-    if (selLength == 1) {
-      if (txt1.substring(0, selStart2) == txt2.substring(0, selStart2)) {
-        if (txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart2, txt2.length)) {
+    if (selLength === 1) {
+      if (txt1.substring(0, selStart2) === txt2.substring(0, selStart2)) {
+        if (txt1.substring(selStart1 + 1, txt1.length) === txt2.substring(selStart2, txt2.length)) {
           return new KeyInfo(Keys.BACKSPACE);
         }
       }
@@ -65,15 +65,15 @@ export class Keys {
     }
 
     // Tes|t -> Te|t
-    if (txt1.substring(0, selStart1 - 1) == txt2.substring(0, selStart1 - 1)) {
-      if (txt1.substring(selStart1, txt1.length) == txt2.substring(selStart1 - 1, txt2.length)) {
+    if (txt1.substring(0, selStart1 - 1) === txt2.substring(0, selStart1 - 1)) {
+      if (txt1.substring(selStart1, txt1.length) === txt2.substring(selStart1 - 1, txt2.length)) {
         return new KeyInfo(Keys.BACKSPACE);
       }
     }
 
     // Te|st -> Te|t
-    if (txt1.substring(0, selStart1) == txt2.substring(0, selStart1)) {
-      if (txt1.substring(selStart1 + 1, txt1.length) == txt2.substring(selStart1, txt2.length)) {
+    if (txt1.substring(0, selStart1) === txt2.substring(0, selStart1)) {
+      if (txt1.substring(selStart1 + 1, txt1.length) === txt2.substring(selStart1, txt2.length)) {
         return new KeyInfo(Keys.DELETE);
       }
     }

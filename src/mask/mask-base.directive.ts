@@ -85,7 +85,7 @@ export abstract class MaskBaseDirective {
 
     public processKey(e: any): boolean {
 
-      if (e.keyCode == 229 || e.keyCode == 0 || e.keyCode == undefined) {
+      if (e.keyCode === 229 || e.keyCode === 0 || e.keyCode === undefined) {
         // Android detected
         this.android_behavior = true;
         this.last_res = this.currentRes();
@@ -93,7 +93,7 @@ export abstract class MaskBaseDirective {
       }
 
       let c: string = e.char;
-      if (c == undefined)
+      if (c === undefined)
         c = e.key;
 
       let selStart: number = e.target.selectionStart;
@@ -136,7 +136,7 @@ export abstract class MaskBaseDirective {
         return false;
       }
 
-      if (e.ctrlKey && e.keyCode == Keys.Y) {
+      if (e.ctrlKey && e.keyCode === Keys.Y) {
         // REDO
         let redoRes = this._redo.pop();
         if (redoRes) {

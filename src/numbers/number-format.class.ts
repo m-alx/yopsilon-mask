@@ -48,51 +48,51 @@ export class NumberFormat {
         if (!isDigit && "EDFNedfn+-. ".indexOf(char) < 0)
           return null;
 
-        if (pos == 0 && "+-".indexOf(char) >= 0)
+        if (pos === 0 && "+-".indexOf(char) >= 0)
           res.signum = true;
 
         // Задается спецификатор
-        if (part == "spec"  && "EDFNedfn".indexOf(char) >= 0) {
+        if (part === "spec"  && "EDFNedfn".indexOf(char) >= 0) {
             res.specifier = char.toUpperCase();
             part = "int";
             continue;
         }
 
-        if ((part == "spec" || part == "int") && isDigit) {
+        if ((part === "spec" || part === "int") && isDigit) {
           digits.int += char;
           part = "int";
           continue;
         }
 
-        if (part == "int" && char == "-")
+        if (part === "int" && char === "-")
           part = "intmax";
 
-        if (part == "intmax" && isDigit)
+        if (part === "intmax" && isDigit)
           digits.intMax += char;
 
-        if (char == ".")
+        if (char === ".")
           part = "fmin";
 
-        if (part == "fmin" && char == "-")
+        if (part === "fmin" && char === "-")
           part = "fmax";
 
-        if (part == "fmin" && isDigit)
+        if (part === "fmin" && isDigit)
             digits.fMin += char;
 
-        if (part == "fmax" && isDigit)
+        if (part === "fmax" && isDigit)
             digits.fMax += char;
       }
 
-      if (digits.int != "")
+      if (digits.int !== "")
         res.intMin = +digits.int;
 
-      if (digits.intMax != "")
+      if (digits.intMax !== "")
         res.intMax = +digits.intMax;
 
-      if (digits.fMin != "")
+      if (digits.fMin !== "")
         res.fractionMin = +digits.fMin;
 
-      if (digits.fMax != "")
+      if (digits.fMax !== "")
         res.fractionMax = +digits.fMax;
       else
         res.fractionMax = res.fractionMin;

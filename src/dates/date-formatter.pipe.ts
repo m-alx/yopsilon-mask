@@ -16,16 +16,14 @@ import { DateParserFormatter } from "./date-parser-formatter.class";
   pure: true
 })
 export class DateFormatterPipe {
+  transform(date: any, pattern: string): string {
+    let mask: Mask = new Mask(this.intl);
+    mask.pattern = pattern;
 
-    transform(date: any, pattern: string): string {
+    return DateParserFormatter.format(date, mask);
+  }
 
-      let mask: Mask = new Mask(this.intl);
-      mask.pattern = pattern;
-
-      return DateParserFormatter.format(date, mask);
-    }
-
-    constructor(private intl: InternationalizationService) {
-      //
-    }
+  constructor(private intl: InternationalizationService) {
+    //
+  }
 }

@@ -11,20 +11,19 @@ import { MaskSectionType } from "../mask/mask-section-type.class";
 
 // Parse and format DateTime
 export class DateParserFormatter {
-
   // Creating Invalid Date
   public static invalidDate() {
-    return new Date('*');
+    return new Date("*");
   }
 
-  public static daysInMonth (y: number, m: number): number {
+  public static daysInMonth(y: number, m: number): number {
     return new Date(y, m, 0).getDate();
   }
 
   public static parse(value: string, mask: Mask): any {
-
-    if (value == "")
+    if (value === "") {
       return null;
+    }
 
     let sectionPos = 0;
     let res = value;
@@ -40,14 +39,15 @@ export class DateParserFormatter {
 
     let tt: string = "";
 
-    for(let i = 0; i < mask.sections.length; i++) {
-
+    for (let i = 0; i < mask.sections.length; i++) {
       let incomplete = false;
       let section: MaskSection = mask.sections[i];
       let datePart = section.sectionType.datePart;
 
-      if (datePart == null) // Not datetime component
+      if (datePart === null) {
+        // Not datetime component
         continue;
+      }
 
       let v = section.extract(res, sectionPos);
       sectionPos = v.nextSectionPos();
@@ -59,141 +59,121 @@ export class DateParserFormatter {
       n = NaN;
 
       if (section.isNumeric()) {
-
-        if (s.indexOf(mask.settings.placeholder) >= 0) { // Contains placeholders
+        if (s.indexOf(mask.settings.placeholder) >= 0) {
+          // Contains placeholders
           return DateParserFormatter.invalidDate();
         }
 
         n = section.numericValue(section.removePlaceholders(s));
 
-        if (n < section.sectionType.min || n > section.sectionType.max)
+        if (n < section.sectionType.min || n > section.sectionType.max) {
           return DateParserFormatter.invalidDate();
-
-      }
-      else
+        }
+      } else {
         if (section.hasOptions()) {
           n = section.sectionType.options.indexOf(s);
-          if (n < 0)
+          if (n < 0) {
             return DateParserFormatter.invalidDate();
+          }
           n++; // Index starts from 0
         }
+      }
 
-      if (isNaN(n))
+      if (isNaN(n)) {
         return DateParserFormatter.invalidDate();
+      }
 
       // Time components...
-      if (datePart == "H")
+      if (datePart === "H") {
         hh = n;
-
-      if (datePart == "h") {
-        hh = n;
-        if (hh == 12)
-          hh = 0;
       }
 
-      if (datePart == "tt")
-        tt = s;
+      if (datePart === "h") {
+        hh = n;
+        if (hh === 12) hh = 0;
+      }
 
-      if (datePart == "mi")
-        mi = n;
+      if (datePart === "tt") tt = s;
 
-      if (datePart == "ss")
-        ss = n;
+      if (datePart === "mi") mi = n;
 
-      if (datePart == "ms")
-        ms = n;
+      if (datePart === "ss") ss = n;
+
+      if (datePart === "ms") ms = n;
 
       // Date components...
-      if (datePart == "d")
-        d = n;
+      if (datePart === "d") d = n;
 
-      if (datePart == "m")
-        m = n;
+      if (datePart === "m") m = n;
 
-      if (datePart == "yy")
-        y = n < 50 ? 2000 + n : 1900 + n;
+      if (datePart === "yy") y = n < 50 ? 2000 + n : 1900 + n;
 
-      if (datePart == "yyyy") {
-        if (n < 100 && incomplete)
-          y = n < 50 ? 2000 + n : 1900 + n;
-        else
-          y = n;
+      if (datePart === "yyyy") {
+        if (n < 100 && incomplete) y = n < 50 ? 2000 + n : 1900 + n;
+        else y = n;
       }
-
     }
 
-    if (tt.toLowerCase() == "pm")
-      hh += 12;
+    if (tt.toLowerCase() === "pm") hh += 12;
 
     // We should check number of days in month
     let maxDays: number = DateParserFormatter.daysInMonth(y, m);
-    if (d > maxDays)
-      return DateParserFormatter.invalidDate();
+    if (d > maxDays) return DateParserFormatter.invalidDate();
 
     return new Date(y, m - 1, d, hh, mi, ss, ms);
   }
 
   public static format(date: any, mask: Mask): string {
-
-    if (date == null || date == undefined || date.getTime() == NaN)
-      return "";
+    if (date === null || date === undefined || date.getTime() === NaN) return "";
 
     let res: string = "";
-    for(let i = 0; i < mask.sections.length; i++) {
-
+    for (let i = 0; i < mask.sections.length; i++) {
       let section: MaskSection = mask.sections[i];
       let datePart = section.sectionType.datePart;
 
       let n: number = NaN;
 
-      if (datePart == "yyyy")
-        n = date.getFullYear();
+      if (datePart === "yyyy") n = date.getFullYear();
 
-      if (datePart == "yy") {
+      if (datePart === "yy") {
         n = date.getFullYear();
-        if ( n >= 2000)
-          n-=2000;
-        else
-          n-=1900;
+        if (n >= 2000) n -= 2000;
+        else n -= 1900;
       }
 
-      if (datePart == "m")
-        n = date.getMonth() + 1;
+      if (datePart === "m") n = date.getMonth() + 1;
 
-      if (datePart == "d")
-        n = date.getDate();
+      if (datePart === "d") n = date.getDate();
 
-      if (datePart == "H")
+      if (datePart === "H") n = date.getHours();
+
+      if (datePart === "h") {
         n = date.getHours();
 
-      if (datePart == "h") {
-        n = date.getHours();
-
-        if (n == 0)
+        if (n === 0) {
           n = 12;
-        else
-          if (n > 12)
+        } else {
+          if (n > 12) {
             n -= 12;
+          }
+        }
       }
 
-      if (datePart == "mi")
-        n = date.getMinutes();
+      if (datePart === "mi") n = date.getMinutes();
 
-      if (datePart == "ss")
-        n = date.getSeconds();
+      if (datePart === "ss") n = date.getSeconds();
 
-      if (datePart == "ms")
-        n = date.getMilliseconds();
+      if (datePart === "ms") n = date.getMilliseconds();
 
-      if (datePart == "tt")
-        n = date.getHours() >= 12 ? 2 : 1;
+      if (datePart === "tt") n = date.getHours() >= 12 ? 2 : 1;
 
       let s: string = "";
 
-      if (section.hasOptions())
+      if (section.hasOptions()) {
         s = section.sectionType.options[n - 1];
-      else
+      } else {
         s = section.autoCorrectVal(n + "");
+      }
 
       res += s + section.delimiter;
     }
