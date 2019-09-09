@@ -1,5 +1,8 @@
 # Yopsilon mask
 
+[![Known Vulnerabilities](https://snyk.io/test/github/m-alx/yopsilon-mask/badge.svg?targetFile=package.json)](https://snyk.io/test/github/m-alx/yopsilon-mask?targetFile=package.json)
+[![Build status](https://travis-ci.org/m-alx/yopsilon-mask.svg?branch=master)](//travis-ci.org/m-alx/yopsilon-mask)
+
 Angular 2+ input masking directive.
 
 #### [Demo](http://yopsilon.com/mask)
