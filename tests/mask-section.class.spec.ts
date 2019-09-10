@@ -3,7 +3,7 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { InternationalizationService } from "../src/internationalization/internationalization.service";
-import { MaskSection } from "../src/mask/mask-section.class";
+import { MaskSection, Action } from "../src/mask/mask-section.class";
 import { MaskValue } from "../src/mask/mask-value.class";
 import { MaskSettings } from "../src/mask/mask-settings.class";
 import { Mask } from "../src/mask/mask.class";
@@ -117,4 +117,84 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selS
 
   it(`Новое значение маски должно быть 13 dec 197`, () => expect(res.newValue).toBe("13 dec 197"));
   it(`Новая позиция курсора должна быть 10`, () => expect(res.selStart).toBe(10));
+});
+
+
+describe(`Section features`, () => {
+  let intl = new InternationalizationService();
+  let mask = new Mask(intl);
+  mask.pattern = "dd mmm yyyy";
+  let section = mask.sections[0];
+  let monthSection = mask.sections[1];
+
+  it(`Autocorrect 99 jan 2019 -> 31 jan 2019`, () => {
+    expect(section.autoCorrect('99 jan 2019', 0, 0, 0).newValue).toBe('31 jan 2019');
+  });
+
+  it(`Select last char of first section`, () => {
+    let res = section.selectLast('31 jan 2019', 0);
+    expect(res.selStart).toBe(1);
+    expect(res.selLength).toBe(1);
+  });
+
+  it(`Set default month`, () => {
+    let res = monthSection.setDefaultVariant('31 ', 3);
+    expect(res).toBe('31 jan');
+  });
+
+  it(`Right arrow key`, () => {
+    let res2 = monthSection.applyKey('31 jan 2019', Keys.RIGHT, '', 3, 3, 1);
+    expect(res2.selStart).toBe(4);
+  });
+
+  it(`Right arrow key at the end of the section`, () => {
+    let res3 = monthSection.applyKey('31 jan 2019', Keys.RIGHT, '', 3, 5, 1);
+    expect(res3.action).toBe(Action.GO_FWD);
+  });
+
+});
+
+
+describe(`Section features (replaceMode = false, defaultOptions = false)`, () => {
+  let intl = new InternationalizationService();
+  let mask = new Mask(intl);
+  mask.pattern = "dd mmm yyyy";
+  mask.settings = new MaskSettings('_');
+  mask.settings.replaceMode = false;
+  mask.settings.defaultOptions = false;
+  mask.settings.incDecByArrows = true;
+  const section = mask.sections[0];
+  const monthSection = mask.sections[1];
+
+  it(`Select last char of first section `, () => {
+    let res = section.selectLast('12 jan 2019', 0);
+    expect(res.selStart).toBe(1);
+    expect(res.selLength).toBe(0);
+  });
+
+  it(`Set default month`, () => {
+    let res = monthSection.setDefaultVariant('31 ', 3);
+    expect(res).toBe('31 ');
+  });
+
+  it(`Prev day by down arrow key`, () => {
+    let res3 = section.applyKey('30 jan 2019', Keys.DOWN, '', 0, 0, 1);
+    expect(res3.newValue).toBe('29 jan 2019');
+  });
+
+  it(`Next day by up arrow key`, () => {
+    let res3 = section.applyKey('30 jan 2019', Keys.UP, '', 0, 0, 1);
+    expect(res3.newValue).toBe('31 jan 2019');
+  });
+
+  it(`Prev month by down arrow key`, () => {
+    let res3 = monthSection.applyKey('31 jan 2019', Keys.DOWN, '', 3, 5, 1);
+    expect(res3.newValue).toBe('31 dec 2019');
+  });
+
+  it(`Next month by up arrow key`, () => {
+    let res3 = monthSection.applyKey('31 jan 2019', Keys.UP, '', 3, 5, 1);
+    expect(res3.newValue).toBe('31 feb 2019');
+  });
+
 });
