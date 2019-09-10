@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular input masking directive",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "test": "karma start",
