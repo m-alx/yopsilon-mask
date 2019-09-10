@@ -476,6 +476,12 @@ export class Mask {
     this.selectSectionType('MMM').options = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
   }
 
+  public static maskWithPattern(intl: InternationalizationService, pattern: string): Mask {
+    const mask = new Mask(intl);
+    mask.pattern = pattern;
+    return mask;
+  }
+
   constructor(protected intl: InternationalizationService) {
     // Здесь нужно подписаться на смену локализации и поменять наименования месяцев
     this.intl.onLocaleChange.subscribe(locale => {

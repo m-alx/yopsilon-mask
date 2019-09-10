@@ -20,7 +20,7 @@
     "@angular/platform-browser-dynamic": "~7.2.15",
     "@angular/router": "~7.2.15",
     "rxjs": "^6.5.2",
-    "yopsilon-mask": "^1.0.2",
+    "yopsilon-mask": "^1.0.4",
     "zone.js": "~0.8.26"
   },
   "peerDependencies": {

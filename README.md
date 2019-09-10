@@ -4,13 +4,14 @@
 [![Build status](https://travis-ci.org/m-alx/yopsilon-mask.svg?branch=master)](//travis-ci.org/m-alx/yopsilon-mask)
 [![Coverage Status](https://coveralls.io/repos/github/m-alx/yopsilon-mask/badge.svg?branch=master)](https://coveralls.io/github/m-alx/yopsilon-mask?branch=master)
 
-Angular 2+ input masking directive.
+Angular formatted input and masking directive.
 
 #### [Demo](http://yopsilon.com/mask)
 
 ## Features
 
-  - Date/time and numbers autoformatting and parsing using pattern for Date Value bindings.
+  - Date/time input using pattern for Date Value bindings.
+  - Numbers input using format for Number Value bindings.
   - Ability to create array of possible values for every part of pattern (e.g., to emulate autocomplete or to enter Date values using `dd mmm yyyy` pattern or Time using `h:mi am/pm` pattern).
   - RegExp to verify if user input is valid for each pattern section.
   - Ability to define a pattern section requiring input with variable value length. For example, `h:mi tt` pattern's `h` section length could be 1 or 2 chars. And for `dd mmm yyyy` pattern for French locale short month abbreviation length could be 3 to 5 chars.

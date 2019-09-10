@@ -13,7 +13,7 @@ import { MaskSectionType } from "../mask/mask-section-type.class";
 export class DateParserFormatter {
   // Creating Invalid Date
   public static invalidDate() {
-    return new Date("*");
+    return new Date('*');
   }
 
   public static daysInMonth(y: number, m: number): number {
@@ -21,7 +21,7 @@ export class DateParserFormatter {
   }
 
   public static parse(value: string, mask: Mask): any {
-    if (value === "") {
+    if (value === '') {
       return null;
     }
 
@@ -40,11 +40,10 @@ export class DateParserFormatter {
     let tt: string = "";
 
     for (let i = 0; i < mask.sections.length; i++) {
-      let incomplete = false;
-      let section: MaskSection = mask.sections[i];
-      let datePart = section.sectionType.datePart;
+      const section: MaskSection = mask.sections[i];
+      const datePart = section.sectionType.datePart;
 
-      if (datePart === null) {
+      if (!datePart) {
         // Not datetime component
         continue;
       }
@@ -90,62 +89,93 @@ export class DateParserFormatter {
 
       if (datePart === "h") {
         hh = n;
-        if (hh === 12) hh = 0;
+        if (hh === 12) {
+          hh = 0;
+        }
       }
 
-      if (datePart === "tt") tt = s;
+      if (datePart === "tt") {
+        tt = s;
+      }
 
-      if (datePart === "mi") mi = n;
+      if (datePart === "mi") {
+        mi = n;
+      }
 
-      if (datePart === "ss") ss = n;
+      if (datePart === "ss") {
+        ss = n;
+      }
 
-      if (datePart === "ms") ms = n;
+      if (datePart === "ms") {
+        ms = n;
+      }
 
       // Date components...
-      if (datePart === "d") d = n;
+      if (datePart === "d") {
+        d = n;
+      }
 
-      if (datePart === "m") m = n;
+      if (datePart === "m") {
+        m = n;
+      }
 
-      if (datePart === "yy") y = n < 50 ? 2000 + n : 1900 + n;
+      if (datePart === "yy") {
+        y = n < 50 ? 2000 + n : 1900 + n;
+      }
 
       if (datePart === "yyyy") {
-        if (n < 100 && incomplete) y = n < 50 ? 2000 + n : 1900 + n;
-        else y = n;
+        y = n;
       }
     }
 
-    if (tt.toLowerCase() === "pm") hh += 12;
+    if (tt.toLowerCase() === "pm") {
+      hh += 12;
+    }
 
     // We should check number of days in month
-    let maxDays: number = DateParserFormatter.daysInMonth(y, m);
-    if (d > maxDays) return DateParserFormatter.invalidDate();
-
+    const maxDays: number = DateParserFormatter.daysInMonth(y, m);
+    if (d > maxDays) {
+      return DateParserFormatter.invalidDate();
+    }
     return new Date(y, m - 1, d, hh, mi, ss, ms);
   }
 
   public static format(date: any, mask: Mask): string {
-    if (date === null || date === undefined || date.getTime() === NaN) return "";
+    if (date === null || date === undefined || date.getTime() === NaN) {
+      return "";
+    }
 
     let res: string = "";
     for (let i = 0; i < mask.sections.length; i++) {
-      let section: MaskSection = mask.sections[i];
-      let datePart = section.sectionType.datePart;
+      const section: MaskSection = mask.sections[i];
+      const datePart = section.sectionType.datePart;
 
       let n: number = NaN;
 
-      if (datePart === "yyyy") n = date.getFullYear();
+      if (datePart === "yyyy") {
+        n = date.getFullYear();
+      }
 
       if (datePart === "yy") {
         n = date.getFullYear();
-        if (n >= 2000) n -= 2000;
-        else n -= 1900;
+        if (n >= 2000) {
+          n -= 2000;
+        } else {
+          n -= 1900;
+        }
       }
 
-      if (datePart === "m") n = date.getMonth() + 1;
+      if (datePart === "m") {
+        n = date.getMonth() + 1;
+      }
 
-      if (datePart === "d") n = date.getDate();
+      if (datePart === "d") {
+        n = date.getDate();
+      }
 
-      if (datePart === "H") n = date.getHours();
+      if (datePart === "H") {
+        n = date.getHours();
+      }
 
       if (datePart === "h") {
         n = date.getHours();
@@ -159,13 +189,21 @@ export class DateParserFormatter {
         }
       }
 
-      if (datePart === "mi") n = date.getMinutes();
+      if (datePart === "mi") {
+        n = date.getMinutes();
+      }
 
-      if (datePart === "ss") n = date.getSeconds();
+      if (datePart === "ss") {
+        n = date.getSeconds();
+      }
 
-      if (datePart === "ms") n = date.getMilliseconds();
+      if (datePart === "ms") {
+        n = date.getMilliseconds();
+      }
 
-      if (datePart === "tt") n = date.getHours() >= 12 ? 2 : 1;
+      if (datePart === "tt") {
+        n = date.getHours() >= 12 ? 2 : 1;
+      }
 
       let s: string = "";
 
