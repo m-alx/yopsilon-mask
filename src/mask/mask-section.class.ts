@@ -19,8 +19,7 @@ export class Action {
   static SKIP = new Action('SKIP');
   static GO_FWD = new Action('GO_FWD');
   static GO_BACK = new Action('GO_BACK');
-  static GO_BACK_AND_DELETE = new Action('GO_BACK_AND_DELETE');
-  static GO_BACK_AND_BACKSPACE = new Action('GO_BACK_AND_BACKSPACE');
+  static GO_BACK_AND_DELETE = new Action('GO_BACK_AND_DELETE');  
 
   constructor(public name: string) { }
 }
@@ -582,13 +581,16 @@ export class MaskSection {
       // Backspace key
       if (keyCode === Keys.BACKSPACE) {
 
-        if (mv.section.length === 0)
+        if (mv.section.length === 0) {
           return this.goBack(mv, selStart, selLength, true, isLast);
+        }
 
         if (mv.section.beforeChars === '') {
           // Nothing to delete in current section
-          if (mv.before === '') // is first
+          if (mv.before === '') {
+            // is first
             return this.none(mv);
+          }
 
           // Deleting in the previous section
           return this.goBack(mv, selStart, selLength, true, isLast);
@@ -596,15 +598,16 @@ export class MaskSection {
 
         mv.section.beforeChars = mv.section.beforeChars.substring(0, mv.section.beforeChars.length - 1);
 
-        if ((mv.section.beforeChars.length >= this.length && mv.after === '') || (mv.section.currentChar === '' && mv.after === '')) {
+        if ((mv.section.beforeChars.length >= this.length && mv.after === '') ||
+            (mv.section.currentChar === '' && mv.after === '')) {
           // Deleting completely
           // Delimiter should be deleted too
           mv.delimiter = '';
-        }
-        else // Replacing with a placeholder
-        {
-          if (mv.section.beforeChars.length < this.length)
+        } else {
+          // Replacing with a placeholder
+          if (mv.section.beforeChars.length < this.length) {
             mv.section.beforeChars += this.settings.placeholder;
+          }
         }
 
         return this.apply(mv, mv.section.value(), selStart, -1, isLast);

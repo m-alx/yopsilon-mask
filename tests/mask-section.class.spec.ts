@@ -152,6 +152,21 @@ describe(`Section features`, () => {
     expect(res3.action).toBe(Action.GO_FWD);
   });
 
+  it(`Backspace key at the second char of the month`, () => {
+    let res3 = monthSection.applyKey('31 jan 2019', Keys.BACKSPACE, '', 3, 4, 1);
+    expect(res3.newValue).toBe('31 _an 2019');
+  });
+
+  it(`Backspace key at the start of the month`, () => {
+    let res3 = monthSection.applyKey('31 jan 2019', Keys.BACKSPACE, '', 3, 3, 1);
+    expect(res3.action).toBe(Action.GO_BACK_AND_DELETE);
+  });
+
+  it(`Backspace key at the start of text`, () => {
+    let res3 = section.applyKey('31 jan 2019', Keys.BACKSPACE, '', 0, 0, 1);
+    expect(res3.action).toBe(Action.NONE);
+  });
+
 });
 
 
@@ -196,5 +211,4 @@ describe(`Section features (replaceMode = false, defaultOptions = false)`, () =>
     let res3 = monthSection.applyKey('31 jan 2019', Keys.UP, '', 3, 5, 1);
     expect(res3.newValue).toBe('31 feb 2019');
   });
-
 });

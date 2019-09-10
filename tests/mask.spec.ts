@@ -62,15 +62,20 @@ describe(`Последний символ маски - разделитель. �
 
 });
 
-describe(`Applying mask to incomplete value. Pattern mm/dd/yyyy, value 12/12/19__: `, () => {
+describe(`Applying mask to incomplete value.`, () => {
   let intl = new InternationalizationService();
   let s = new MaskSettings('_', true);
   let mask = new Mask(intl);
   mask.settings = s;
   mask.pattern = 'mm/dd/yyyy';
 
-  let res = mask.applyMask('12/12/19__');
-  it(`Result must be 12/12/2019`, () => expect(res).toBe('12/12/2019'));
+  it(`Pattern mm/dd/yyyy, value 12/12/19__: result must be 12/12/2019`, () => {
+    expect(mask.applyMask('12/12/19__')).toBe('12/12/2019');
+  });
+
+  it(`Pattern mm/dd/yyyy, value 12/1/2019: result must be empty`, () => {
+    expect(mask.applyMask('12/1/2019')).toBe('');
+  });
 });
 
 describe(`Applying mask to incomplete value. Pattern mm/dd/yyyy, value 12/12/19__: `, () => {
@@ -130,6 +135,49 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
 
   it(`Положение курсора должно остаться 7`, () => expect(res.selStart).toBe(7));
   it(`SelLength должна стать 1`, () => expect(res.selLength).toBe(1));
+});
+
+
+describe(`Нажатие [ArrowLeft] с selLength=0 при значении [13.12.2018] перед [2018]: `, () => {
+  let res: MaskResult;
+
+  beforeEach(async(() => {
+    let intl = new InternationalizationService();
+    let mask = new Mask(intl);
+    mask.pattern = 'mm/dd/yyyy';
+    res = mask.applyKeyAtPos('12/12/2018', Keys.LEFT, '', 6, 6);
+  }));
+
+  it(`Положение курсора должно стать 4`, () => expect(res.selStart).toBe(4));
+  it(`SelLength должна стать 1`, () => expect(res.selLength).toBe(1));
+});
+
+describe(`Нажатие [BACKSPACE] с selLength=0 при значении [13.12.2018] перед [2018]: `, () => {
+  let res: MaskResult;
+
+  beforeEach(async(() => {
+    let intl = new InternationalizationService();
+    let mask = new Mask(intl);
+    mask.pattern = 'mm/dd/yyyy';
+    res = mask.applyKeyAtPos('12/12/2018', Keys.BACKSPACE, '', 6, 6);
+  }));
+
+  it(`Новое значение должно быть 12/1_/2018`, () => expect(res.newValue).toBe('12/1_/2018'));
+  it(`Положение курсора должно стать 4`, () => expect(res.selStart).toBe(4));
+  it(`SelLength должна стать 1`, () => expect(res.selLength).toBe(1));
+});
+
+describe(`Нажатие [ArrowRight] для IP-address в конце строки [172.16.0.300]: `, () => {
+  let res: MaskResult;
+
+  beforeEach(async(() => {
+    let intl = new InternationalizationService();
+    let mask = new Mask(intl);
+    mask.pattern = 'b.b.b.b';
+    res = mask.applyKeyAtPos('172.16.0.300', Keys.RIGHT, '', 12, 21);
+  }));
+
+  it(`Значение должно скорректироваться`, () => expect(res.newValue).toBe('172.16.0.255'));
 });
 
 describe(`AppendPlaceholders = false. Шаблон [dd mmm yyyy]. Нажимаем [ArrowRight] с selStart=2 при значении [11]: `, () => {
@@ -300,5 +348,26 @@ describe(`Преобразование из одного шаблона в др�
 
   it(`Чистое значение старой маски`, () => expect(mask1.pureValue('34__ ____ ____ ____')).toBe('34'));
   it(`Значение для новой маски`, () => expect(mask2.applyPureValue('34')).toBe('34_ ______ _____'));
+});
 
+describe(`Создание маски по шаблону`, () => {
+  const intl = new InternationalizationService();
+  const mask1 = Mask.maskWithPattern(intl, 'NN.NN.NNNN');
+  it(`Шаблон NN.NN.NNNN`, () => expect(mask1.pattern).toBe('NN.NN.NNNN'));
+});
+
+describe(`Применение клавиши к пустому шаблону: `, () => {
+  let intl = new InternationalizationService();
+  let mask = Mask.maskWithPattern(intl, '');
+  mask.pattern = '';
+
+  let res = mask.applyKeyAtPos('', 0, 'A', 0, 0);
+  it(`Должно быть null`, () => expect(res).toBe(null));
+});
+
+
+describe(`Шаблоны из текущей локализации: `, () => {
+  const intl = new InternationalizationService();
+  const locale = intl.locale;
+  it(`[date]`, () => expect(Mask.maskWithPattern(intl, 'date').sections.length).toBe(3));
 });

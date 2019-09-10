@@ -18,3 +18,15 @@
 ### Added
 
 - CI & Coveralls.
+
+## [1.0.4]
+
+### Added
+
+- Some tests.
+
+## [1.0.5]
+
+### Added
+
+- Mask.maskWithPattern static method for quick creating mask with given pattern.

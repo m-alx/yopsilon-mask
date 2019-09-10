@@ -230,8 +230,9 @@ export class Mask {
       default: s = this._pattern;
     }
 
-    if (!s || s.length==0)
+    if (!s || s.length === 0) {
       return;
+    }
 
     let delimiter: string = '';
 
@@ -340,10 +341,7 @@ export class Mask {
       if (sv.length < section.length) {
         if (section.sectionType && section.sectionType.datePart) {
           let dp = section.sectionType.datePart;
-          if (dp === 'yyyy' && sv.length != 2) {  // For year we can accept value with 2 digits
-            return '';
-          }
-          if (sv.length < 1) { // For others dateparts we can accept any not empty value
+          if (dp === 'yyyy' && sv.length !== 2) {  // For year we can accept value with 2 digits
             return '';
           }
         } else {
@@ -411,16 +409,9 @@ export class Mask {
       }
 
       // Идем в конец предыдущей секции
-      // И тоже применяем Delete
-      if (res.action == Action.GO_BACK_AND_BACKSPACE && prev_section != null) {
-        res = prev_section.selectLast(res.newValue, prev_sectionStart);
-        res = prev_section.applyKey(res.newValue, Keys.DELETE, '', prev_sectionStart, res.selStart, res.selLength);
-        return res;
-      }
-
-      // Идем в конец предыдущей секции
-      if (res.action == Action.GO_BACK && prev_section != null)
+      if (res.action == Action.GO_BACK && prev_section != null) {
         return prev_section.selectLast(res.newValue, prev_sectionStart);
+      }
 
       // Идем в начало следующей секции
       if (res.action == Action.GO_FWD) {
@@ -463,8 +454,9 @@ export class Mask {
       }
 
       // Значение кончилось...
-      if (sectionStart > value.length)
+      if (sectionStart > value.length) {
         return null;
+      }
     }
 
     return null;
