@@ -47,6 +47,11 @@ describe(`Parse ` + testStr2, () => {
   it(`Value = ` + testStr2, () => expect(v).toBe(-1.2345e+6));
 });
 
+describe(`Parse -$123.00`, () => {
+  let v: number = NumberParserFormatter.parse('-$123.00', '~${N1.2}', ['.',',']);
+  it(`Value = -123`, () => expect(v).toBe(-123));
+});
+
 describe(`Parse ` + testStr3, () => {
 
   let v: number = NumberParserFormatter.parse(testStr3, testFmt3, [',',' ']);
@@ -155,6 +160,14 @@ describe(`Reformat after backspace: ` + testStr1, () => {
   it('Cursor position = ', () => expect(state.selStart).toBe(19));
 });
 
+describe(`Reformat after backspace 2: -$`, () => {
+  let s = '-';
+  let state: any = NumberParserFormatter.reformat(s, '~${n1.2}', ['.',','], 1, 0);
+  it(s, () => expect(state.value).toBe('-'));
+  it('Cursor position = ', () => expect(state.selStart).toBe(1));
+});
+
+
 describe(`Reformat after decimal point insert `, () => {
   let s = '123,12.3,123';
   let state: any = NumberParserFormatter.reformat(s, '{n1.2-4}', ['.',','], 0, 0);
@@ -211,6 +224,10 @@ describe(`Can accept key`, () => {
   s = '$1';
   const res11 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '${n1-4.2}', ['.',','], 2);
   it(s + ` Can accept backspace`, () => expect(res11).toBeTruthy());
+
+  s = '-$1';
+  const res11_2 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '~${n1-4.2}', ['.',','], 2);
+  it(s + ` Can accept backspace 2`, () => expect(res11_2).toBeTruthy());
 
   s = '$1.2';
   const res12 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '${n1-4.2}', ['.',','], 3, 3, true);

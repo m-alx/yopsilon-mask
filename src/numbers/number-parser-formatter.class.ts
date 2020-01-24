@@ -100,13 +100,13 @@ export class NumberParserFormatter {
     }
 
     let sgn = Math.sign(value) < 0 ? '-' : '';
-    if (fmt.signum && sgn === '')
+    if (fmt.signum && sgn === '' && value > 0)
       sgn = '+';
 
     let p_sgn = '';
     if (fmt.prefixSignum !== '') {
       p_sgn = sgn;
-      if (fmt.prefixSignum === '+' && p_sgn === '') {
+      if (fmt.prefixSignum === '+' && p_sgn === '' && value > 0) {
         p_sgn = '+';
       }
       sgn = '';
@@ -163,8 +163,9 @@ export class NumberParserFormatter {
       sgn = -1;
 
     let p_sgn = 1;
-    if (number.prefixSignum === '-')
+    if (parts.prefixSignum === '-') {
       p_sgn = -1;
+    }
 
     let int: number = +groups.join('');
     let fraction: number = number.fraction.length !== '' ? (+number.fraction) * Math.pow(10, -number.fraction.length) : 0;
@@ -311,6 +312,11 @@ export class NumberParserFormatter {
     let fmt: NumberFormat = NumberFormat.parseFormat(format);
 
     let parts = NumberParserFormatter.unclotheNumber(txt, fmt);
+
+    if ((parts.prefix.length > 0 || parts.prefixSignum.length > 0) && parts.number.length === 0) {
+      return { value: txt, selStart: selStart, selEnd: selEnd, canInput: true };
+    }
+
     let number = NumberParserFormatter.splitNumber(parts.number, separators);
 
     let decimalSeparator = separators[0];
@@ -416,9 +422,10 @@ export class NumberParserFormatter {
       newSelEnd += ps.length;
     }
 
-    resValue += fmt.prefix;
-    newSelStart += resValue.length;
-    newSelEnd += resValue.length;
+    const p = fmt.prefix;
+    resValue += p;
+    newSelStart += p.length;
+    newSelEnd += p.length;
 
     const s = number.signum;
     if (s !== '') {

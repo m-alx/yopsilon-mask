@@ -36,3 +36,15 @@
 ### Added
 
 - Signum before prefix: format "~${n1.2}" -> "-$1,234.25", "${n1.2}" -> "$-1,234.25".
+
+## [1.1.1]
+
+### Fixed
+
+- Handling Backspace if delete a prefix.
+
+## [1.1.2]
+
+### Fixed
+
+- Handling backspace if delete digit when string contains signum before prefix.

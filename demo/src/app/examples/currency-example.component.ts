@@ -23,7 +23,7 @@ import * as YN from "yopsilon-mask";
 })
 export class CurrencyExampleComponent {
 
-  format: string = "currency";
+  format: string = "~${N1.2}";
 
   numValue: number = null;
   state: string;
