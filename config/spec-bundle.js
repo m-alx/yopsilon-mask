@@ -1,6 +1,6 @@
 require("zone.js/dist/zone");
 require("zone.js/dist/zone-testing");
-require("core-js/es7/reflect");
+// require("core-js/es7/reflect");
 
 /*
 const testing = require('@angular/core/testing');

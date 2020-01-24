@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular input masking directive",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "test": "karma start",
@@ -24,7 +24,7 @@
     "formatted input",
     "masking"
   ],
-  "author": "Aleksey Melnikov <z9115011@gmail.com>",
+  "author": "Aleksey Melnikov <m_alx@list.ru>",
   "license": "MIT",
   "main": "./bundles/yopsilon-mask.umd.js",
   "module": "./yopsilon-mask.es5.js",
@@ -32,11 +32,10 @@
   "homepage": "https://github.com/m-alx/yopsilon-mask#readme",
   "peerDependencies": {
     "@angular/core": "~7.2.15",
-    "@angular/forms": "~7.2.15",
-    "typescript": "^3.2.2"
+    "@angular/forms": "~7.2.15"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.13.0",
+    "@angular-devkit/build-angular": "^0.803.23",
     "@angular/animations": "~7.2.15",
     "@angular/common": "~7.2.15",
     "@angular/compiler": "~7.2.15",

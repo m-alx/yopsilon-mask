@@ -30,3 +30,9 @@
 ### Added
 
 - Mask.maskWithPattern static method for quick creating mask with given pattern.
+
+## [1.1.0]
+
+### Added
+
+- Signum before prefix: format "~${n1.2}" -> "-$1,234.25", "${n1.2}" -> "$-1,234.25".

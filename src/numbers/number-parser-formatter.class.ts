@@ -16,9 +16,15 @@ export class NumberParserFormatter {
         return { prefix: '', number: txt, postfix: ''};
 
     let number: string = txt;
-
     let prefix: string = '';
+    let prefixSignum: string = '';
     let postfix: string = '';
+
+    if (fmt.prefixSignum && txt.length > 0 && '-+'.indexOf(txt[0]) >= 0) {
+      // Первый символ - знак
+      prefixSignum = number[0];
+      number = number.substr(1);
+    }
 
     let postfixL = fmt.postfix.length;
     if (number.substring(number.length - postfixL, number.length) === fmt.postfix) {
@@ -33,6 +39,7 @@ export class NumberParserFormatter {
     }
 
     return {
+      prefixSignum: prefixSignum,
       prefix: prefix,
       number: number,
       postfix: postfix
@@ -48,9 +55,9 @@ export class NumberParserFormatter {
     if (ei >= 0)
       e = txt[ei];
 
-    let exponentialParts = txt.split(/e/i);
-    let significand: string = exponentialParts[0];
-    let orderOfMagnitude: string = exponentialParts.length > 1 ? exponentialParts[1] : '';
+    let expParts = txt.split(/e/i);
+    let significand: string = expParts[0];
+    let orderOfMagnitude: string = expParts.length > 1 ? expParts[1] : '';
 
     if (significand.length > 0 && '-+'.indexOf(significand[0]) >= 0) {
       sgn = significand[0];
@@ -93,9 +100,17 @@ export class NumberParserFormatter {
     }
 
     let sgn = Math.sign(value) < 0 ? '-' : '';
-
     if (fmt.signum && sgn === '')
       sgn = '+';
+
+    let p_sgn = '';
+    if (fmt.prefixSignum !== '') {
+      p_sgn = sgn;
+      if (fmt.prefixSignum === '+' && p_sgn === '') {
+        p_sgn = '+';
+      }
+      sgn = '';
+    }
 
     let num = NumberParserFormatter.roundTo(Math.abs(value), fmt.fractionMax).toFixed(fmt.fractionMax);
     let parts = num.split('.');
@@ -120,7 +135,7 @@ export class NumberParserFormatter {
       }
     }
 
-    let res = fmt.prefix + sgn + sInt;
+    let res = p_sgn + fmt.prefix + sgn + sInt;
     if (sFraction !== '') {
       res += separators[0] + sFraction;
     }
@@ -147,9 +162,13 @@ export class NumberParserFormatter {
     if (number.signum === '-')
       sgn = -1;
 
+    let p_sgn = 1;
+    if (number.prefixSignum === '-')
+      p_sgn = -1;
+
     let int: number = +groups.join('');
     let fraction: number = number.fraction.length !== '' ? (+number.fraction) * Math.pow(10, -number.fraction.length) : 0;
-    let resValue: number = sgn * (int + fraction) * Math.pow(10, number.orderOfMagnitude);
+    let resValue: number = p_sgn * sgn * (int + fraction) * Math.pow(10, number.orderOfMagnitude);
 
     return resValue;
   }
@@ -204,6 +223,15 @@ export class NumberParserFormatter {
 
     // Знак
     if ('+-'.indexOf(char) >= 0) {
+      // Можно применить в префиксе только если нет знака и мы в начале строки
+      if (fmt.prefixSignum !== '') {
+        if (selStart === 0 && (txt === '' || '-+'.indexOf(txt[0]) < 0)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
       // Можно применить только в двух случаях
 
       // 1. Знака не было и мы в начале строки
@@ -288,8 +316,8 @@ export class NumberParserFormatter {
     let decimalSeparator = separators[0];
     let thousandSeparator = separators[1];
 
-    let newSelStart = selStart - parts.prefix.length - number.signum.length;
-    let newSelEnd = selEnd - parts.prefix.length - number.signum.length;
+    let newSelStart = selStart - parts.prefixSignum.length - parts.prefix.length - number.signum.length;
+    let newSelEnd = selEnd - parts.prefixSignum.length - parts.prefix.length - number.signum.length;
 
     // ЦЕЛАЯ ЧАСТЬ
     // Убираем лидирующие нули
@@ -357,33 +385,46 @@ export class NumberParserFormatter {
       newSelEnd++;
     }
 
-    if (convertToFormat && fmt !== null && (number.signum !='' || number.int !== '' || number.fraction !== ''))
+    if (convertToFormat && fmt !== null &&
+        (number.prefixSignum !== '' || number.signum !== '' || number.int !== '' || number.fraction !== '')) {
       while (number.int.length < fmt.intMin) {
         number.int = '0' + number.int;
         newSelEnd++;
       }
+    }
 
     // Fraction
     // Remove thousand separators
     number.fraction = number.fraction.replace(thousandSeparator, '');
 
     // Добавляем до минимума
-    if (convertToFormat && fmt !== null && (number.int !== '' || number.signum !== ''))
+    if (convertToFormat && fmt !== null && (number.int !== '' || number.prefixSignum !== '' || number.signum !== ''))
       while (number.fraction.length < fmt.fractionMin)
         number.fraction += '0';
 
     // Убираем лишние знаки
     number.fraction = number.fraction.substring(0, fmt.fractionMax);
 
+
     // ИТОГОВОЕ ЗНАЧЕНИЕ
-    let resValue = fmt.prefix;
+    let resValue = '';
+
+    const ps = parts.prefixSignum;
+    if (ps !== '') {
+      resValue += ps;
+      newSelStart += ps.length;
+      newSelEnd += ps.length;
+    }
+
+    resValue += fmt.prefix;
     newSelStart += resValue.length;
     newSelEnd += resValue.length;
 
-    if (number.signum !== '') {
-      resValue += number.signum;
-      newSelStart += number.signum.length;
-      newSelEnd += number.signum.length;
+    const s = number.signum;
+    if (s !== '') {
+      resValue += s;
+      newSelStart += s.length;
+      newSelEnd += s.length;
     }
 
     resValue += number.int;

@@ -1,11 +1,14 @@
 export class NumberFormat {
+
+  prefixSignum : string = "";
+
   prefix  : string = "";
   postfix : string = "";
 
   // D - десятичная, E - экспоненциальная, F - шестнадцатеричная
   specifier: string = "D";
 
-  signum: boolean;          // Обязательно нужен знак (даже +)
+  signum: boolean;  // Обязательно нужен знак (даже +)
 
   intMin  : number = 1;
   intMax  : number = 16;
@@ -22,6 +25,7 @@ export class NumberFormat {
 
   // Формат в виде "${1.2}" -- префикс [$ ], потом минимум одна цифра целого, затем только две цифры после точки
   // Формат в виде "${1.2-5}" -- префикс [$ ], потом минимум одна цифра целого, затем от двух до пяти цифр дроби
+  // Еще попробуем такой формат: ~${A1.2-5} или {{$}1.2-5} - сначала знак, потом
   //  {E.4} - экспоненциальная форма с максимум 4 знаками после запятой
   // {+E.4} - обязательно знак
   public static parseFormat(formatTxt: string): NumberFormat {
@@ -33,7 +37,13 @@ export class NumberFormat {
 
       let res = new NumberFormat();
 
+      res.prefixSignum = '';
       res.prefix = splitted[0];
+      if (res.prefix.length > 0 && "~+-".indexOf(res.prefix[0]) >= 0) {
+        res.prefixSignum = res.prefix[0];
+        res.prefix = res.prefix.substr(1);
+      }
+
       let format = splitted[1].trim();
       res.postfix = splitted[2];
 
@@ -45,7 +55,7 @@ export class NumberFormat {
 
         let isDigit = NumberFormat.isDigit(char);
 
-        if (!isDigit && "EDFNedfn+-. ".indexOf(char) < 0)
+        if (!isDigit && "AEDFNaedfn+-. ".indexOf(char) < 0)
           return null;
 
         if (pos === 0 && "+-".indexOf(char) >= 0)

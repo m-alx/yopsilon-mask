@@ -103,6 +103,12 @@ describe(`Reformat ` + testStr1, () => {
   it(s + ` with {n1.2} = '-123,456,789.25'`, () => expect(state.value).toBe('-123,456,789.25'));
 });
 
+describe(`Reformat ` + testStr1, () => {
+  let s = '-1234.25';
+  let state: any = NumberParserFormatter.reformat(s, '~${n1.2}', ['.',','], 0, 0);
+  it(s + " with ~${n1.2} = '-$1,234.25'", () => expect(state.value).toBe('-$1,234.25'));
+});
+
 describe(`Reformat -1 (convertToFormat=true)` , () => {
   let s = '-1';
   let state: any = NumberParserFormatter.reformat(s, '{n1.2}', ['.',','], 0, 0, true);
@@ -163,50 +169,58 @@ describe(`Can accept key`, () => {
   it(s + ` Append decimal point at the end of '123'. Result should be '123.'.`, () => expect(state.value).toBe('123.'));
 
   s = '123.0';
-  let res = NumberParserFormatter.canAcceptKey(s, null, '.', '{1-4.2}', ['.',','], s.length);
+  const res = NumberParserFormatter.canAcceptKey(s, null, '.', '{1-4.2}', ['.',','], s.length);
   it(s + ` Can't append decimal point at the end of '123.0'`, () => expect(res).toBeFalsy());
 
   s = '123.00';
-  let res2 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2}', ['.',','], s.length);
+  const res2 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2}', ['.',','], s.length);
   it(s + ` Can't append 0 at the end of '123.00'`, () => expect(res2).toBeFalsy());
 
   s = '1230';
-  let res3 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2}', ['.',','], 4);
+  const res3 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2}', ['.',','], 4);
   it(s + ` Can't append number at the end of '1230' with format {1-4.2}`, () => expect(res3).toBeFalsy());
 
   s = '-1';
-  let res4 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2}', ['.',','], 0);
+  const res4 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2}', ['.',','], 0);
   it(s + ` Can't insert number before minus`, () => expect(res4).toBeFalsy());
 
   s = '$1';
-  let res5 = NumberParserFormatter.canAcceptKey(s, null, '0', '${1-4.2}', ['.',','], 0);
+  const res5 = NumberParserFormatter.canAcceptKey(s, null, '0', '${1-4.2}', ['.',','], 0);
   it(s + ` Can't insert number before prefix`, () => expect(res5).toBeFalsy());
 
   s = '1 kg';
-  let res6 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2} kg', ['.',','], 4);
+  const res6 = NumberParserFormatter.canAcceptKey(s, null, '0', '{1-4.2} kg', ['.',','], 4);
   it(s + ` Can't append number after postfix`, () => expect(res6).toBeFalsy());
 
   s = '1.0';
-  let res7 = NumberParserFormatter.canAcceptKey(s, null, '.', '{1-4.2} kg', ['.',','], 1);
+  const res7 = NumberParserFormatter.canAcceptKey(s, null, '.', '{1-4.2} kg', ['.',','], 1);
   it(s + ` Can replace decimal separator`, () => expect(res7).toBeTruthy());
 
   s = '1e1';
-  let res8 = NumberParserFormatter.canAcceptKey(s, null, 'e', '{e1-4.2} kg', ['.',','], 1);
+  const res8 = NumberParserFormatter.canAcceptKey(s, null, 'e', '{e1-4.2} kg', ['.',','], 1);
   it(s + ` Can replace e`, () => expect(res8).toBeTruthy());
 
   s = '1e1';
-  let res9 = NumberParserFormatter.canAcceptKey(s, null, '+', '{e1-4.2} kg', ['.',','], 2);
+  const res9 = NumberParserFormatter.canAcceptKey(s, null, '+', '{e1-4.2} kg', ['.',','], 2);
   it(s + ` Can accept '+' after e`, () => expect(res9).toBeTruthy());
 
   s = '$1';
-  let res10 = NumberParserFormatter.canAcceptKey(s, null, '+', '${n1-4.2}', ['.',','], 1);
+  const res10 = NumberParserFormatter.canAcceptKey(s, null, '+', '${n1-4.2}', ['.',','], 1);
   it(s + ` Can accept signum before number`, () => expect(res10).toBeTruthy());
 
   s = '$1';
-  let res11 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '${n1-4.2}', ['.',','], 2);
+  const res11 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '${n1-4.2}', ['.',','], 2);
   it(s + ` Can accept backspace`, () => expect(res11).toBeTruthy());
 
   s = '$1.2';
-  let res12 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '${n1-4.2}', ['.',','], 3, 3, true);
+  const res12 = NumberParserFormatter.canAcceptKey(s, Keys.BACKSPACE, '', '${n1-4.2}', ['.',','], 3, 3, true);
   it(s + ` Can't delete decimal point if convertToFormat = true`, () => expect(res12).toBeFalsy());
+
+  s = '$1';
+  const res13 = NumberParserFormatter.canAcceptKey(s, null, '-', '~${n1-4.2}', ['.',','], 0);
+  it(s + ` Can accept signum before prefix`, () => expect(res13).toBeTruthy());
+
+  s = '$1';
+  const res14 = NumberParserFormatter.canAcceptKey(s, null, '-', '~${n1-4.2}', ['.',','], 1);
+  it(s + ` Can accept signum after prefix`, () => expect(res14).toBeFalsy());
 });

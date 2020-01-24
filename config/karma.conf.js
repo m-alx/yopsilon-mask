@@ -146,26 +146,5 @@ module.exports = function (config) {
 
   };
 
-/*
-  // Optional Sonar Qube Reporter
-  if (process.env.SONAR_QUBE) {
-
-    // SonarQube reporter plugin configuration
-    configuration.sonarQubeUnitReporter = {
-      sonarQubeVersion: '5.x',
-      outputFile: 'reports/ut_report.xml',
-      overrideTestDescription: true,
-      testPath: 'src/components',
-      testFilePattern: '.spec.ts',
-      useBrowserName: false
-    };
-
-    // Additional lcov format required for
-    // sonarqube
-    configuration.remapCoverageReporter.lcovonly = './coverage/coverage.lcov';
-
-    configuration.reporters.push('sonarqubeUnit');
-  }
-*/
   config.set(configuration);
 };

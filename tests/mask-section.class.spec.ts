@@ -166,9 +166,7 @@ describe(`Section features`, () => {
     let res3 = section.applyKey('31 jan 2019', Keys.BACKSPACE, '', 0, 0, 1);
     expect(res3.action).toBe(Action.NONE);
   });
-
 });
-
 
 describe(`Section features (replaceMode = false, defaultOptions = false)`, () => {
   let intl = new InternationalizationService();

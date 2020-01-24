@@ -4,7 +4,18 @@
 
 import { NumberFormat } from "../src/numbers/number-format.class";
 
-// this.parseFormat("{.3-5} РУБ");
+describe("Parse format ~${N1-5.2}", () => {
+
+  let fmt: NumberFormat = NumberFormat.parseFormat("~${N1-5.2}");
+
+  it(`Prefix "$"`, () => expect(fmt.prefix).toBe("$"));
+  it(`Numeric specifier`, () => expect(fmt.specifier).toBe("N"));
+  it(`Mimimum integer digits`, () => expect(fmt.intMin).toBe(1));
+  it(`Maximum integer digits`, () => expect(fmt.intMax).toBe(5));
+  it(`Mimimum fraction digits`, () => expect(fmt.fractionMin).toBe(2));
+  it(`Maximum fraction digits`, () => expect(fmt.fractionMax).toBe(2));
+});
+
 describe(`Parse format "L = {E1.2-3} km"`, () => {
 
   let fmt: NumberFormat = NumberFormat.parseFormat("L = {E1.2-3} km");
