@@ -7,7 +7,7 @@ import * as YN from "yopsilon-mask";
     `<div class="input-wrapper">
         <input #input yn-mask-date="date" autofocus [placeholder]="intl.locale.dateFormat" (ynStateChange)="stateChange($event)" [(ngModel)]="dateValue" autofocus="1" />
         <div class="state-indicator" [ngClass]="stateClass">{{state}}</div>
-     </div>     
+     </div>
      <span class="model-value">{{dateValue}}</span>
     `,
   styles:[
@@ -23,10 +23,10 @@ export class DateExampleComponent {
   state: string;
   stateClass: string;
 
-  @ViewChild('input', {read: YN.MaskDateDirective})
+  @ViewChild('input', {static: true, read: YN.MaskDateDirective})
   maskDateDirective: YN.MaskDateDirective;
 
-  @ViewChild('input')
+  @ViewChild('input', {static: true })
   input: any;
 
   stateChange(state: YN.MaskState) {

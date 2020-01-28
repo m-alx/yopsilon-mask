@@ -51,7 +51,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "codelyzer": "^5.1.0",
     "coveralls": "^3.0.6",
-    "istanbul-instrumenter-loader": "^0.2.0",
+    "istanbul-instrumenter-loader": "^3.0.0",
     "jasmine": "^3.4.0",
     "jasmine-core": "^3.4.0",
     "jasmine-node": "^3.0.0",
