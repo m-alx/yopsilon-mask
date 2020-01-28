@@ -85,7 +85,7 @@ export class InternationalizationService {
         dateTimeHMSFormat: "mm/dd/yyyy hh:mi:ss am",
 
         separators: [".", ","],
-        currency: "${N1-12.2}",
+        currency: "~${N1-12.2}",
 
         translates: {}
       }
