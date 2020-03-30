@@ -48,3 +48,9 @@
 ### Fixed
 
 - Handling backspace if delete digit when string contains signum before prefix.
+
+## [1.1.3]
+
+### Fixed
+
+- Vulnerabilites fix.
