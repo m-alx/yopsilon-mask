@@ -17,6 +17,9 @@
       "dom"
     ]
   },
+  "exclude": [
+    "node_modules", "demo"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "enableIvy": false    
