@@ -4,11 +4,11 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { NgModule, ModuleWithProviders } from "@angular/core";
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from "@angular/forms";
 
 import { InternationalizationService } from "./internationalization/internationalization.service";
-import { Mask } from "./mask/mask.class";
 
+import { MaskBaseDirective } from "./mask/mask-base.directive";
 import { MaskDirective } from "./mask/mask.directive";
 import { MaskDateDirective } from "./mask/mask-date.directive";
 import { MaskNumberDirective } from "./mask/mask-number.directive";
@@ -18,15 +18,14 @@ import { DateFormatterPipe } from "./dates/date-formatter.pipe";
 
 @NgModule({
   imports: [FormsModule],
-  declarations: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe],
+  declarations: [MaskBaseDirective, MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe],
   entryComponents: [],
-  providers: [
-    InternationalizationService],
+  providers: [InternationalizationService],
   exports: [MaskDirective, MaskDateDirective, MaskNumberDirective, DateParserPipe, DateFormatterPipe]
 })
 export class YopsilonMaskModule {
 
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders<YopsilonMaskModule> {
       return {
         ngModule: YopsilonMaskModule,
         providers: [InternationalizationService]

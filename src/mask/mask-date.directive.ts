@@ -9,14 +9,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Locale } from "../internationalization/locale.class";
 
-import { Mask } from "./mask.class";
 import { MaskState } from "./mask-state.class";
 import { MaskSettings } from "./mask-settings.class";
 
 import { MaskBaseDirective } from "./mask-base.directive";
 
-import { DateParserPipe } from "../dates/date-parser.pipe";
-import { DateFormatterPipe } from "../dates/date-formatter.pipe";
 import { DateParserFormatter } from "../dates/date-parser-formatter.class";
 
 @Directive({
@@ -119,8 +116,10 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     }
 
     setLocale(locale: Locale) {
-      this._mask.updateMask(); // Changing format
-      this.writeValue(this._dateValue); // Updating view
+      // Change format
+      this._mask.updateMask(); 
+      // Update view
+      this.writeValue(this._dateValue); 
     }
 
     localeSubscription: any;

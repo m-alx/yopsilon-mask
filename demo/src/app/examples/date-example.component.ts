@@ -1,5 +1,5 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import * as YN from "yopsilon-mask";
+import { Component, ViewChild } from '@angular/core';
+import * as YN from 'yopsilon-mask';
 
 @Component({
   selector: "date-example",
@@ -11,7 +11,8 @@ import * as YN from "yopsilon-mask";
      <span class="model-value">{{dateValue}}</span>
     `,
   styles:[
-    `:host {
+    `
+      :host {
         width: 100%;
         box-sizing: border-box;
       }

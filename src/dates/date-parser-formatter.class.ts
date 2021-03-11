@@ -3,11 +3,8 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Pipe } from "@angular/core";
-
 import { Mask } from "../mask/mask.class";
 import { MaskSection } from "../mask/mask-section.class";
-import { MaskSectionType } from "../mask/mask-section-type.class";
 
 // Parse and format DateTime
 export class DateParserFormatter {
@@ -20,7 +17,7 @@ export class DateParserFormatter {
     return new Date(y, m, 0).getDate();
   }
 
-  public static parse(value: string, mask: Mask): any {
+  public static parse(value: string, mask: Mask, minY: number = 1950, maxY: number = 2050): any {
     if (value === '') {
       return null;
     }
@@ -119,7 +116,7 @@ export class DateParserFormatter {
         m = n;
       }
 
-      if (datePart === "yy") {
+      if (datePart === "yy") {          
         y = n < 50 ? 2000 + n : 1900 + n;
       }
 
@@ -131,13 +128,16 @@ export class DateParserFormatter {
     if (tt.toLowerCase() === "pm") {
       hh += 12;
     }
-
+    
     // We should check number of days in month
     const maxDays: number = DateParserFormatter.daysInMonth(y, m);
     if (d > maxDays) {
       return DateParserFormatter.invalidDate();
     }
-    return new Date(y, m - 1, d, hh, mi, ss, ms);
+    
+    const result = new Date(y, m - 1, d, hh, mi, ss, ms);
+    result.setFullYear(y);
+    return result;
   }
 
   public static format(date: any, mask: Mask): string {

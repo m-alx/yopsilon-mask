@@ -54,3 +54,13 @@
 ### Fixed
 
 - Vulnerabilites fix.
+
+## [1.2.0]
+
+### Changed
+
+- Updated to Angular 11
+
+### Fixed
+
+- Parser bug: Two digit years were mapped to 1900-1999.

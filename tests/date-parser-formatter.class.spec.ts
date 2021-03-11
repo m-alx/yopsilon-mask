@@ -2,11 +2,8 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { async } from '@angular/core/testing';
 
 import { InternationalizationService } from "../src/internationalization/internationalization.service";
-import { MaskSection, MaskResult } from "../src/mask/mask-section.class";
-import { MaskValue } from "../src/mask/mask-value.class";
 import { Mask } from "../src/mask/mask.class";
 
 import { DateParserFormatter } from "../src/dates/date-parser-formatter.class";
@@ -69,6 +66,14 @@ describe('Parse datetime', () => {
   it(`Parse 01/05/2019 2:30:40.000 pm`, () => {
     const d = DateParserFormatter.parse(sDate, mask);
     expect(d.getFullYear()).toBe(2019);
+    expect(d.getMonth()).toBe(0);
+    expect(d.getDate()).toBe(5);
+  });
+
+  const sDate0000 = '01/05/0000 2:30:40.000 pm';
+  it(`Parse 01/05/0000 2:30:40.000 pm`, () => {
+    const d = DateParserFormatter.parse(sDate0000, mask);
+    expect(d.getFullYear()).toBe(0);
     expect(d.getMonth()).toBe(0);
     expect(d.getDate()).toBe(5);
   });

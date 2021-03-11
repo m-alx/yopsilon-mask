@@ -3,15 +3,17 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Output, Directive, ElementRef, Renderer2, EventEmitter } from "@angular/core";
+import { Output, ElementRef, Renderer2, EventEmitter, Directive } from "@angular/core";
 import { InternationalizationService } from "../internationalization/internationalization.service";
 import { Mask } from "./mask.class";
 import { Keys, KeyInfo } from "../keys/keys.class";
 import { Action, MaskResult } from "./mask-section.class";
-import { MaskSettings } from "./mask-settings.class";
 import { MaskState } from "./mask-state.class";
 
-export abstract class MaskBaseDirective {
+@Directive({
+    selector: '[yn-mask-base]'
+})
+export class MaskBaseDirective {
 
     private _undo: Array<MaskResult> = [];
     private _redo: Array<MaskResult> = [];
@@ -219,7 +221,7 @@ export abstract class MaskBaseDirective {
     }
 
     // Following method should be overridden
-    protected abstract toModel(): void;
+    protected toModel(): void { }
 
     // Writing a text to control
     protected setText(displayedValue: string, toModel: boolean = true) {

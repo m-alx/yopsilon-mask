@@ -3,12 +3,9 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Injectable } from '@angular/core';
-
 import { InternationalizationService } from '../internationalization/internationalization.service';
 import { Locale } from '../internationalization/locale.class';
 
-import { MaskSectionValue } from './mask-section-value.class';
 import { MaskSectionType } from './mask-section-type.class';
 import { MaskSection, MaskResult, Action } from './mask-section.class';
 import { MaskSettings } from './mask-settings.class';
@@ -333,15 +330,17 @@ export class Mask {
       if (section.isNumeric())
       {
         // Invalid number value
-        let n = section.numericValue(sv);
-        if (isNaN(n) || sv === '')
+        const n = section.numericValue(sv);
+        if (isNaN(n) || sv === '') {
           return '';
+        }
       }
 
       if (sv.length < section.length) {
         if (section.sectionType && section.sectionType.datePart) {
           let dp = section.sectionType.datePart;
-          if (dp === 'yyyy' && sv.length !== 2) {  // For year we can accept value with 2 digits
+          if (dp === 'yyyy' && sv.length !== 2) {  
+              // For year we can accept value with 2 digits
             return '';
           }
         } else {
@@ -349,8 +348,9 @@ export class Mask {
         }
       }
 
-      if (autoCorrect)
+      if (autoCorrect) {
         sv = section.autoCorrectVal(sv);
+      }
 
       res = v.update(sv, 0);
       sectionPos = v.nextSectionPos();
@@ -420,12 +420,12 @@ export class Mask {
           let valueWithDefaultVariant = next_section.setDefaultVariant(res.newValue, res.nextSectionPos);
           return next_section.selectFirst(valueWithDefaultVariant, res.nextSectionPos);
         } else {
-          // Секция последняя. Скорректируем значение.
+          // The last section. Correct value.
           return section.autoCorrect(res.newValue, sectionStart, res.selStart, res.selLength);
         }
       }
 
-      // К этой секции ничего не применилось. Переходим к следующей секции..
+      // Skipped section
       if (res.action == Action.SKIP) {
 
         // Запомним положение текущей секции и саму секцию для возврата по BACKSPACE
@@ -439,9 +439,9 @@ export class Mask {
 
         // Больше не будем принимать символы разделителей, т.к.
         // мы его отвергли в одной из предыдущей секций
-        // Пример - +7 921 911 11 11 - в начале строки жмем 7, но + его не принял
+        // Example - +7 921 911 11 11 - в начале строки жмем 7, но + его не принял
         // Тогда это будет значащий символ уже
-        if (section.section == '' && /*value != res.newValue &&*/ selStart < res.nextSectionPos)
+        if (section.section == '' && selStart < res.nextSectionPos)
           acceptDelimiterChars = false;
 
         // Даже если мы передали управление следующей секции, значение может
@@ -453,7 +453,7 @@ export class Mask {
         continue;
       }
 
-      // Значение кончилось...
+      // Value is finished
       if (sectionStart > value.length) {
         return null;
       }
@@ -463,7 +463,7 @@ export class Mask {
   }
 
   private setLocale(locale: Locale) {
-    // Устанавливаем короткие названия месяцев
+    // Set short month names
     this.selectSectionType('mmm').options = this.intl.shortMonthNames.map(el => { return el.toLowerCase(); });
     this.selectSectionType('MMM').options = this.intl.shortMonthNames.map(el => { return el.toUpperCase(); });
   }
@@ -475,8 +475,8 @@ export class Mask {
   }
 
   constructor(protected intl: InternationalizationService) {
-    // Здесь нужно подписаться на смену локализации и поменять наименования месяцев
-    this.intl.onLocaleChange.subscribe(locale => {
+    // Subscribe for localization change event. We have to update month names.
+    this.intl.onLocaleChange.subscribe((locale: any) => {
       this.setLocale(locale);
     });
   }

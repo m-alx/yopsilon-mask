@@ -3,8 +3,8 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { Directive, ElementRef, Input, Output, HostListener, EventEmitter, Renderer2, forwardRef } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Directive, forwardRef } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import * as YN from "yopsilon-mask";
 

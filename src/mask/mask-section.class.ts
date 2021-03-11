@@ -201,8 +201,8 @@ export class MaskSection {
       }
 
       // Year
-      if (this.sectionType.datePart === 'yyyy') {
-        if (s.length === 2) {
+      if (this.sectionType.datePart === 'yyyy') {          
+        if (s.length === 2) {          
           n += n < 50 ? 2000 : 1900;
         } else {
           if (s.length !== 4) {

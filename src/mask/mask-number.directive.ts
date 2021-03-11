@@ -4,7 +4,7 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Directive, ElementRef, Input, Output, HostListener, EventEmitter, Renderer2, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { InternationalizationService } from '../internationalization/internationalization.service';
 import { Locale } from '../internationalization/locale.class';
@@ -12,7 +12,6 @@ import { Locale } from '../internationalization/locale.class';
 import { Keys, KeyInfo } from '../keys/keys.class';
 
 import { MaskState } from './mask-state.class';
-import { MaskSettings } from './mask-settings.class';
 import { Action, MaskResult } from './mask-section.class';
 
 import { NumberParserFormatter } from '../numbers/number-parser-formatter.class';
