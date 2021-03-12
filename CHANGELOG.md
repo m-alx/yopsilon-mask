@@ -64,3 +64,9 @@
 ### Fixed
 
 - Parser bug: Two digit years were mapped to 1900-1999.
+
+## [1.2.1]
+
+### Fixed
+
+- License, repository and homepage in package.json.

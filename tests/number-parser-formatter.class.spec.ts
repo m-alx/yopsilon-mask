@@ -14,7 +14,6 @@ let testStr3 = '123 456,78 РУБ';
 let testStr4 = '12,345.00';
 
 let testFmt1 = '${1.2}';
-let testFmt2 = '';
 let testFmt3 = '{1.2} РУБ';
 let testFmt4 = '{1.2}';
 

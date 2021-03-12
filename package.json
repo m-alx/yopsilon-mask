@@ -1,7 +1,14 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular input masking and formatting directive",
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "author": "Aleksey Melnikov <m_alx@list.ru>",
+  "license": "MIT",
+  "homepage": "https://github.com/m-alx/yopsilon-mask#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m-alx/yopsilon-mask"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,6 +21,7 @@
     "build-ci": "npm run clean && ngc && ng-packagr -p ng-package.json && npm run build:cl",
     "build": "npm run clean && ngc && ng-packagr -p ng-package.json && npm run build:cl"
   },
+  "main": "./bundles/yopsilon-mask.umd.js",  
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.3",
     "@angular/animations": "^11.2.0",
