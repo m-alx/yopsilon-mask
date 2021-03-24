@@ -70,3 +70,9 @@
 ### Fixed
 
 - License, repository and homepage in package.json.
+
+## [1.2.2]
+
+### Changed
+
+- Angular has been moved to peer dependencies.
