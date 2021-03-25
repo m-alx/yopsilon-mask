@@ -20,7 +20,7 @@ export class MaskSettings {
   // ArrowUp and ArrowDown keys change values to previous and next
   public incDecByArrows: boolean = false;
 
-  // If set to true, moving to an icnomplete section with predefined set of values,
+  // If set to true, moving to an incomplete section with predefined set of values,
   // first value of the set will be entered automatically
   public defaultOptions: boolean = true;
 

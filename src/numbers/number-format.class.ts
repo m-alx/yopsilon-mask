@@ -30,7 +30,7 @@ export class NumberFormat {
   // {+E.4} - обязательно знак
   public static parseFormat(formatTxt: string): NumberFormat {
 
-      let splitted = formatTxt.split(/[\{\}]/);
+      let splitted = formatTxt.split(/[{}]/);
 
       if (splitted.length < 3)
         return null;
