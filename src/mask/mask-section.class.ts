@@ -19,7 +19,7 @@ export class Action {
   static SKIP = new Action('SKIP');
   static GO_FWD = new Action('GO_FWD');
   static GO_BACK = new Action('GO_BACK');
-  static GO_BACK_AND_DELETE = new Action('GO_BACK_AND_DELETE');  
+  static GO_BACK_AND_DELETE = new Action('GO_BACK_AND_DELETE');
 
   constructor(public name: string) { }
 }
@@ -201,8 +201,8 @@ export class MaskSection {
       }
 
       // Year
-      if (this.sectionType.datePart === 'yyyy') {          
-        if (s.length === 2) {          
+      if (this.sectionType.datePart === 'yyyy') {
+        if (s.length === 2) {
           n += n < 50 ? 2000 : 1900;
         } else {
           if (s.length !== 4) {
@@ -422,7 +422,7 @@ export class MaskSection {
           res.selLength = 0;
       } else
         {
-          // Nothing's present next, just positoning the carriage in the end of the section
+          // Nothing's present next, just positioning the carriage in the end of the section
           res.selStart = selStart + 1;
           res.selLength = 0;
         }
@@ -650,7 +650,7 @@ export class MaskSection {
     // Get section value
     const mv: MaskValue = this.extract(value, sectionPos, 0, 0);
 
-    // Remove placeholderes
+    // Remove placeholders
     let s = this.removePlaceholders(mv.section.value());
 
     // If empty...
@@ -663,7 +663,7 @@ export class MaskSection {
     return value;
   }
 
-  // Selcting first symbol of the section
+  // Selecting first symbol of the section
   selectFirst(value: string, sectionPos: number): MaskResult {
 
     let mv: MaskValue = this.extract(value, sectionPos, sectionPos, 0);
