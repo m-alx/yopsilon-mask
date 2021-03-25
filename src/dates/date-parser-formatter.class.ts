@@ -116,7 +116,7 @@ export class DateParserFormatter {
         m = n;
       }
 
-      if (datePart === "yy") {          
+      if (datePart === "yy") {
         y = n < 50 ? 2000 + n : 1900 + n;
       }
 
@@ -128,20 +128,20 @@ export class DateParserFormatter {
     if (tt.toLowerCase() === "pm") {
       hh += 12;
     }
-    
+
     // We should check number of days in month
     const maxDays: number = DateParserFormatter.daysInMonth(y, m);
     if (d > maxDays) {
       return DateParserFormatter.invalidDate();
     }
-    
+
     const result = new Date(y, m - 1, d, hh, mi, ss, ms);
     result.setFullYear(y);
     return result;
   }
 
   public static format(date: any, mask: Mask): string {
-    if (date === null || date === undefined || date.getTime() === NaN) {
+    if (date === null || date === undefined || isNaN(date.getTime())) {
       return "";
     }
 
