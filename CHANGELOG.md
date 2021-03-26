@@ -76,3 +76,15 @@
 ### Changed
 
 - Angular has been moved to peer dependencies.
+
+## [1.2.3]
+
+### Added
+
+- Signum chars for numbers with `P` specifier are forbidden (only positive numbers).
+
+## [1.2.5]
+
+### Fixed
+
+- Insert digit after signum before prefix for the `~${n1-4.2}` format.

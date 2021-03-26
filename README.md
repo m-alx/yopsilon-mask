@@ -115,7 +115,26 @@ After a mask pattern is parsed, each section's type is identified (`MaskSection.
 
 Custom section type can be created and applied (please refer to part 4. Custom section types)
 
-#### 2. Predefined section types
+#### 2. Number formatted input (`yn-mask-number` directive)
+
+Numeric format string takes the form `[prefix]{[format specifier][min integer digits]-[max integer digits].[min decimal digits]-[max decimal digits]}[postfix]`.
+
+Specifier is optional. Supported specifiers:
+    - P - positive numbers (signum chars are forbidden).
+    - N - numeric (with thousand separators).
+    - D - decimal (no thousand separators).
+
+Example: {N1-6.1-2}
+Where: 
+- 1-6 - minimum and maximum (from 1 to 6) number of integer digits.
+- 1-2 - minimum and maximum (from 1 to 2) number of decimal digits.
+
+Shortened notation is {[min integer digits].[decimal digits]}. Example: {1.2} where 1 is a minimum number of integer digits and 2 is a number of decimal digits (min=2 and max=2).
+
+Also you can use chars ~ or + before prefix as a signum placeholder.
+Example: ~£{N1.2}. If you need signum to be displayed for positive values too, use "+£{N1.2}" format.
+
+#### 3. Predefined section types
 
 Mask class includes predefined section types set:
 
@@ -159,7 +178,7 @@ public static readonly sectionTypes: MaskSectionType[] = [
 ];
 ```
 
-#### 3. Settings
+#### 4. Settings
 
 MaskSettings class contains attributes which determine directive's behaviour upon user input:
 
@@ -172,7 +191,7 @@ MaskSettings class contains attributes which determine directive's behaviour upo
 *placeholder* property value should not be set to a symbol which is a member of delimiters list (e.g. space) due to unability to tell delimiter from empty section.
 *whiteSpace* ('\u2000') could be used instead of space. Moreover, static property `Mask.delimiterChar` can be overridden, if there is no necessity to use that char as a delimiter.
 
-#### 4. Custom section types
+#### 5. Custom section types
 
 New section type can be added to list, defined in `Mask.sectionTypes` static property. These types of sections will be used by all `yn-mask` and `yn-mask-date` directives of your application.
 
@@ -196,14 +215,14 @@ And use it for canadian postal code with settings:
 <input yn-mask='ANA NAN' [yn-mask-settings]='settings' />
 ```
 
-#### 5. Sections with variable length
+#### 6. Sections with variable length
 
 Section value can accept variable value length.
 For example, section `h` in `h:mm tt` pattern can accept values 1 to 12 (value length - 1 or 2 chars).
 Difference between it and fixed-length sections:
   - cursor moves to next section only if maximum value length is reached. If length is less than maximum, User can move to the next section pressing `ArrowRight` key or pressing section delimiter char key (`:` in this example).
 
-#### 6. Sections with options
+#### 7. Sections with options
 
 For each section type a list of possible values can be defined (e.g., month names list).
 Upon user input necessary list element is defined based on beginning of the line (before cursor's position) and section value is set to a chosen element.
@@ -231,7 +250,7 @@ Using it to choose month:
 <input yn-mask='mmmm' [yn-mask-settings]='settings' />
 ```
 
-#### 7. Events
+#### 8. Events
 
 ynStateChange(e: MaskState) event - is triggered by directive state change.
 Possible values:
@@ -264,7 +283,7 @@ export class DateExampleComponent {
 
 ```
 
-#### 8. Localization
+#### 9. Localization
 
 Service `InternationalizationService` contains available locales in `locales` array. Current locale can be retrieved via `locale` property.
 `currentLocale` property contains current locale code.
