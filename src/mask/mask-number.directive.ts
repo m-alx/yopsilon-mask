@@ -209,10 +209,7 @@ export class MaskNumberDirective {
   }
 
   private isDigit(char: string): boolean {
-    if ('0123456789'.indexOf(char) >= 0)
-      return true;
-
-    return false;
+    return '0123456789'.includes(char);
   }
 
   public processKey(e: any): boolean {
@@ -321,7 +318,7 @@ export class MaskNumberDirective {
         let fragmentToDelete = s.substring(selStart, selEnd);
 
         if (canAccept) {
-          if (fragmentToDelete.indexOf(this._separators[0]) >= 0)
+          if (fragmentToDelete.includes(this._separators[0]))
             s = s.substring(0, selStart) + this._separators[0] + s.substring(selEnd);
           else
             s = s.substring(0, selStart) + s.substring(selEnd);

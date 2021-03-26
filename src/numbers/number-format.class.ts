@@ -17,10 +17,7 @@ export class NumberFormat {
   fractionMax : number = 0;
 
   public static isDigit(char: string): boolean {
-    if ("0123456789".indexOf(char) >= 0)
-      return true;
-
-    return false;
+    return "0123456789".includes(char);
   }
 
   // Формат в виде "${1.2}" -- префикс [$ ], потом минимум одна цифра целого, затем только две цифры после точки
@@ -39,7 +36,7 @@ export class NumberFormat {
 
       res.prefixSignum = '';
       res.prefix = splitted[0];
-      if (res.prefix.length > 0 && "~+-".indexOf(res.prefix[0]) >= 0) {
+      if (res.prefix.length > 0 && "~+-".includes(res.prefix[0])) {
         res.prefixSignum = res.prefix[0];
         res.prefix = res.prefix.substr(1);
       }
@@ -55,14 +52,14 @@ export class NumberFormat {
 
         let isDigit = NumberFormat.isDigit(char);
 
-        if (!isDigit && "AEDFNPaedfnp+-. ".indexOf(char) < 0)
+        if (!isDigit && !"AEDFNPaedfnp+-. ".includes(char))
           return null;
 
-        if (pos === 0 && "+-".indexOf(char) >= 0)
+        if (pos === 0 && "+-".includes(char))
           res.signum = true;
 
         // Задается спецификатор
-        if (part === "spec"  && "EDFNPRedfnpr".indexOf(char) >= 0) {
+        if (part === "spec" && "EDFNPRedfnpr".includes(char)) {
             res.specifier = char.toUpperCase();
             part = "int";
             continue;

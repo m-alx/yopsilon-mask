@@ -12,9 +12,9 @@ Angular formatted input and masking directive.
 
   - Date/time input using pattern for Date Value bindings.
   - Numbers input using format for Number Value bindings.
-  - Ability to create array of possible values for every part of pattern (e.g., to emulate autocomplete or to enter Date values using `dd mmm yyyy` pattern or Time using `h:mi am/pm` pattern).
+  - Ability to create an array of possible values for every part of pattern (e.g., to emulate autocomplete or to enter Date values using `dd mmm yyyy` pattern or Time using `h:mi am/pm` pattern).
   - RegExp to verify if user input is valid for each pattern section.
-  - Ability to define a pattern section requiring input with variable value length. For example, `h:mi tt` pattern's `h` section length could be 1 or 2 chars. And for `dd mmm yyyy` pattern for French locale short month abbreviation length could be 3 to 5 chars.
+  - Ability to define a pattern section requiring input with variable value length. For example, `h:mi tt` pattern's `h` section length could be 1 or 2 chars. For `dd mmm yyyy` pattern for French locale short month abbreviation length could be 3 to 5 chars.
   - Date/time and number formats are internationalized. Ability to define your own custom locales. Directives are able to detect locale change - all Date values will be re-formatted and displayed in correct locale.
   - Mobile browsers support.
 
@@ -188,7 +188,7 @@ MaskSettings class contains attributes which determine directive's behaviour upo
   - allowIncomplete: boolean - directive truncates bound value of input control on blur if value is incomplete
   - sectionTypes: Array<MaskSectionType> - list of your own custom section types.
 
-*placeholder* property value should not be set to a symbol which is a member of delimiters list (e.g. space) due to unability to tell delimiter from empty section.
+*placeholder* property value should not be set to a symbol which is a member of delimiters list (e.g. space) due to inability to tell delimiter from empty section.
 *whiteSpace* ('\u2000') could be used instead of space. Moreover, static property `Mask.delimiterChar` can be overridden, if there is no necessity to use that char as a delimiter.
 
 #### 5. Custom section types
@@ -209,7 +209,7 @@ constructor() {
 }
 ```
 
-And use it for canadian postal code with settings:
+Use it for canadian postal code with settings:
 
 ```html
 <input yn-mask='ANA NAN' [yn-mask-settings]='settings' />
@@ -227,7 +227,7 @@ Difference between it and fixed-length sections:
 For each section type a list of possible values can be defined (e.g., month names list).
 Upon user input necessary list element is defined based on beginning of the line (before cursor's position) and section value is set to a chosen element.
 
-Section length can vary from minumum to maximum length of elements list contains.
+Section length can vary from minimum to maximum length of elements list contains.
 
 Example:
 
@@ -244,7 +244,7 @@ constructor() {
 }
 ```
 
-Using it to choose month:
+Using it to choose a month:
 
 ```html
 <input yn-mask='mmmm' [yn-mask-settings]='settings' />
@@ -285,10 +285,10 @@ export class DateExampleComponent {
 
 #### 9. Localization
 
-Service `InternationalizationService` contains available locales in `locales` array. Current locale can be retrieved via `locale` property.
+Service `InternationalizationService` contains available locales in `locales` array. The current locale can be retrieved via `locale` property.
 `currentLocale` property contains current locale code.
 
-`MaskDateDirective` subscribes to a `InternationalizationService.onLocaleChange` event and replaces Date/Time formats with those defined in current locale. Replacing occurs if format alias is defined instead of pattern:
+`MaskDateDirective` subscribes to a `InternationalizationService.onLocaleChange` event and replaces Date/Time formats with those defined in the current locale. Replacing occurs if format alias is defined instead of pattern:
 
   - Locale.dateFormat in case of 'date';
   - Locale.timeHMFormat in case of 'time' and 'timeHM';

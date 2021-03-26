@@ -19,7 +19,7 @@ export class NumberParserFormatter {
     let prefixSignum: string = '';
     let postfix: string = '';
 
-    if (fmt.prefixSignum && txt.length > 0 && '-+'.indexOf(txt[0]) >= 0) {
+    if (fmt.prefixSignum && txt.length > 0 && '-+'.includes(txt[0])) {
       // Первый символ - знак
       prefixSignum = number[0];
       number = number.substr(1);
@@ -58,7 +58,7 @@ export class NumberParserFormatter {
     let significand: string = expParts[0];
     let orderOfMagnitude: string = expParts.length > 1 ? expParts[1] : '';
 
-    if (significand.length > 0 && '-+'.indexOf(significand[0]) >= 0) {
+    if (significand.length > 0 && '-+'.includes(significand[0])) {
       sgn = significand[0];
       significand = significand.substring(1, txt.length);
     }
@@ -126,9 +126,7 @@ export class NumberParserFormatter {
     }
 
     // Add leading zeros
-    while (sInt.length < fmt.intMin) {
-      sInt = '0' + sInt;
-    }
+    sInt = sInt.padStart(fmt.intMin, '0');
 
     // Thousand separators
     if (specifier === 'N' && separators.length > 1) {
@@ -195,7 +193,6 @@ export class NumberParserFormatter {
     const fractionStart =  intEnd + number.decimalSeparator.length;
 
     const eStart = fractionStart + number.fraction.length;
-    
 
     if (keyCode === Keys.DELETE) {
       // Нельзя удалить десятичный разделитель
@@ -225,11 +222,12 @@ export class NumberParserFormatter {
       return true;
     }
 
+
     // Signum. Only if specifier is not 'P' (positive number)
-    if (fmt && fmt.specifier !== 'R' && fmt.specifier !== 'P' && '+-'.indexOf(char) >= 0) {
+    if (fmt && fmt.specifier !== 'R' && fmt.specifier !== 'P' && '+-'.includes(char) >= 0) {
       // Can accept in the prefix or start of the string. And there isn't signum yet. 
       if (fmt.prefixSignum !== '') {
-        if (selStart === 0 && (txt === '' || '-+'.indexOf(txt[0]) < 0)) {
+        if (selStart === 0 && (txt === '' || !'-+'.includes(txt[0]))) {
           return true;
         } else {
           return false;
@@ -271,7 +269,7 @@ export class NumberParserFormatter {
     }
 
     // Digit
-    if ('0123456789'.indexOf(char) >= 0) {
+    if ('0123456789'.includes(char)) {
 
       // Forbidden before signum
       if (number.signum !== '' && selStart <= numStart) {
@@ -451,7 +449,7 @@ export class NumberParserFormatter {
       }
     } else {
       // Не нужно приводить к формату... Добавляем разделитель только если он был в исходном значении
-      if (txt.indexOf(separators[0]) >= 0) {
+      if (txt.includes(separators[0])) {
         resValue += separators[0] + number.fraction;
       }
     }
