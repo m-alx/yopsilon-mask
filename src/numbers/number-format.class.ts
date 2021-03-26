@@ -5,7 +5,7 @@ export class NumberFormat {
   prefix  : string = "";
   postfix : string = "";
 
-  // D - десятичная, E - экспоненциальная, F - шестнадцатеричная
+  // P - positive value, D - десятичная, E - экспоненциальная, F - шестнадцатеричная
   specifier: string = "D";
 
   signum: boolean;  // Обязательно нужен знак (даже +)
@@ -52,14 +52,14 @@ export class NumberFormat {
 
         let isDigit = NumberFormat.isDigit(char);
 
-        if (!isDigit && !"AEDFNaedfn+-. ".includes(char))
+        if (!isDigit && !"AEDFNPaedfnp+-. ".includes(char))
           return null;
 
         if (pos === 0 && "+-".includes(char))
           res.signum = true;
 
         // Задается спецификатор
-        if (part === "spec" && "EDFNedfn".includes(char)) {
+        if (part === "spec" && "EDFNPRedfnpr".includes(char)) {
             res.specifier = char.toUpperCase();
             part = "int";
             continue;

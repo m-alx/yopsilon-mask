@@ -166,7 +166,6 @@ describe(`Reformat after backspace 2: -$`, () => {
   it('Cursor position = ', () => expect(state.selStart).toBe(1));
 });
 
-
 describe(`Reformat after decimal point insert `, () => {
   let s = '123,12.3,123';
   let state: any = NumberParserFormatter.reformat(s, '{n1.2-4}', ['.',','], 0, 0);
@@ -179,6 +178,10 @@ describe(`Can accept key`, () => {
   if (NumberParserFormatter.canAcceptKey(s, null, '.', '{1-4.2}', ['.',','], 2))
     state = NumberParserFormatter.reformat(s + '.', '{1-4}', ['.',','], 0, 0);
   it(s + ` Append decimal point at the end of '123'. Result should be '123.'.`, () => expect(state.value).toBe('123.'));
+
+  s = '123.0';
+  const res0 = NumberParserFormatter.canAcceptKey(s, null, '-', '{P1-4.2}', ['.',','], s.length);
+  it(s + ` Forbid signum for P (positive numbers) specifier ''`, () => expect(res0).toBeFalsy());
 
   s = '123.0';
   const res = NumberParserFormatter.canAcceptKey(s, null, '.', '{1-4.2}', ['.',','], s.length);
@@ -239,4 +242,13 @@ describe(`Can accept key`, () => {
   s = '$1';
   const res14 = NumberParserFormatter.canAcceptKey(s, null, '-', '~${n1-4.2}', ['.',','], 1);
   it(s + ` Can accept signum after prefix`, () => expect(res14).toBeFalsy());
+
+  s = '-$1';
+  const res15 = NumberParserFormatter.canAcceptKey(s, null, '1', '~${n1-4.2}', ['.',','], 1);
+  it(s + ` Can't accept digit after signum before prefix`, () => expect(res15).toBeFalsy());
+
+  s = '-';
+  const res16 = NumberParserFormatter.canAcceptKey(s, null, '1', '~${n1-4.2}', ['.',','], 1);
+  it(s + ` Can accept digit after signum without prefix`, () => expect(res16).toBeTruthy());
+
 });

@@ -3,7 +3,6 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { InternationalizationService } from '../internationalization/internationalization.service';
 import { NumberFormat } from './number-format.class';
 import { Keys } from '../keys/keys.class';
 
@@ -95,7 +94,10 @@ export class NumberParserFormatter {
     } else
       fmt = <NumberFormat>format;
 
-    if (fmt.specifier.toLowerCase() === 'e') {
+
+    const specifier = fmt ? fmt.specifier.toUpperCase() : '';
+
+    if (specifier === 'E') {
       // Exponential
     }
 
@@ -127,7 +129,7 @@ export class NumberParserFormatter {
     sInt = sInt.padStart(fmt.intMin, '0');
 
     // Thousand separators
-    if (fmt.specifier.toLowerCase() === 'n' && separators.length > 1) {
+    if (specifier === 'N' && separators.length > 1) {
       for (let i = 3; i < sInt.length; i += 4) {
         sInt = sInt.substring(0, sInt.length - i) + separators[1] + sInt.substring(sInt.length - i);
       }
@@ -177,20 +179,20 @@ export class NumberParserFormatter {
     convertToFormat: boolean = false): boolean {
 
     // Можем принять цифру, если она после знака или знака нет
-    let fmt: NumberFormat = NumberFormat.parseFormat(format);
+    const fmt: NumberFormat = NumberFormat.parseFormat(format);
 
-    let parts = NumberParserFormatter.unclotheNumber(txt, fmt);
+    const parts = NumberParserFormatter.unclotheNumber(txt, fmt);
 
-    let number = NumberParserFormatter.splitNumber(parts.number, separators);
+    const number = NumberParserFormatter.splitNumber(parts.number, separators);
+    
+    const numStart = parts.prefixSignum.length + parts.prefix.length;
+    const numEnd = parts.prefix.length + parts.number.length;
 
-    let numStart = parts.prefix.length;
-    let numEnd = parts.prefix.length + parts.number.length;
+    const intStart = numStart + number.signum.length;
+    const intEnd = intStart + number.int.length;
+    const fractionStart =  intEnd + number.decimalSeparator.length;
 
-    let intStart = numStart + number.signum.length;
-    let intEnd = intStart + number.int.length;
-    let fractionStart = intEnd + number.decimalSeparator.length;
-
-    let eStart = fractionStart + number.fraction.length;
+    const eStart = fractionStart + number.fraction.length;
 
     if (keyCode === Keys.DELETE) {
       // Нельзя удалить десятичный разделитель
@@ -220,9 +222,10 @@ export class NumberParserFormatter {
       return true;
     }
 
-    // Знак
-    if ('+-'.includes(char)) {
-      // Можно применить в префиксе только если нет знака и мы в начале строки
+
+    // Signum. Only if specifier is not 'P' (positive number)
+    if (fmt && fmt.specifier !== 'R' && fmt.specifier !== 'P' && '+-'.includes(char) >= 0) {
+      // Can accept in the prefix or start of the string. And there isn't signum yet. 
       if (fmt.prefixSignum !== '') {
         if (selStart === 0 && (txt === '' || !'-+'.includes(txt[0]))) {
           return true;
@@ -251,7 +254,7 @@ export class NumberParserFormatter {
         return true;
     }
 
-    // Десятичный разделитель
+    // Decimal separator
     if (separators.length > 0 && char === separators[0] && fmt.fractionMax > 0) {
 
       // Только если заменяем разделитель
@@ -265,20 +268,24 @@ export class NumberParserFormatter {
         return true;
     }
 
-    // Цифра
+    // Digit
     if ('0123456789'.includes(char)) {
 
-      // Нельзя до минуса
+      // Forbidden before signum
       if (number.signum !== '' && selStart <= numStart) {
         return false;
       }
 
-      // И до префикса
-      if (selStart < numStart) {
+      // And before prefix
+      if (selStart < numStart && parts.prefix !== '') {                  
+        return false;
+      }
+            
+      if (fmt && fmt.prefixSignum && selStart === 1 && parts.prefix) {                  
         return false;
       }
 
-      if (selStart > (numEnd + 1)) {
+      if (selStart > (numEnd + 1)) {        
         return false;
       }
 
@@ -293,6 +300,7 @@ export class NumberParserFormatter {
       if (selStart === eStart && number.fraction.length >= fmt.fractionMax && number.decimalSeparator !== '') {
         return false;
       }
+
       return true;
     }
     return false;
@@ -364,8 +372,9 @@ export class NumberParserFormatter {
 
     // Составляем целую часть из групп
     number.int = groups.join('');
+    const specifier = fmt ? fmt.specifier.toUpperCase() : '';
 
-    if (fmt.specifier.toLowerCase() === 'n')
+    if (specifier === 'N' || specifier == 'R')
       for(let i = 3; i < number.int.length; i += 4) {
 
         // Необходимо добавить курсору немного позиции, если он стоит дальше этого разделителя...
