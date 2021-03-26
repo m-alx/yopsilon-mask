@@ -53,7 +53,7 @@
 
 ### Fixed
 
-- Vulnerabilites fix.
+- Vulnerabilities fix.
 
 ## [1.2.0]
 

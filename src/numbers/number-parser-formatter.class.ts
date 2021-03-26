@@ -20,7 +20,7 @@ export class NumberParserFormatter {
     let prefixSignum: string = '';
     let postfix: string = '';
 
-    if (fmt.prefixSignum && txt.length > 0 && '-+'.indexOf(txt[0]) >= 0) {
+    if (fmt.prefixSignum && txt.length > 0 && '-+'.includes(txt[0])) {
       // Первый символ - знак
       prefixSignum = number[0];
       number = number.substr(1);
@@ -59,7 +59,7 @@ export class NumberParserFormatter {
     let significand: string = expParts[0];
     let orderOfMagnitude: string = expParts.length > 1 ? expParts[1] : '';
 
-    if (significand.length > 0 && '-+'.indexOf(significand[0]) >= 0) {
+    if (significand.length > 0 && '-+'.includes(significand[0])) {
       sgn = significand[0];
       significand = significand.substring(1, txt.length);
     }
@@ -124,9 +124,7 @@ export class NumberParserFormatter {
     }
 
     // Add leading zeros
-    while (sInt.length < fmt.intMin) {
-      sInt = '0' + sInt;
-    }
+    sInt = sInt.padStart(fmt.intMin, '0');
 
     // Thousand separators
     if (fmt.specifier.toLowerCase() === 'n' && separators.length > 1) {
@@ -190,7 +188,7 @@ export class NumberParserFormatter {
 
     let intStart = numStart + number.signum.length;
     let intEnd = intStart + number.int.length;
-    let fractionStart =  intEnd + number.decimalSeparator.length;
+    let fractionStart = intEnd + number.decimalSeparator.length;
 
     let eStart = fractionStart + number.fraction.length;
 
@@ -223,10 +221,10 @@ export class NumberParserFormatter {
     }
 
     // Знак
-    if ('+-'.indexOf(char) >= 0) {
+    if ('+-'.includes(char)) {
       // Можно применить в префиксе только если нет знака и мы в начале строки
       if (fmt.prefixSignum !== '') {
-        if (selStart === 0 && (txt === '' || '-+'.indexOf(txt[0]) < 0)) {
+        if (selStart === 0 && (txt === '' || !'-+'.includes(txt[0]))) {
           return true;
         } else {
           return false;
@@ -268,9 +266,9 @@ export class NumberParserFormatter {
     }
 
     // Цифра
-    if ('0123456789'.indexOf(char) >= 0) {
+    if ('0123456789'.includes(char)) {
 
-      // Нельзя  до минуса
+      // Нельзя до минуса
       if (number.signum !== '' && selStart <= numStart) {
         return false;
       }
@@ -442,7 +440,7 @@ export class NumberParserFormatter {
       }
     } else {
       // Не нужно приводить к формату... Добавляем разделитель только если он был в исходном значении
-      if (txt.indexOf(separators[0]) >= 0) {
+      if (txt.includes(separators[0])) {
         resValue += separators[0] + number.fraction;
       }
     }

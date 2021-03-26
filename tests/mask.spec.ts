@@ -328,7 +328,7 @@ describe(`Кастомная секция, regular expression`, () => {
   mask.pattern = 'ANNN';
   let res: MaskResult;
 
-  it(`Первый символ A или B или C: символ D нелья применить`, () => expect(mask.applyKeyAtPos('', 0, 'D', 0, 0)).toBe(null));
+  it(`Первый символ A или B или C: символ D нельзя применить`, () => expect(mask.applyKeyAtPos('', 0, 'D', 0, 0)).toBe(null));
   it(`Первый символ A или B или C: при нажатии A значение становится равным A `, () => expect(mask.applyKeyAtPos('', 0, 'A', 0, 0).newValue).toBe('A'));
 });
 
