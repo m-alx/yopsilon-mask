@@ -19,7 +19,7 @@ export class NumberParserFormatter {
     let prefixSignum: string = '';
     let postfix: string = '';
 
-    if (fmt.prefixSignum && txt.length > 0 && '-+'.indexOf(txt[0]) >= 0) {
+    if (fmt.prefixSignum && txt.length > 0 && '-+'.includes(txt[0])) {
       // Первый символ - знак
       prefixSignum = number[0];
       number = number.substr(1);
@@ -224,6 +224,7 @@ export class NumberParserFormatter {
 
 
     // Signum. Only if specifier is not 'P' (positive number)
+    if (fmt && fmt.specifier !== 'R' && fmt.specifier !== 'P' && '+-'.includes(char)) {
       // Can accept in the prefix or start of the string. And there isn't signum yet. 
       if (fmt.prefixSignum !== '') {
         if (selStart === 0 && (txt === '' || !'-+'.includes(txt[0]))) {
