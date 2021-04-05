@@ -88,3 +88,9 @@
 ### Fixed
 
 - Insert digit after signum before prefix for the `~${n1-4.2}` format.
+
+## [1.2.6]
+
+### Fixed
+
+- setDisabledState implementation.

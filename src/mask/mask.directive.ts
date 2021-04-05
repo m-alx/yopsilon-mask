@@ -6,7 +6,6 @@
 import { Directive, ElementRef, Input, HostListener, Renderer2, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { InternationalizationService } from "../internationalization/internationalization.service";
-import { Mask } from "./mask.class";
 import { MaskState } from "./mask-state.class";
 import { MaskSettings } from "./mask-settings.class";
 
@@ -27,6 +26,10 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+
+    setDisabledState(isDisabled: boolean): void {
+      this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
+    }
 
     blur() {
 

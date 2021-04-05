@@ -33,9 +33,13 @@ export class MaskNumberDirective {
   registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 
+  setDisabledState(isDisabled: boolean): void {
+    this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
+  }
+
   blur() {
     // Очищаем, если формат неверен
-    let value = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
+    const value = NumberParserFormatter.parse(this._txtValue, this.format, this._separators);
     if (value === null || isNaN(value))
       this.setText('');
     else

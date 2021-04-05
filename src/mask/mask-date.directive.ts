@@ -36,6 +36,10 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 
+    setDisabledState(isDisabled: boolean): void {
+        this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
+    }
+
     // Focus lost
     blur() {
 
@@ -136,7 +140,10 @@ export class MaskDateDirective extends MaskBaseDirective implements ControlValue
       this.localeSubscription.unsubscribe();
     }
 
-    constructor(protected _renderer: Renderer2, protected _elementRef: ElementRef, protected intl: InternationalizationService) {
+    constructor(
+        protected _renderer: Renderer2, 
+        protected _elementRef: ElementRef, 
+        protected intl: InternationalizationService) {
       super(_renderer, _elementRef, intl);
     }
 }
