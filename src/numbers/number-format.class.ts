@@ -1,5 +1,8 @@
 export class NumberFormat {
 
+  static specifiers = 'AEDFNPRaedfnpr';
+  static digits = '0123456789';
+
   prefixSignum : string = "";
 
   prefix  : string = "";
@@ -17,7 +20,7 @@ export class NumberFormat {
   fractionMax : number = 0;
 
   public static isDigit(char: string): boolean {
-    return "0123456789".includes(char);
+    return NumberFormat.digits.includes(char);
   }
 
   // Формат в виде "${1.2}" -- префикс [$ ], потом минимум одна цифра целого, затем только две цифры после точки
@@ -52,14 +55,14 @@ export class NumberFormat {
 
         let isDigit = NumberFormat.isDigit(char);
 
-        if (!isDigit && !"AEDFNPaedfnp+-. ".includes(char))
+        if (!isDigit && !(this.specifiers + "+-. ").includes(char))
           return null;
 
         if (pos === 0 && "+-".includes(char))
           res.signum = true;
 
         // Задается спецификатор
-        if (part === "spec" && "EDFNPRedfnpr".includes(char)) {
+        if (part === "spec" && this.specifiers.includes(char)) {
             res.specifier = char.toUpperCase();
             part = "int";
             continue;
