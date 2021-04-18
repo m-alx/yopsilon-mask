@@ -10,7 +10,7 @@ describe("Parse format ~${N1-5.2}", () => {
 
   it(`Prefix "$"`, () => expect(fmt.prefix).toBe("$"));
   it(`Numeric specifier`, () => expect(fmt.specifier).toBe("N"));
-  it(`Mimimum integer digits`, () => expect(fmt.intMin).toBe(1));
+  it(`Minimum integer digits`, () => expect(fmt.intMin).toBe(1));
   it(`Maximum integer digits`, () => expect(fmt.intMax).toBe(5));
   it(`Mimimum fraction digits`, () => expect(fmt.fractionMin).toBe(2));
   it(`Maximum fraction digits`, () => expect(fmt.fractionMax).toBe(2));
@@ -22,8 +22,8 @@ describe(`Parse format "L = {E1.2-3} km"`, () => {
 
   it(`Prefix "L = "`, () => expect(fmt.prefix).toBe("L = "));
   it(`Exponential specifier`, () => expect(fmt.specifier).toBe("E"));
-  it(`Mimimum integer digits`, () => expect(fmt.intMin).toBe(1));
-  it(`Mimimum fraction digits`, () => expect(fmt.fractionMin).toBe(2));
+  it(`Minimum integer digits`, () => expect(fmt.intMin).toBe(1));
+  it(`Minimum fraction digits`, () => expect(fmt.fractionMin).toBe(2));
   it(`Maximum fraction digits`, () => expect(fmt.fractionMax).toBe(3));
   it(`Postfix " km"`, () => expect(fmt.postfix).toBe(" km"));
 
@@ -44,7 +44,7 @@ describe(`Parse format "$ {+1-3.2}"`, () => {
 
 });
 
-describe(`Parse interger number format "{1-4}"`, () => {
+describe(`Parse integer number format "{1-4}"`, () => {
 
   let fmt: NumberFormat = NumberFormat.parseFormat("{1-4}");
 
