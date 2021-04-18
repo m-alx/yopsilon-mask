@@ -3,7 +3,7 @@
 // https://github.com/m-alx/yopsilon-mask
 
 import { Keys } from '../src/keys/keys.class';
-import { async } from '@angular/core/testing';
+import { waitForAsync } from '@angular/core/testing';
 
 describe(`Which key has been pressed: `, () => {
   it(`Backspace`, () => expect(Keys.whichKeyHasBeenPressed('abc', 'ab', 3, 2, 0).code).toBe(Keys.BACKSPACE));

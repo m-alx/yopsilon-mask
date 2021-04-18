@@ -2,7 +2,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/m-alx/yopsilon-mask
 
-import { async } from '@angular/core/testing';
+import { waitForAsync } from '@angular/core/testing';
 
 import { InternationalizationService } from "../src/internationalization/internationalization.service";
 import { MaskSection, MaskResult } from "../src/mask/mask-section.class";

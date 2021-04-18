@@ -8,7 +8,7 @@ import { MaskValue } from '../src/mask/mask-value.class';
 import { MaskSettings } from '../src/mask/mask-settings.class';
 import { Mask } from '../src/mask/mask.class';
 import { Keys } from '../src/keys/keys.class';
-import { async } from '@angular/core/testing';
+import { waitForAsync } from '@angular/core/testing';
 
 describe(`Получение списка секций маски [yyyy年mm月dd日]: `, () => {
   let intl = new InternationalizationService();
@@ -126,7 +126,7 @@ describe(`Applying mask to incomplete value. Pattern b.b.b.b, value 127.`, () =>
 describe(`Нажатие [ArrowRight] с selLength=0 при значении [13.12.2018] перед [018]: `, () => {
   let res: MaskResult;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.pattern = 'mm/dd/yyyy';
@@ -141,7 +141,7 @@ describe(`Нажатие [ArrowRight] с selLength=0 при значении [13
 describe(`Нажатие [ArrowLeft] с selLength=0 при значении [13.12.2018] перед [2018]: `, () => {
   let res: MaskResult;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.pattern = 'mm/dd/yyyy';
@@ -155,7 +155,7 @@ describe(`Нажатие [ArrowLeft] с selLength=0 при значении [13.
 describe(`Нажатие [BACKSPACE] с selLength=0 при значении [13.12.2018] перед [2018]: `, () => {
   let res: MaskResult;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.pattern = 'mm/dd/yyyy';
@@ -170,7 +170,7 @@ describe(`Нажатие [BACKSPACE] с selLength=0 при значении [13.
 describe(`Нажатие [ArrowRight] для IP-address в конце строки [172.16.0.300]: `, () => {
   let res: MaskResult;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.pattern = 'b.b.b.b';
@@ -200,7 +200,7 @@ describe(`Опция AppendPlaceholders=true: `, () => {
   let res: MaskResult;
   let s: MaskSettings;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     let s = new MaskSettings('_', true);
     s.appendPlaceholders = true;
@@ -219,7 +219,7 @@ describe(`Маска с переменной длиной секции (255.255.
   let res: MaskResult;
   let s: MaskSettings;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     let s = new MaskSettings('_', true);
     s.appendPlaceholders = false;
@@ -238,7 +238,7 @@ describe(`Символ разделителя в пустой секции до�
   let res: MaskResult;
   let s: MaskSettings;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     let s = new MaskSettings(' ', true);
     s.appendPlaceholders = false;
@@ -258,7 +258,7 @@ describe(`Символ разделителя не должен принимат
   let res: MaskResult;
   let s: MaskSettings;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     let s = new MaskSettings('_', true);
     s.appendPlaceholders = true;

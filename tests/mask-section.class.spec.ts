@@ -8,12 +8,12 @@ import { MaskValue } from "../src/mask/mask-value.class";
 import { MaskSettings } from "../src/mask/mask-settings.class";
 import { Mask } from "../src/mask/mask.class";
 import { Keys } from '../src/keys/keys.class';
-import { async } from '@angular/core/testing';
+import { waitForAsync } from '@angular/core/testing';
 
 describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () => {
   let maskValue: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let settings = new MaskSettings(" ");
     let m: Mask = new Mask(intl);
@@ -37,7 +37,7 @@ describe(`MaskValue [dd.mm.yyyy] - split second section of "13.12.2018": `, () =
 describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
   let res: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
 
     let mask = new Mask(intl);
@@ -54,7 +54,7 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '3' with selStart=3 : `, () => {
 describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
   let res: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let settings = new MaskSettings(" ");
     settings.appendPlaceholders = false;
@@ -73,7 +73,7 @@ describe(`MaskValue [mm/dd/yyyy] - apply key '/' with selStart=1: `, () => {
 describe(`Автоматическое заполнение секции первым вариантом: `, () => {
   let res: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let settings: MaskSettings = new MaskSettings("_", true);
     settings.appendPlaceholders = true;
     settings.defaultOptions = true;
@@ -92,7 +92,7 @@ describe(`Автоматическое заполнение секции пер�
 describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3 : `, () => {
   let res: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.pattern = "dd mmm yyyy";
@@ -107,7 +107,7 @@ describe(`MaskValue [dd mmm yyyy] - apply key 'd' on value '13 ' with selStart=3
 describe(`MaskValue [dd mmm yyyy] - apply key 'Delete' on 13 dec 1979  with selStart=10 : `, () => {
   let res: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let intl = new InternationalizationService();
     let mask = new Mask(intl);
     mask.pattern = "dd mmm yyyy";

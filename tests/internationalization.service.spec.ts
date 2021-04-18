@@ -5,7 +5,7 @@
 import { InternationalizationService } from "../src/internationalization/internationalization.service";
 import { Locale } from "../src/internationalization/locale.class";
 
-import { async } from '@angular/core/testing';
+import { waitForAsync } from '@angular/core/testing';
 
 describe(`InternationalizationService: `, () => {
 
