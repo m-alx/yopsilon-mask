@@ -106,3 +106,9 @@
 ### Fixed
 
 - Positive numbers format: thousand separators fix (specifiers N, R, P). Example: {R1.2} 1234 -> 1,234.00
+
+## [1.2.9]
+
+### Fixed
+
+- P specifier - for positive numbers without separators.

@@ -8,7 +8,7 @@ import { Keys } from '../keys/keys.class';
 
 export class NumberParserFormatter {
   
-  public static readonly specifiersWithThousandSeparators = 'NPR';
+  public static readonly specifiersWithThousandSeparators = 'NR';
 
   // Split string to prefix, number and postfix
   public static unclotheNumber(txt: string, fmt: NumberFormat): any {

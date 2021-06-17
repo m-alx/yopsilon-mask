@@ -28,6 +28,11 @@ describe(`Format positive value with separators ` + intStr, () => {
    it(`Value = '1,234.00'`, () => expect(v).toBe('1,234.00'));
  });
 
+ describe(`Format positive value without separators ` + intStr, () => {
+   let v = NumberParserFormatter.format(1234, "{P4.2}", ['.',',']);
+   it(`Value = '1234.00'`, () => expect(v).toBe('1234.00'));
+ });
+
 describe(`Format integer value ` + intStr, () => {
   let v = NumberParserFormatter.format(2019, intFmt, ['.',',']);
   it(`Value = 2019'`, () => expect(v).toBe('2019'));

@@ -1,7 +1,7 @@
 {
   "name": "yopsilon-mask",
   "description": "Angular input masking and formatting directive",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "author": "Aleksey Melnikov <m_alx@list.ru>",
   "license": "MIT",
   "homepage": "https://github.com/m-alx/yopsilon-mask#readme",
