@@ -167,10 +167,10 @@ public static readonly sectionTypes: MaskSectionType[] = [
 { selectors: ['~'], numeric: false, regExp: /[-+]/ },
 
 // Letter or digit
-{ selectors: ['*'], numeric: false, regExp: /[\d\w]/ },
+{ selectors: ['*'], numeric: false, regExp: /\w/ },
 
 // Letters
-{ selectors: ['l', 'L'], numeric: false, regExp: /\w/ },
+{ selectors: ['l', 'L'], numeric: false, regExp: /[a-zA-Z]/ },
 
 // Digits
 { selectors: ['n', 'N'], numeric: false, regExp: /\d/ }

@@ -64,10 +64,10 @@ export class Mask {
     { selectors: ['~'], numeric: false, regExp: /[-+]/ },
 
     // Letter or digit
-    { selectors: ['*'], numeric: false, regExp: /[\d\w]/ },
+    { selectors: ['*'], numeric: false, regExp: /\w/ },
 
     // Letters
-    { selectors: ['l', 'L'], numeric: false, regExp: /\w/ },
+    { selectors: ['l', 'L'], numeric: false, regExp: /[a-zA-Z]/ },
 
     // Digits
     { selectors: ['n', 'N'], numeric: false, regExp: /\d/ },
@@ -339,7 +339,7 @@ export class Mask {
       if (sv.length < section.length) {
         if (section.sectionType && section.sectionType.datePart) {
           let dp = section.sectionType.datePart;
-          if (dp === 'yyyy' && sv.length !== 2) {  
+          if (dp === 'yyyy' && sv.length !== 2) {
               // For year we can accept value with 2 digits
             return '';
           }
