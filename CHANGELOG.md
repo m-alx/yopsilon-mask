@@ -94,3 +94,15 @@
 ### Fixed
 
 - setDisabledState implementation.
+
+## [1.2.7]
+
+### Fixed
+
+- Numeric parser: JS floating point error fix.
+
+## [1.2.8]
+
+### Fixed
+
+- Positive numbers format: thousand separators fix (specifiers N, R, P). Example: {R1.2} 1234 -> 1,234.00

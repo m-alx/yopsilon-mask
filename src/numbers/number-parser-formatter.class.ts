@@ -7,6 +7,8 @@ import { NumberFormat } from './number-format.class';
 import { Keys } from '../keys/keys.class';
 
 export class NumberParserFormatter {
+  
+  public static readonly specifiersWithThousandSeparators = 'NPR';
 
   // Split string to prefix, number and postfix
   public static unclotheNumber(txt: string, fmt: NumberFormat): any {
@@ -129,7 +131,7 @@ export class NumberParserFormatter {
     sInt = sInt.padStart(fmt.intMin, '0');
 
     // Thousand separators
-    if (specifier === 'N' && separators.length > 1) {
+    if (this.specifiersWithThousandSeparators.includes(specifier) && separators.length > 1) {
       for (let i = 3; i < sInt.length; i += 4) {
         sInt = sInt.substring(0, sInt.length - i) + separators[1] + sInt.substring(sInt.length - i);
       }
@@ -168,9 +170,7 @@ export class NumberParserFormatter {
     }
 
     let int: number = +groups.join('');
-    let fraction: number = number.fraction.length !== '' ? (+number.fraction) * Math.pow(10, -number.fraction.length) : 0;
-    let resValue: number = p_sgn * sgn * (int + fraction) * Math.pow(10, number.orderOfMagnitude);
-
+    let resValue = p_sgn * sgn * parseFloat(`${int}.${number.fraction}`) * Math.pow(10, number.orderOfMagnitude);
     return resValue;
   }
 

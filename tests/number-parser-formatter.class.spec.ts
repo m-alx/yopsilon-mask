@@ -23,11 +23,20 @@ describe(`Parse integer value ` + intStr, () => {
   it(`Value = 2019'`, () => expect(v).toBe(2019));
 });
 
+describe(`Format positive value with separators ` + intStr, () => {
+   let v = NumberParserFormatter.format(1234, "{R4.2}", ['.',',']);
+   it(`Value = '1,234.00'`, () => expect(v).toBe('1,234.00'));
+ });
+
 describe(`Format integer value ` + intStr, () => {
   let v = NumberParserFormatter.format(2019, intFmt, ['.',',']);
   it(`Value = 2019'`, () => expect(v).toBe('2019'));
 });
 
+describe(`Parse '1.66'`, () => {
+   let v = NumberParserFormatter.parse('1.66', testFmt4, ['.',',']);
+   it(`Value = 1.66`, () => expect(v).toBe(1.66));
+});
 
 describe(`Parse ` + testStr1, () => {
 
