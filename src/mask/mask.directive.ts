@@ -38,7 +38,7 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
       if (autocorrected === '' && !this._mask.settings.allowIncomplete)
         this.setText('');
       else {
-        // Маска верна, но нужно автокоррекцию провернуть        
+        // Маска верна, но нужно автокоррекцию провернуть
         if (autocorrected != this._txtValue)
           this.setText(autocorrected);
       }
@@ -77,6 +77,12 @@ export class MaskDirective extends MaskBaseDirective implements ControlValueAcce
 
       // Но обновить состояние нужно...
       this.updateState();
+
+      let autocorrected = this._mask.applyMask(this._txtValue);
+      if (autocorrected !== '' || this._mask.settings.allowIncomplete) {
+        if (autocorrected != this._txtValue)
+          this.setText(autocorrected);
+      }
     }
 
     @Input("yn-mask")
